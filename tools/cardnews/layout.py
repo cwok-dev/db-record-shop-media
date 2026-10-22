@@ -228,14 +228,18 @@ background:{PAPER} url('{c.img(W, H)}') 0 0/{W}px {H}px;-webkit-background-clip:
 
 
 def spin_arcs(s, color):
-    """LP 왼쪽 바깥의 호 세 줄: 판이 도는 움직임(모션 라인). 판 중심을 공유하고 바깥으로 갈수록 가늘고 짧아진다."""
+    """LP 왼쪽 바깥의 호: 판이 도는 움직임(모션 라인). 판 중심을 공유하는 같은 굵기의 가는 호를 카드 왼쪽 끝까지 겹겹이 긋고,
+    바깥으로 갈수록 짧아져 라벨·한 줄 평과 닿지 않는다."""
     cx, cy, r0 = -s // 3 + s * 9 // 20, s // 20 + s * 9 // 20, s * 9 // 20
+    edge = W - M - s + cx  # 판 중심에서 카드 왼쪽 끝까지
+    rs = list(range(r0 + 28, edge + 32, 32))
     paths = []
-    for i, (gap, a0, a1, w) in enumerate([(28, 128, 236, 10), (60, 142, 222, 7), (92, 156, 206, 4)]):
-        r = r0 + gap
+    for i, r in enumerate(rs):
+        half = 54 - 30 * i / max(1, len(rs) - 1)  # 54° → 24°
+        a0, a1 = 180 - half, 180 + half
         x0, y0 = cx + r * math.cos(math.radians(a0)), cy - r * math.sin(math.radians(a0))
         x1, y1 = cx + r * math.cos(math.radians(a1)), cy - r * math.sin(math.radians(a1))
-        paths.append(f"<path d='M{x0:.0f} {y0:.0f} A{r} {r} 0 0 0 {x1:.0f} {y1:.0f}' stroke='{color}' stroke-width='{w}' fill='none' stroke-linecap='round'/>")
+        paths.append(f"<path d='M{x0:.0f} {y0:.0f} A{r} {r} 0 0 0 {x1:.0f} {y1:.0f}' stroke='{color}' stroke-width='4' fill='none' stroke-linecap='round'/>")
     return f"<svg style='position:absolute;left:0;top:0;overflow:visible' width='1' height='1'>{''.join(paths)}</svg>"
 
 
