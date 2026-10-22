@@ -1,0 +1,281 @@
+{
+ "credit": "피나클엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://images.khan.co.kr/article/2026/10/13/news-p.v1.20261013.2691f0bb0d064a378da18064aac3f8b7_P1.png",
+   "page": "https://sports.khan.co.kr/en/article/202610131137007",
+   "note": "콘셉트 포토 1: 잔디밭 나무 아래 여덟 명 단체"
+  },
+  "p2": {
+   "url": "https://images.khan.co.kr/article/2026/10/13/news-p.v1.20261013.71ae36a1feb04b6d9281073ca8411385_P1.png",
+   "page": "https://sports.khan.co.kr/en/article/202610131137007",
+   "note": "콘셉트 포토 1 개인 콜라주(야외, 근접)"
+  },
+  "p3": {
+   "url": "https://images.khan.co.kr/article/2026/10/13/news-p.v1.20261013.057d588205eb41de85781becd716963f_P1.png",
+   "page": "https://sports.khan.co.kr/en/article/202610131137007",
+   "note": "콘셉트 포토 3: 흰 옷 단체, 사다리"
+  },
+  "p4": {
+   "url": "https://images.khan.co.kr/article/2026/10/13/news-p.v1.20261013.3f065e19d48c4923929c26347c3a4362_P1.png",
+   "page": "https://sports.khan.co.kr/en/article/202610131137007",
+   "note": "콘셉트 포토 2 개인 콜라주(음료·디저트 소품)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "glyph",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.15,
+     1.0,
+     0.7
+    ],
+    "basis": "소개",
+    "why": "과거·현재·미래의 '우리'를 잇는다는 소개대로 여덟 명이 한데 엉킨 단체 사진으로 B를 채웁니다."
+   },
+   {
+    "template": "glyph",
+    "photo": "p3",
+    "crop": [
+     0.1,
+     0.05,
+     0.95,
+     0.55
+    ],
+    "basis": "위치",
+    "why": "데뷔 후 첫 EP라는 새 출발을 흰 옷 단체 사진의 깨끗한 바탕으로 보여 줍니다."
+   },
+   {
+    "template": "glyph",
+    "basis": "제목",
+    "why": "앨범명 'B' 자체가 콘셉트(Before·Be·Begin)라 표지를 글자 안에 그대로 넣어 이름을 전면에 둡니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "polaroid",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.18,
+     1.0,
+     0.68
+    ],
+    "basis": "위치",
+    "why": "앨범의 첫 곡이자 출발이라, 잔디밭에 모인 단체 장면을 폴라로이드로 남겨 둡니다."
+   },
+   {
+    "template": "cutout",
+    "shape": "circle",
+    "photo": "p4",
+    "crop": [
+     0.34,
+     0.58,
+     0.74,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "디저트를 YUHZ에 빗댄 가사라 음료·디저트 소품 사진을 둥글게 오려 붙입니다."
+   },
+   {
+    "template": "grid",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.0,
+     0.42,
+     0.45
+    ],
+    "basis": "평",
+    "why": "'최저선은 올라왔지만 뾰족한 매력은 모르겠다'는 평을 같은 얼굴 18칸 반복으로 보여 줍니다."
+   }
+  ],
+  "2": [
+   {
+    "template": "full",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.03,
+     1.0,
+     0.95
+    ],
+    "props": [
+     "wave"
+    ],
+    "basis": "소개",
+    "why": "일렉기타 리프와 808 베이스가 맞물리는 곡이라 단체 전신 사진에 파형 소품을 얹습니다."
+   },
+   {
+    "template": "full",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.12,
+     1.0,
+     0.72
+    ],
+    "props": [
+     "motif:equalizer"
+    ],
+    "basis": "위치",
+    "why": "타이틀곡이라 앨범 대표 단체 사진을 전면에 두고 이퀄라이저로 '대표곡'을 표시합니다."
+   },
+   {
+    "template": "full",
+    "photo": "p2",
+    "crop": [
+     0.29,
+     0.47,
+     0.62,
+     1.0
+    ],
+    "props": [
+     "motif:blur_dots"
+    ],
+    "basis": "평",
+    "why": "'타이틀다운 특별함이 없다'는 평을 흐린 점 소품으로, 초점이 맺히지 않는 인상으로 옮깁니다."
+   }
+  ],
+  "3": [
+   {
+    "template": "cutout",
+    "shape": "circle",
+    "photo": "p2",
+    "crop": [
+     0.29,
+     0.47,
+     0.62,
+     1.0
+    ],
+    "lines": [
+     "Moon",
+     "light"
+    ],
+    "basis": "제목",
+    "why": "제목의 달을 둥근 오림으로 옮기고, Moon/light로 나눠 글자를 크게 둡니다."
+   },
+   {
+    "template": "polaroid",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.0,
+     0.42,
+     0.45
+    ],
+    "lines": [
+     "Moon",
+     "light"
+    ],
+    "basis": "소개",
+    "why": "사랑에 빠지는 설렘의 순간을 그린 곡이라 한 장면을 폴라로이드로 붙잡아 둡니다."
+   },
+   {
+    "template": "cutout",
+    "shape": "frame",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.18,
+     1.0,
+     0.68
+    ],
+    "lines": [
+     "Moon",
+     "light"
+    ],
+    "basis": "소개",
+    "why": "'영화 같은 장면'이라는 소개를 스크린 프레임 오림으로 보여 줍니다(B와 근거는 같고 템플릿·사진이 다름)."
+   }
+  ],
+  "4": [
+   {
+    "template": "full",
+    "photo": "p4",
+    "crop": [
+     0.75,
+     0.58,
+     1.0,
+     1.0
+    ],
+    "props": [
+     "sparkle"
+    ],
+    "basis": "소개",
+    "why": "어둠 속에서 발견한 작은 빛을 따라가는 곡이라 반짝이 별 소품을 붙입니다."
+   },
+   {
+    "template": "full",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.12,
+     1.0,
+     0.72
+    ],
+    "props": [
+     "motif:wire_sphere"
+    ],
+    "basis": "제목",
+    "why": "제목의 Galaxy를 와이어프레임 행성 모티프로 옮깁니다."
+   },
+   {
+    "template": "full",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.03,
+     1.0,
+     0.95
+    ],
+    "props": [
+     "motif:venn"
+    ],
+    "basis": "평",
+    "why": "'멤버들 목소리와 가장 맞아떨어지는 곡'이라는 평을 겹친 원과 전원 단체 사진으로 보여 줍니다."
+   }
+  ],
+  "5": [
+   {
+    "template": "grid",
+    "photo": "p3",
+    "crop": [
+     0.15,
+     0.05,
+     0.85,
+     0.45
+    ],
+    "basis": "위치",
+    "why": "타이틀곡의 반주 버전이라 같은 사진 반복 격자로 '같은 곡의 다른 버전'을 보여 줍니다."
+   },
+   {
+    "template": "grid",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.18,
+     1.0,
+     0.68
+    ],
+    "basis": "평",
+    "why": "'밴드사운드 가미한 팝이 너무 많다'는 평을 18칸 반복으로 '흔함'으로 옮깁니다."
+   },
+   {
+    "template": "polaroid",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.03,
+     1.0,
+     0.95
+    ],
+    "basis": "위치",
+    "why": "앨범의 마지막 곡이라 흰 옷 단체 장면을 폴라로이드로 남기며 끝맺습니다."
+   }
+  ]
+ }
+}
