@@ -7,6 +7,7 @@
 4. 배경과의 명도 대비가 4.5:1 이상이 되도록, HSL의 L을 10씩 위아래로 옮겨
    기준을 넘는 색 중 원본에 가장 가까운 색을 쓴다.
 5. 별점은 그림자 없이 색만으로 띄우므로 기준을 7:1로 높인다.
+6. alt 배경은 글씨가 블랙일 때 L을 10 밝힌다.
 """
 import colorsys
 import sys
@@ -16,6 +17,7 @@ CHROMA_MIN = 0.18   # 이보다 채도가 낮으면 무채색으로 판단
 SHARE_MIN = 0.02    # 팔레트 중 비중 2% 미만 색은 '표지에 쓰인 색'으로 보지 않음
 CONTRAST_MIN = 4.5
 CONTRAST_STAR = 7
+ALT_LIFT = 0.1    # alt 배경(글씨 블랙)을 밝히는 양
 WHITE, BLACK = "#ffffff", "#111111"
 
 
@@ -119,16 +121,21 @@ def _adjust_steps(color, other):
 def alt_colors(path):
     """두 번째 게시물 커버용: 배경은 포인트 컬러, 글씨는 무채색.
     포인트 컬러를 기준으로 블랙/화이트 중 대비가 맞는 쪽을 고르고,
-    둘 다 4.5:1에 못 미치면 포인트 컬러의 L을 가장 적게 옮기는 쪽을 택한다."""
+    둘 다 4.5:1에 못 미치면 포인트 컬러의 L을 가장 적게 옮기는 쪽을 택한다.
+    글씨가 블랙이면 배경이 탁해 보이지 않도록 L을 ALT_LIFT만큼 밝힌다(대비도 함께 커진다)."""
     base = base_color(path)
     if _is_achromatic(_rgb(base)):  # 흑백 표지
-        return base, (WHITE if _lum(_rgb(base)) < 0.5 else BLACK)
-    options = []
-    for ink in (BLACK, WHITE):
-        bg, steps = _adjust_steps(base, ink)
-        if bg:
-            options.append((steps, -contrast(bg, ink), bg, ink))
-    _, _, bg, ink = min(options)
+        bg, ink = base, (WHITE if _lum(_rgb(base)) < 0.5 else BLACK)
+    else:
+        options = []
+        for ink in (BLACK, WHITE):
+            bg, steps = _adjust_steps(base, ink)
+            if bg:
+                options.append((steps, -contrast(bg, ink), bg, ink))
+        _, _, bg, ink = min(options)
+    if ink == BLACK:
+        h, l, s = _hls(_rgb(bg))
+        bg = _hex(c * 255 for c in colorsys.hls_to_rgb(h, min(1.0, l + ALT_LIFT), s))
     return bg, ink
 
 
