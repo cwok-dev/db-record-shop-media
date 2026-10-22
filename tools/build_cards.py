@@ -18,6 +18,7 @@ FONTS = {
     "S-CoreDream-4Regular.woff": "https://raw.githubusercontent.com/projectnoonnu/noonfonts_six/master/S-CoreDream-4Regular.woff",
     "S-CoreDream-5Medium.woff": "https://raw.githubusercontent.com/projectnoonnu/noonfonts_six/master/S-CoreDream-5Medium.woff",
     "S-CoreDream-6Bold.woff": "https://raw.githubusercontent.com/projectnoonnu/noonfonts_six/master/S-CoreDream-6Bold.woff",
+    "ChosunGu.woff": "https://raw.githubusercontent.com/projectnoonnu/noonfonts_20-04/master/ChosunGu.woff",
 }
 POST_ORDER = [1, 2, "remix"]
 

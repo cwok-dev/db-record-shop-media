@@ -6,6 +6,7 @@
 3. 배경 위에서 안 보이는 무채색은 바꾼다: 흰 배경 위의 흰색 → 블랙, 검은 배경 위의 어두운색 → 화이트.
 4. 배경과의 명도 대비가 4.5:1 이상이 되도록, HSL의 L을 10씩 위아래로 옮겨
    기준을 넘는 색 중 원본에 가장 가까운 색을 쓴다.
+5. 별점은 그림자 없이 색만으로 띄우므로 기준을 7:1로 높인다.
 """
 import colorsys
 import sys
@@ -14,6 +15,7 @@ from PIL import Image
 CHROMA_MIN = 0.18   # 이보다 채도가 낮으면 무채색으로 판단
 SHARE_MIN = 0.02    # 팔레트 중 비중 2% 미만 색은 '표지에 쓰인 색'으로 보지 않음
 CONTRAST_MIN = 4.5
+CONTRAST_STAR = 7
 WHITE, BLACK = "#ffffff", "#111111"
 
 
@@ -64,12 +66,12 @@ def base_color(path):
     return _hex(min(used, key=sum))
 
 
-def fit_to_background(color, bg):
+def fit_to_background(color, bg, minimum=CONTRAST_MIN):
     """배경 위에서 쓸 수 있도록 보정."""
     rgb = _rgb(color)
     if _is_achromatic(rgb):  # 흑백 표지: 배경 반대색
         return BLACK if _lum(_rgb(bg)) > 0.5 else WHITE
-    if contrast(color, bg) >= CONTRAST_MIN:
+    if contrast(color, bg) >= minimum:
         return color
     h, l, s = _hls(rgb)
     for step in range(1, 11):  # L을 10씩(0.1) 위아래로
@@ -78,7 +80,7 @@ def fit_to_background(color, bg):
             nl = l + d
             if 0 <= nl <= 1:
                 cand = _hex(c * 255 for c in colorsys.hls_to_rgb(h, nl, s))
-                if contrast(cand, bg) >= CONTRAST_MIN:
+                if contrast(cand, bg) >= minimum:
                     hits.append(cand)
         if hits:  # 같은 거리면 대비가 더 큰 쪽
             return max(hits, key=lambda c: contrast(c, bg))
@@ -87,9 +89,14 @@ def fit_to_background(color, bg):
 
 def point_colors(path, bg):
     """카드에 쓰는 포인트 컬러 2개.
-    pt: 페이지 배경 위(별점, 추천 인덱스 등) / pt_label: 흰 견출지 위(테두리)"""
+    pt: 페이지 배경 위(트랙 그래픽 등) / pt_label: 흰 추천 스티커 위(테두리·글씨)"""
     base = base_color(path)
     return fit_to_background(base, bg), fit_to_background(base, WHITE)
+
+
+def star_color(path, bg):
+    """별점 색: 포인트 컬러를 페이지 배경 기준 7:1로 보정."""
+    return fit_to_background(base_color(path), bg, CONTRAST_STAR)
 
 
 def _adjust_steps(color, other):

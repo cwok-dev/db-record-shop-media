@@ -1,7 +1,7 @@
 """카드뉴스 HTML 템플릿을 1080x1350 PNG로 렌더링."""
 import base64, html, mimetypes, pathlib
 from playwright.sync_api import sync_playwright
-from point_color import point_colors, alt_colors, WHITE, BLACK
+from point_color import point_colors, star_color, alt_colors, WHITE, BLACK
 import graphics
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -10,7 +10,7 @@ STAR = '<path d="M12 1.5l3.1 6.6 7.2.9-5.3 5 1.4 7.1L12 17.6 5.6 21.1 7 14 1.7 9
 
 
 def stars_svg(score, size=None):
-    """5점 만점, 0.5 단위 별점. 색은 포인트 컬러(--pt)."""
+    """5점 만점, 0.5 단위 별점. 색은 별점 색(--star, 배경 대비 7:1)."""
     out = []
     for i in range(5):
         fill = max(0.0, min(1.0, score - i)) * 100  # 100, 50, 0
@@ -18,19 +18,19 @@ def stars_svg(score, size=None):
         style = f' style="width:{size}px;height:{size}px"' if size else ""
         out.append(
             f'<svg viewBox="0 0 24 24"{style}><defs><linearGradient id="{gid}">'
-            f'<stop offset="{fill}%" stop-color="var(--pt)"/><stop offset="{fill}%" stop-color="transparent"/>'
-            f'</linearGradient></defs><g fill="url(#{gid})" stroke="var(--pt)" stroke-width="1.6" '
+            f'<stop offset="{fill}%" stop-color="var(--star)"/><stop offset="{fill}%" stop-color="transparent"/>'
+            f'</linearGradient></defs><g fill="url(#{gid})" stroke="var(--star)" stroke-width="1.8" '
             f'stroke-linejoin="round">{STAR}</g></svg>')
     return "".join(out)
 
 
 def rec_html(recommended):
-    """추천 트랙이면 그림 좌상단에 인덱스 표시. 아니면 표시하지 않음."""
-    return '<div class="idx">추천</div>' if recommended else ""
+    """추천 트랙이면 프레임 오른쪽 위에 네모 스티커. 아니면 표시하지 않음."""
+    return '<div class="rec"><span>추천</span></div>' if recommended else ""
 
 
 def noise_tile(size=160, seed=7, alpha=14):
-    """프레임·견출지에 까는 미세한 질감 타일(투명 바탕에 흑백 점)."""
+    """프레임·추천 스티커에 까는 미세한 질감 타일(투명 바탕에 흑백 점)."""
     import io, numpy as np
     from PIL import Image
     rng = np.random.default_rng(seed)
@@ -72,15 +72,18 @@ def render_card(out_png, *, cover, artist, title, oneline, score, page,
     alt_bg, alt_ink = alt_colors(HERE / cover)
     if theme == "alt":
         pt, pt_label = alt_ink, point_colors(HERE / cover, WHITE)[1]
+        star = alt_ink
     else:
-        pt, pt_label = point_colors(HERE / cover, WHITE if theme == "album" else BLACK)
+        bg = WHITE if theme == "album" else BLACK
+        pt, pt_label = point_colors(HERE / cover, bg)
+        star = star_color(HERE / cover, bg)
     media = media or f'<img src="{data_uri(HERE / cover)}">'
     global NOISE
     NOISE = NOISE or noise_tile()
     doc = TEMPLATE.read_text(encoding="utf-8")
     for k, v in {
         "NOISE": NOISE, "ALT_BG": alt_bg, "ALT_INK": alt_ink,
-        "THEME": theme, "PAGE": page, "POINT": pt, "POINT_LABEL": pt_label, "MEDIA": media, "REC": rec_html(recommended),
+        "THEME": theme, "PAGE": page, "POINT": pt, "POINT_LABEL": pt_label, "STAR": star, "MEDIA": media, "REC": rec_html(recommended),
         "STARS": stars_svg(score), "ARTIST": html.escape(artist), "TITLE": html.escape(title),
         "ONELINE": html.escape(oneline),
     }.items():
