@@ -123,7 +123,7 @@ class Card:
     """카드 한 장의 값. img(w, h, cell)은 이 카드 사진 칸의 파일 URI를 돌려준다."""
 
     def __init__(self, *, kind, spec, spot, prop, artist, album, year, page, n=None, total=None, title="",
-                 is_title=False, review=None, bg=None, img=None):
+                 is_title=False, review=None, bg=None, img=None, cover=None):
         self.__dict__.update(locals()); del self.__dict__["self"]
 
     @property
@@ -224,6 +224,31 @@ background:{PAPER} url('{c.img(W, H)}') 0 0/{W}px {H}px;-webkit-background-clip:
 <div class='abs name'><div data-fit data-maxw='560' data-maxh='140' class='lbl big' style='width:max-content;margin-left:auto'>{esc(c.artist)}</div>
 <div class='lbl' style='font:700 26px SCDream;padding:10px 14px 8px;margin-top:-3px'>{esc(c.album)} · {esc(c.spec.get('date', ''))}</div><br>
 <div class='type'>{esc(sub)}</div></div>{foot(c, dark=not main)}"""
+    return bg, css, body
+
+
+def t_sleeve(c):
+    """앨범 카드: 실제 앨범 표지를 레코드 슬리브처럼 크게 놓고, 뒤로 LP가 비어져 나온다. 첫 장에서 어떤 앨범인지 바로 보인다.
+    표지는 하프톤으로 바꾸지 않는다(앨범의 얼굴이라 원본 그대로)."""
+    main = c.bg != "ink"
+    bg = c.spot if main else INK
+    s = 584  # 4칸(648)에서 라벨·한 줄 평 사이 공간에 맞춘 정사각(8의 배수)
+    css = f"""
+.name{{left:{M}px;top:{TOP_TITLE}px;z-index:4}}
+.name .big{{font:900 96px/1 'Paperlogy';padding:10px 18px 4px}}
+.type{{display:inline-block;margin-top:24px;background:{c.prop};border:3px solid {INK};box-shadow:6px 6px 0 {INK};padding:10px 16px 8px;font:700 28px 'SCDream';transform:rotate(-4deg)}}
+.zone{{left:{W - M - s}px;width:{s}px;height:{s}px}}
+.disc{{position:absolute;left:-{s // 3}px;top:{s // 20}px;width:{s * 9 // 10}px;height:{s * 9 // 10}px;border-radius:50%;
+background:radial-gradient(circle,{c.spot} 0 15%,{INK} 15.5% 17%,transparent 17.5%),repeating-radial-gradient(circle,#1c1c1c 0 3px,#2a2a2a 3px 5px);
+border:3px solid {INK};box-shadow:8px 8px 0 rgba(0,0,0,.35)}}
+.sleeve{{position:absolute;inset:0;background:{PAPER} url('{c.cover}') 0 0/cover;border:3px solid {INK};box-shadow:10px 10px 0 {INK}}}
+"""
+    body = f"""<div class='grain'></div>{head(c, dark=not main)}
+<div class='abs name'><div data-fit data-maxw='984' data-maxh='140' class='lbl big' style='width:max-content'>{esc(c.artist)}</div><br>
+<div class='lbl' style='font:700 26px SCDream;padding:10px 14px 8px;margin-top:-3px'>{esc(c.album)} · {esc(c.spec.get('date', ''))}</div><br>
+<div class='type'>{esc(c.spec.get('type', ''))}</div></div>
+<div class='abs zone' data-zone='center' data-after='.name' data-origin='top right'><div class='disc'></div><div class='sleeve anchor'></div></div>
+{foot(c, dark=not main)}"""
     return bg, css, body
 
 
@@ -361,7 +386,7 @@ def t_full(c):
     return PAPER, css, body
 
 
-TEMPLATES = {"glyph": t_glyph, "polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid, "player": t_player, "full": t_full}
+TEMPLATES = {"sleeve": t_sleeve, "glyph": t_glyph, "polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid, "player": t_player, "full": t_full}
 
 
 def page_html(c):

@@ -1,0 +1,131 @@
+{
+ "credit": "플레디스엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16251710_2060041_416_crop.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16251710",
+   "note": "'12 o'clock' 뮤직비디오 장면 2x2 콜라주(흰 기둥, 누운 얼굴, 벽 앞, 초원 위 두 사람)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16251710_2060042_423.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16251710",
+   "note": "뮤직비디오 장면 세로 3단(우로보로스 고리와 두 옆얼굴, 근접 얼굴, 어두운 옆얼굴)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16250373_2058623_83_crop.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16250373",
+   "note": "뮤직비디오 티저 장면 2x2 콜라주(두 얼굴 근접, 손 얹은 얼굴, 검은 재킷, 두 사람)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16250373_2058624_89.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16250373",
+   "note": "뮤직비디오 티저 장면(위: 우로보로스 고리와 두 옆얼굴, 아래: 어두운 두 얼굴)"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "sleeve",
+   "basis": "위치",
+   "why": "게시물의 첫 장이라 실제 앨범 표지를 레코드 슬리브처럼 크게 놓아, 어떤 앨범인지 바로 알아보게 합니다."
+  },
+  "1": {
+   "template": "polaroid",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.0,
+    0.5,
+    0.5
+   ],
+   "basis": "위치",
+   "why": "앨범을 여는 첫 곡이라, 하얀 빛 속에 서 있는 장면을 꿈에 들어서는 첫 장면으로 폴라로이드에 남깁니다."
+  },
+  "2": {
+   "template": "player",
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.33
+   ],
+   "basis": "위치",
+   "why": "타이틀곡이라 뮤직비디오의 우로보로스 고리 장면을 재생 화면에 올려 '지금 재생 중'으로 보여 줍니다."
+  },
+  "3": {
+   "template": "cutout",
+   "shape": "frame",
+   "photo": "p1",
+   "crop": [
+    0.5,
+    0.5,
+    1.0,
+    1.0
+   ],
+   "basis": "소개",
+   "why": "일상을 벗어나는 해방감을 노래한다는 소개대로, 초원 풍경을 창틀(프레임) 너머 바깥 세상으로 보여 줍니다."
+  },
+  "4": {
+   "template": "full",
+   "photo": "p3",
+   "crop": [
+    0.0,
+    0.0,
+    0.5,
+    0.5
+   ],
+   "props": [
+    "motif:venn"
+   ],
+   "basis": "제목",
+   "why": "'One plus one'이라는 제목을 겹친 두 원(벤 다이어그램)으로 짚고, 맞닿은 두 얼굴 장면을 깝니다."
+  },
+  "5": {
+   "template": "cutout",
+   "shape": "arch",
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.67,
+    1.0,
+    1.0
+   ],
+   "basis": "제목",
+   "why": "'Not personal'이라는 제목의 거리 두기를, 어둠 속에서 고개를 돌린 조슈아의 옆얼굴을 무대 아치에 넣어 표현합니다."
+  },
+  "6": {
+   "template": "full",
+   "photo": "p3",
+   "crop": [
+    0.5,
+    0.0,
+    1.0,
+    0.5
+   ],
+   "props": [
+    "sparkle"
+   ],
+   "basis": "소개",
+   "why": "몽환적인 음색이라는 소개를 반짝이 소품으로 짚고, 손을 얹은 정한의 얼굴 장면을 깝니다.",
+   "lines": [
+    "컬러링",
+    "(JEONGHAN Solo)"
+   ]
+  },
+  "7": {
+   "template": "cutout",
+   "shape": "wide",
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.333
+   ],
+   "basis": "소개",
+   "why": "우로보로스 고리 양쪽에서 서로 반대로 고개를 돌린 두 옆얼굴을 자르지 않고 화면 폭 전체에 깔아, 제목 'No looking back'(뒤돌아보지 않음)이 장면 그대로 읽히게 합니다.",
+   "bg": "ink",
+   "aspect": 0.5
+  }
+ }
+}

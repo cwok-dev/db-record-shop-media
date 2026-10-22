@@ -10,12 +10,12 @@ python3 -I tools/build_cards.py --album <albums JSON> --cover <표지> --out <�
 
 design.json  {"photos": {"p1": {"url": ..., "page": 기사 주소}}, "cards": {"album": 사양, "1": 사양, ...}}
 options.json {"photos": {...}, "cards": {"album": [A, B, C], "1": [A, B, C], ...}}
-사양         {"template": glyph|polaroid|cutout|grid|player|full, "photo": "p1", "crop": [x0, y0, x1, y1](비율),
+사양         {"template": sleeve|glyph|polaroid|cutout|grid|player|full, "photo": "p1", "crop": [x0, y0, x1, y1](비율),
               "bg": paper|ink|spot(타이포 카드), "shape": circle|arch|frame|wide(cutout, wide는 화면 폭 전체·"aspect" 높이/폭 비율, 기본 0.5), "props": ["sparkle"|"wave"|"motif:<이름>"],
               "wide": true|false(한 줄 평 6칸), "lines": ["Moon", "light"](제목 줄바꿈 직접 지정),
               "basis": 제목|소개|위치|평, "why": 의도 한 문장}
 design.json·options.json의 "credit": 사진 출처(소속사명). 사진을 쓴 카드가 있으면 캡션에 "사진: <credit>"을 넣는다.
-사양이 없는 카드는 표지로 만든다(앨범 glyph, 트랙은 타이포 cutout·사진 full을 번갈아).
+사양이 없는 카드는 표지로 만든다(앨범 sleeve, 트랙은 타이포 cutout·사진 full을 번갈아).
 
 출력: <out>/p1_01.jpg …, p2_…, premix_…, caption_<post>.txt, manifest.json (warnings 포함)
 """
@@ -87,9 +87,9 @@ def captions(album, review, posts, credit=None):
 
 
 def default_spec(kind, i):
-    """사양이 없을 때: 표지 사진으로 앨범은 glyph, 트랙은 타이포(cutout)·사진(full)을 번갈아."""
+    """사양이 없을 때: 표지 사진으로 앨범은 sleeve, 트랙은 타이포(cutout)·사진(full)을 번갈아."""
     if kind == "album":
-        return {"template": "glyph"}
+        return {"template": "sleeve"}
     return {"template": "cutout"} if i % 2 == 1 else {"template": "full"}
 
 
@@ -140,7 +140,7 @@ def build(args, album, review, posts_specs, photos, out, preview=False):
     prop = layout.prop_color(spot)
     tracks = sorted(album["tracks"], key=lambda t: t["n"])
     year = album["releaseDate"][:4]
-    common = dict(spot=spot, prop=prop, artist=album["artist"], album=album["title"], year=year)
+    common = dict(cover=cover.as_uri(), spot=spot, prop=prop, artist=album["artist"], album=album["title"], year=year)
     a = (review or {}).get("album")
     posts = [p for p in POST_ORDER if any(t.get("post") == p for t in tracks)]
     jobs, manifest, warns, used = [], [], [], {}
