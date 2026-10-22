@@ -255,13 +255,15 @@ def t_cutout(c):
     ring = c.spot if bgname != "spot" else INK
     d = span(4) if bgname == "ink" else span(3)  # 제목 아래에 놓일 때는 3칸(줄어들지 않게)
     shape = c.spec.get("shape", "circle")
-    radius = {"circle": "50%", "arch": f"{d // 2}px {d // 2}px 0 0", "frame": "0"}[shape]
+    radius = {"circle": "50%", "arch": f"{d // 2}px {d // 2}px 0 0", "frame": "0", "wide": "0"}[shape]
+    # wide: 사진 한 칸을 자르지 않고 화면 폭 전체에 띄운다(크롭 비율 그대로).
+    w, h, x = (W, round(W * c.spec.get("aspect", .5)), 0) if shape == "wide" else (d, d, W - M - d)
     css = f"""
-.shape{{left:{W - M - d}px;top:{TOP_TITLE + 160}px;width:{d}px;height:{d}px;border-radius:{radius};
-background:{PAPER} url('{c.img(d, d)}') 0 0/cover;box-shadow:0 0 0 16px {ring}}}
+.shape{{left:{x}px;top:{TOP_TITLE + 160}px;width:{w}px;height:{h}px;border-radius:{radius};
+background:{PAPER} url('{c.img(w, h)}') 0 0/cover;box-shadow:0 0 0 16px {ring}}}
 """
     # 잉크 배경: 제목이 사진 위에서 반전되며 겹친다. 그 밖의 배경: 겹치면 읽기 어려워 제목 아래 남는 공간 가운데에 둔다.
-    zone = "data-zone='fixed'" if bgname == "ink" else "data-zone='center' data-after='.title'"
+    zone = "data-zone='fixed'" if bgname == "ink" and shape != "wide" else "data-zone='center' data-after='.title'"
     body = f"""<div class='abs shape anchor' {zone} data-origin='top right'></div>
 {title_block(c, 236, 992, 410, resolve(c, color_name), blend)}<div class='grain' style='opacity:.25'></div>
 {head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', False), dark=bgname == 'ink')}"""
