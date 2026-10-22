@@ -228,19 +228,24 @@ background:{PAPER} url('{c.img(W, H)}') 0 0/{W}px {H}px;-webkit-background-clip:
 
 
 def spin_arcs(s, color):
-    """LP 왼쪽 바깥의 호: 판이 도는 움직임(모션 라인). 판 중심을 공유하는 같은 굵기의 가는 호 6줄을 카드 왼쪽 끝까지 고르게 긋고,
-    바깥으로 갈수록 짧아져 라벨·한 줄 평과 닿지 않는다."""
+    """LP 왼쪽 바깥의 호: 판이 도는 움직임(모션 라인). 판 중심을 공유하는 같은 굵기(4px)의 가는 호 6줄을 32 간격으로 긋는다.
+    호의 양 끝이 두 직선 위에 놓이도록 길이를 정해, 바깥으로 갈수록 줄어드는 모양이 왼쪽을 향한 삼각형으로 보인다."""
     cx, cy, r0 = -s // 3 + s * 9 // 20, s // 20 + s * 9 // 20, s * 9 // 20
-    edge = W - M - s + cx  # 판 중심에서 카드 왼쪽 끝까지
-    n = 6
-    rs = [round(r0 + 28 + (edge - r0 - 28) * i / (n - 1)) for i in range(n)]  # 6줄, 가장 바깥 호가 카드 왼쪽 끝에 닿음
+    rs = [r0 + 28 + 32 * i for i in range(6)]
+    t1 = math.radians(60)  # 가장 안쪽 호의 반각
+    x1, h1 = rs[0] * math.cos(t1), rs[0] * math.sin(t1)  # 판 중심에서 왼쪽으로 잰 거리, 위아래 높이
+    xa = rs[-1] + 32  # 삼각형 꼭짓점: 가장 바깥 호 바로 왼쪽
     paths = []
-    for i, r in enumerate(rs):
-        half = 60 - 45 * i / (n - 1)  # 60° → 15°: 바깥으로 갈수록 눈에 띄게 짧아짐
-        a0, a1 = 180 - half, 180 + half
-        x0, y0 = cx + r * math.cos(math.radians(a0)), cy - r * math.sin(math.radians(a0))
-        x1, y1 = cx + r * math.cos(math.radians(a1)), cy - r * math.sin(math.radians(a1))
-        paths.append(f"<path d='M{x0:.0f} {y0:.0f} A{r} {r} 0 0 0 {x1:.0f} {y1:.0f}' stroke='{color}' stroke-width='4' fill='none' stroke-linecap='round'/>")
+    for r in rs:
+        lo, hi = 0.0, t1  # 끝점이 꼭짓점과 안쪽 끝점을 잇는 직선 위에 오는 반각을 이분법으로(바깥 호는 안쪽보다 짧다)
+        for _ in range(40):
+            t = (lo + hi) / 2
+            if r * math.sin(t) > h1 * (xa - r * math.cos(t)) / (xa - x1):
+                hi = t
+            else:
+                lo = t
+        x0, y0 = cx - r * math.cos(t), cy - r * math.sin(t)
+        paths.append(f"<path d='M{x0:.0f} {y0:.0f} A{r} {r} 0 0 0 {x0:.0f} {2 * cy - y0:.0f}' stroke='{color}' stroke-width='4' fill='none' stroke-linecap='round'/>")
     return f"<svg style='position:absolute;left:0;top:0;overflow:visible' width='1' height='1'>{''.join(paths)}</svg>"
 
 
