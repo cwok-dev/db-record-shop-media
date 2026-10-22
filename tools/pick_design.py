@@ -17,7 +17,7 @@ for card, options in opt["cards"].items():
     cards[card] = options[i]
     log.append({"at": now, "album": album_id, "card": card, "picked": k, "by": "user" if card in picks else "default",
                 "options": [{x: o.get(x) for x in ("template", "shape", "props", "basis", "why")} for o in options]})
-design = {"photos": opt.get("photos", {}), "cards": cards}
+design = {"credit": opt.get("credit"), "photos": opt.get("photos", {}), "cards": cards}
 (opt_path.parent / "design.json").write_text(json.dumps(design, ensure_ascii=False, indent=1), encoding="utf-8")
 with open(opt_path.parent.parent / "design_log.jsonl", "a", encoding="utf-8") as f:
     for row in log:

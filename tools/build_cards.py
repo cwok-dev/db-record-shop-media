@@ -12,7 +12,9 @@ design.json  {"photos": {"p1": {"url": ..., "page": 기사 주소}}, "cards": {"
 options.json {"photos": {...}, "cards": {"album": [A, B, C], "1": [A, B, C], ...}}
 사양         {"template": glyph|polaroid|cutout|grid|player|full, "photo": "p1", "crop": [x0, y0, x1, y1](비율),
               "bg": paper|ink|spot(타이포 카드), "shape": circle|arch|frame(cutout), "props": ["sparkle"|"wave"|"motif:<이름>"],
-              "wide": true|false(한 줄 평 6칸), "basis": 제목|소개|위치|평, "why": 의도 한 문장}
+              "wide": true|false(한 줄 평 6칸), "lines": ["Moon", "light"](제목 줄바꿈 직접 지정),
+              "basis": 제목|소개|위치|평, "why": 의도 한 문장}
+design.json·options.json의 "credit": 사진 출처(소속사명). 사진을 쓴 카드가 있으면 캡션에 "사진: <credit>"을 넣는다.
 사양이 없는 카드는 표지로 만든다(앨범 glyph, 트랙은 타이포 cutout·사진 full을 번갈아).
 
 출력: <out>/p1_01.jpg …, p2_…, premix_…, caption_<post>.txt, manifest.json (warnings 포함)
@@ -63,7 +65,7 @@ def stars_text(s):
     return f"{float(s):.1f}"
 
 
-def captions(album, review, posts):
+def captions(album, review, posts, credit=None):
     a = review["album"]
     tags = hashtags(album)
     head = f"★ {stars_text(a['stars'])} | {a['oneline']}"
@@ -73,11 +75,14 @@ def captions(album, review, posts):
              f"{album['type']} · {album['releaseDate'].replace('-', '.')}", "", head]
     if recs:
         first += ["", "추천 트랙: " + ", ".join(recs)]
+    photo = [f"사진: {credit}"] if credit else []
+    if photo:
+        first += [""] + photo
     first += ["", tags]
     out = {}
     for i, p in enumerate(posts, 1):
         out[p] = "\n".join(first) if p == 1 else \
-            f"『{album['title']}』 리뷰 {i}/{len(posts)}\n\n{head}\n\n{tags}"
+            "\n".join([f"『{album['title']}』 리뷰 {i}/{len(posts)}", "", head] + ([""] + photo if photo else []) + ["", tags])
     return out
 
 
@@ -104,8 +109,8 @@ def check_rules(group, specs, warns):
                 seen.add(p)
 
 
-def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, label):
-    """사양 하나로 Card를 만든다. 사진을 못 받으면 표지로 바꾸고 경고를 남긴다."""
+def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, label, used=None):
+    """사양 하나로 Card를 만든다. 사진을 못 받으면 표지로 바꾸고 경고를 남긴다. used: 사진을 실제로 쓴 카드 이름 모음."""
     src = cover
     if spec.get("photo"):
         src = photos.get(spec["photo"], {}).get("url") or photos.get(spec["photo"], {}).get("file") or cover
@@ -114,7 +119,10 @@ def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, la
     def img(w, h, cell=7):
         nonlocal src, crop
         try:
-            return photo.slot(src, crop, w, h, cache, cell).as_uri()
+            uri = photo.slot(src, crop, w, h, cache, cell).as_uri()
+            if src != cover and used is not None:
+                used.add(label)
+            return uri
         except photo.PhotoError as e:
             warns.append(f"{label}: 사진을 못 받아 표지로 대신함 ({e})")
             src, crop = cover, None
@@ -135,7 +143,7 @@ def build(args, album, review, posts_specs, photos, out, preview=False):
     common = dict(spot=spot, prop=prop, artist=album["artist"], album=album["title"], year=year)
     a = (review or {}).get("album")
     posts = [p for p in POST_ORDER if any(t.get("post") == p for t in tracks)]
-    jobs, manifest, warns = [], [], []
+    jobs, manifest, warns, used = [], [], [], {}
     for p in posts:
         group = [t for t in tracks if t.get("post") == p][:19]
         total = 1 + len(group)
@@ -149,7 +157,7 @@ def build(args, album, review, posts_specs, photos, out, preview=False):
                 aspec.setdefault("bg", "ink")
             png = out / f"{key}_01{vname}.png"
             jobs.append((make_card(layout, photo, kind="album", spec=aspec, photos=photos, cover=cover, cache=cache,
-                                   warns=warns, label=f"{key} 앨범", ctx={**common, "page": f"01/{total:02d}", "review": a}), png))
+                                   warns=warns, label=f"{key} 앨범", used=used.setdefault(p, set()), ctx={**common, "page": f"01/{total:02d}", "review": a}), png))
             files.setdefault(1, []).append(png)
             typo_i = 0
             for i, (t, s) in enumerate(zip(group, tspecs), 2):
@@ -162,12 +170,12 @@ def build(args, album, review, posts_specs, photos, out, preview=False):
                 ctx = {**common, "page": f"{i:02d}/{total:02d}", "n": t["n"], "total": len(tracks), "title": t["title"],
                        "is_title": bool(t.get("isTitle")), "review": r}
                 jobs.append((make_card(layout, photo, kind="track", spec=s, photos=photos, cover=cover, cache=cache,
-                                       warns=warns, label=f"{key} 트랙 {t['n']}", ctx=ctx), png))
+                                       warns=warns, label=f"{key} 트랙 {t['n']}", used=used.setdefault(p, set()), ctx=ctx), png))
                 files.setdefault(i, []).append(png)
         manifest.append((p, key, group, files))
     rw = layout.render(jobs, out)
     warns += [f"{k}: {v}" for k, v in rw.items()]
-    return manifest, warns
+    return manifest, warns, used
 
 
 def main():
@@ -197,7 +205,7 @@ def main():
             return [("ABC"[k], pick(cards.get("album", []), k, default_spec("album", 0)),
                      [pick(cards.get(str(t["n"]), []), k, default_spec("track", i)) for i, t in enumerate(group, 1)]) for k in range(n)]
 
-        manifest, warns = build(args, album, review, specs, opt.get("photos", {}), out, preview=True)
+        manifest, warns, _ = build(args, album, review, specs, opt.get("photos", {}), out, preview=True)
         from PIL import ImageDraw
         sheets = []
         for p, key, group, files in manifest:
@@ -225,8 +233,11 @@ def main():
         return [("", dc.get("album", default_spec("album", 0)),
                  [dc.get(str(t["n"]), default_spec("track", i)) for i, t in enumerate(group, 1)])]
 
-    manifest, warns = build(args, album, review, specs, design.get("photos", {}), out)
-    caps = captions(album, review, [m[0] for m in manifest])
+    manifest, warns, used = build(args, album, review, specs, design.get("photos", {}), out)
+    credit = design.get("credit") if any(used.values()) else None
+    if any(used.values()) and not design.get("credit"):
+        warns.append("사진을 썼지만 design.json에 credit(소속사명)이 없어 캡션에 출처를 넣지 못함")
+    caps = captions(album, review, [m[0] for m in manifest], credit)
     result = []
     for p, key, group, files in manifest:
         names = []

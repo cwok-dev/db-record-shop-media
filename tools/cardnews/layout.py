@@ -189,14 +189,14 @@ def resolve(c, name):
 
 
 def title_block(c, size, maxw, maxh, color, blend="normal", left=M - 8, top=TOP_TITLE - 16, lh=.84):
-    lines = "<br>".join(esc(x) for x in split_lines(c.title))
+    lines = "<br>".join(esc(x) for x in (c.spec.get("lines") or split_lines(c.title)))
     return (f"<div class='abs title' data-fit data-maxw='{maxw}' data-maxh='{maxh}' style='left:{left}px;top:{top}px;"
             f"font:900 {size}px/{lh} Paperlogy;letter-spacing:-.05em;color:{color};mix-blend-mode:{blend};width:max-content;z-index:4'>{lines}</div>")
 
 
 def label_title(c, size, maxw, maxh, top):
     spans = "<br>".join(f"<span class='lbl' style='background:{c.spot};padding:14px 22px 2px;margin-bottom:-3px'>{esc(x)}</span>"
-                        for x in split_lines(c.title))
+                        for x in (c.spec.get("lines") or split_lines(c.title)))
     return (f"<div class='abs title' data-fit data-maxw='{maxw}' data-maxh='{maxh}' style='left:{M}px;top:{top}px;"
             f"font:900 {size}px/1 Paperlogy;letter-spacing:-.03em;line-height:0;width:max-content;z-index:4'>"
             f"<div style='line-height:1'>{spans}</div></div>")
@@ -288,7 +288,7 @@ def t_grid(c):
 .tile.on{{background-color:{c.prop};background-blend-mode:multiply;border-width:6px;box-shadow:8px 8px 0 {INK};transform:scale(1.18);z-index:2}}
 .pin{{position:absolute;left:{px}px;top:{pick[0] * (th + GUT) + 34}px;z-index:3;background:{c.prop};border:3px solid {INK};padding:8px 12px 6px;font:700 22px 'SpaceMono'}}
 """
-    c2 = Card(**{**c.__dict__, "title": main.strip()})
+    c2 = Card(**{**c.__dict__, "title": main.strip(), "spec": {k: v for k, v in c.spec.items() if k != "lines"}})
     body = f"""<div class='grain'></div>{title_block(c2, 300, 992, 260, color)}
 <div class='abs sub' data-zone='after' data-after='.title'><span class='lbl'>{esc(sub)}</span></div>
 <div class='abs zone' data-zone='center' data-after='.sub'>{tiles}<div class='pin'>◀ THIS ONE</div></div>
