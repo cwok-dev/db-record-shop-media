@@ -57,8 +57,14 @@ def fit_crop(im, crop, w, h):
 
 
 def halftone(im, cell=7, angle=45):
-    """흰 바탕에 검은 점. 점 크기가 어두움에 비례한다(45° 격자)."""
+    """흰 바탕에 검은 점. 점 크기가 어두움에 비례한다(45° 격자).
+    흰 옷·밝은 배경 사진은 점이 거의 안 찍혀 흐려지므로, 평균 밝기가 0.45를 넘으면 중간톤을 눌러 0.45로 맞춘다."""
     g = ImageOps.autocontrast(ImageOps.grayscale(im), cutoff=1)
+    a = np.asarray(g, dtype=float) / 255
+    m = a.mean()
+    if m > 0.45:
+        a = a ** (np.log(0.45) / np.log(m))
+        g = Image.fromarray((a * 255).astype(np.uint8))
     k = 3
     r = g.rotate(angle, expand=True, fillcolor=255)
     W, H = r.size

@@ -113,7 +113,9 @@ function stamp(){const s=document.querySelector('.recst'),a=document.querySelect
  const r=a.getBoundingClientRect();let cx=r.left+.85*r.width,cy=r.top+.15*r.height;
  cx=Math.min(Math.max(cx,158),1080-158);cy=Math.min(Math.max(cy,236),1350-158);
  s.style.left=(cx-150)+'px';s.style.top=(cy-150)+'px';}
-document.fonts.ready.then(()=>{fit();const w=zones();stamp();document.body.dataset.warn=w.join('; ');document.body.dataset.ready='1';});
+function band(){const b=document.querySelector('.band'),t=document.querySelector('.title');
+ if(b&&t)b.style.height=Math.ceil((t.getBoundingClientRect().bottom+48)/8)*8+'px';}
+document.fonts.ready.then(()=>{fit();band();const w=zones();stamp();document.body.dataset.warn=w.join('; ');document.body.dataset.ready='1';});
 """
 
 
@@ -251,7 +253,7 @@ def t_cutout(c):
     bg = resolve(c, bgname)
     color_name, blend = typo_colors(bgname)
     ring = c.spot if bgname != "spot" else INK
-    d = span(4)
+    d = span(4) if bgname == "ink" else span(3)  # 제목 아래에 놓일 때는 3칸(줄어들지 않게)
     shape = c.spec.get("shape", "circle")
     radius = {"circle": "50%", "arch": f"{d // 2}px {d // 2}px 0 0", "frame": "0"}[shape]
     css = f"""
@@ -345,7 +347,7 @@ def prop_html(c, p, i):
 
 
 def t_full(c):
-    """사진 카드 + 소품: 사진 한 장이 곡의 장면일 때. 위 띠는 포인트 컬러, 소품은 곡의 근거 하나에서 고른다."""
+    """사진 카드 + 소품: 사진 한 장이 곡의 장면일 때. 위 띠는 포인트 컬러(제목 아래 48까지), 소품은 곡의 근거 하나에서 고른다."""
     css = f"""
 .photo{{inset:0;background:url('{c.img(W, H)}') 0 0/cover;mix-blend-mode:multiply}}
 .band{{left:0;top:0;width:{W}px;height:{TOP_TITLE + 384}px;background:{c.spot};mix-blend-mode:multiply}}
