@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git push origin main)",
+      "Bash(python3 -I tools/ig_publish.py *)"
+    ]
+  }
+}
