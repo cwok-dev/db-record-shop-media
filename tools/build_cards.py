@@ -1,13 +1,21 @@
-"""리뷰 하나로 캐러셀 카드(JPEG)와 캡션을 만든다. 릴스는 만들지 않는다.
+"""리뷰 하나로 캐러셀 카드(JPEG)와 캡션을 만든다. 릴스는 만들지 않는다. 디자인은 사양서 4장.
 
-python3 -I tools/build_cards.py --album <albums 문서 JSON> --review <reviews 문서 JSON>
-    --cover <표지 파일> --out <출력 폴더> [--motifs "1=ribbon/grain/accent/glow,2=rings/glow/split"]
+게시용
+python3 -I tools/build_cards.py --album <albums JSON> --review <reviews JSON> --cover <표지> --out <폴더>
+    [--design posts/<id>/design.json]
 
---motifs: 트랙 번호=모티프[/질감[/팔레트[/glow]]]. 질감 기본 grain, 팔레트 기본 accent, glow를 쓰면 배경 빛을 켠다.
-지정하지 않은 트랙은 트랙 제목으로 고정한 난수로 고른다.
-한 게시물 안에서는 모든 모티프를 한 번씩 쓰기 전에는 다시 쓰지 않고, 이웃 카드끼리는 같은 모티프를 쓰지 않는다.
+아침 시안 (카드마다 A·B·C를 나란히 놓은 미리보기)
+python3 -I tools/build_cards.py --album <albums JSON> --cover <표지> --out <폴더>
+    --options <options.json> [--review <reviews JSON>]
 
-출력: <out>/p1_01.jpg …, p2_…, premix_…, caption_<post>.txt, manifest.json
+design.json  {"photos": {"p1": {"url": ..., "page": 기사 주소}}, "cards": {"album": 사양, "1": 사양, ...}}
+options.json {"photos": {...}, "cards": {"album": [A, B, C], "1": [A, B, C], ...}}
+사양         {"template": glyph|polaroid|cutout|grid|player|full, "photo": "p1", "crop": [x0, y0, x1, y1](비율),
+              "bg": paper|ink|spot(타이포 카드), "shape": circle|arch|frame(cutout), "props": ["sparkle"|"wave"|"motif:<이름>"],
+              "wide": true|false(한 줄 평 6칸), "basis": 제목|소개|위치|평, "why": 의도 한 문장}
+사양이 없는 카드는 표지로 만든다(앨범 glyph, 트랙은 타이포 cutout·사진 full을 번갈아).
+
+출력: <out>/p1_01.jpg …, p2_…, premix_…, caption_<post>.txt, manifest.json (warnings 포함)
 """
 import argparse, json, pathlib, re, sys, urllib.request
 
@@ -18,12 +26,15 @@ sys.path.insert(0, str(CARD))
 FONTS = {
     "Paperlogy-6SemiBold.woff2": "https://raw.githubusercontent.com/projectnoonnu/2408-3/main/Paperlogy-6SemiBold.woff2",
     "Paperlogy-8ExtraBold.woff2": "https://raw.githubusercontent.com/projectnoonnu/2408-3/main/Paperlogy-8ExtraBold.woff2",
+    "Paperlogy-9Black.woff2": "https://raw.githubusercontent.com/projectnoonnu/2408-3/main/Paperlogy-9Black.woff2",
     "S-CoreDream-3Light.woff": "https://raw.githubusercontent.com/projectnoonnu/noonfonts_six/master/S-CoreDream-3Light.woff",
     "S-CoreDream-4Regular.woff": "https://raw.githubusercontent.com/projectnoonnu/noonfonts_six/master/S-CoreDream-4Regular.woff",
     "S-CoreDream-5Medium.woff": "https://raw.githubusercontent.com/projectnoonnu/noonfonts_six/master/S-CoreDream-5Medium.woff",
     "S-CoreDream-6Bold.woff": "https://raw.githubusercontent.com/projectnoonnu/noonfonts_six/master/S-CoreDream-6Bold.woff",
     "ChosunGu.woff": "https://raw.githubusercontent.com/projectnoonnu/noonfonts_20-04/master/ChosunGu.woff",
+    "SpaceMono-Bold.woff2": "https://fonts.gstatic.com/s/spacemono/v17/i7dMIFZifjKcF5UAWdDRaPpZUFWaHg.woff2",
 }
+
 POST_ORDER = [1, 2, "remix"]
 
 
@@ -70,109 +81,166 @@ def captions(album, review, posts):
     return out
 
 
-def parse_specs(text, graphics):
-    specs = {}
-    for kv in filter(None, (s.strip() for s in text.split(","))):
-        n, spec = kv.split("=")
-        parts = spec.split("/")
-        motif = parts[0]
-        style = parts[1] if len(parts) > 1 and parts[1] else "grain"
-        palette = parts[2] if len(parts) > 2 and parts[2] else "accent"
-        glow = len(parts) > 3 and parts[3] == "glow"
-        if motif not in graphics.MOTIFS:
-            sys.exit(f"알 수 없는 모티프: {motif} (트랙 {n})")
-        if style not in graphics.STYLES_FOR[motif]:
-            sys.exit(f"{motif}에는 {graphics.STYLES_FOR[motif]} 질감만 쓴다 (트랙 {n})")
-        if palette not in graphics.PALETTES:
-            sys.exit(f"알 수 없는 팔레트: {palette} (트랙 {n})")
-        specs[n.strip()] = {"motif": motif, "style": style, "palette": palette, "bg_glow": glow}
-    return specs
+def default_spec(kind, i):
+    """사양이 없을 때: 표지 사진으로 앨범은 glyph, 트랙은 타이포(cutout)·사진(full)을 번갈아."""
+    if kind == "album":
+        return {"template": "glyph"}
+    return {"template": "cutout"} if i % 2 == 1 else {"template": "full"}
 
 
-def plan_graphics(group, specs, graphics):
-    """게시물 하나의 트랙별 그래픽. 모든 모티프를 한 번씩 쓰기 전엔 재사용 금지, 이웃끼리는 항상 다르게."""
-    import random
-    plan, used, prev = [], set(), None
-    reserved = {specs[str(t["n"])]["motif"] for t in group if str(t["n"]) in specs}
-    for t in group:
-        if len(used) == len(graphics.MOTIFS):
-            used = set()
-        g = specs.get(str(t["n"]))
-        if g is None:
-            rng = random.Random(t["title"])
-            free = [m for m in graphics.MOTIFS if m not in used and m != prev]
-            motif = rng.choice(sorted([m for m in free if m not in reserved] or free))
-            g = {"motif": motif, "style": rng.choice(graphics.STYLES_FOR[motif]),
-                 "palette": rng.choice(graphics.PALETTES if motif in graphics.AREA else ["accent", "split"]),
-                 "bg_glow": False}
-        elif g["motif"] == prev:
-            sys.exit(f"이웃 카드와 모티프가 같다: {g['motif']} (트랙 {t['n']})")
-        elif g["motif"] in used:
-            sys.exit(f"이 게시물에서 이미 쓴 모티프: {g['motif']} (트랙 {t['n']})")
-        used.add(g["motif"]); prev = g["motif"]
-        plan.append(g)
-    return plan
+def check_rules(group, specs, warns):
+    """게시물 안 규칙: 이웃 카드가 같은 계열이면 리듬이 깨진다(경고만). 37종 모티프 소품은 한 게시물에서 겹치지 않는다."""
+    from layout import TYPO
+    fam = [("typo" if s["template"] in TYPO else "photo") for s in specs]
+    for i in range(1, len(fam)):
+        if fam[i] == fam[i - 1]:
+            warns.append(f"트랙 {group[i]['n']}: 앞 카드와 같은 {fam[i]} 계열(리듬 규칙)")
+    seen = set()
+    for t, s in zip(group, specs):
+        for p in s.get("props", []):
+            if p.startswith("motif:"):
+                if p in seen:
+                    sys.exit(f"이 게시물에서 이미 쓴 모티프 소품: {p} (트랙 {t['n']})")
+                seen.add(p)
+
+
+def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, label):
+    """사양 하나로 Card를 만든다. 사진을 못 받으면 표지로 바꾸고 경고를 남긴다."""
+    src = cover
+    if spec.get("photo"):
+        src = photos.get(spec["photo"], {}).get("url") or photos.get(spec["photo"], {}).get("file") or cover
+    crop = spec.get("crop") if src != cover else None
+
+    def img(w, h, cell=7):
+        nonlocal src, crop
+        try:
+            return photo.slot(src, crop, w, h, cache, cell).as_uri()
+        except photo.PhotoError as e:
+            warns.append(f"{label}: 사진을 못 받아 표지로 대신함 ({e})")
+            src, crop = cover, None
+            return photo.slot(src, None, w, h, cache, cell).as_uri()
+
+    return layout.Card(kind=kind, spec=spec, img=img, bg=spec.get("bg"), **ctx)
+
+
+def build(args, album, review, posts_specs, photos, out, preview=False):
+    import layout, photo
+    from PIL import Image
+    cover = pathlib.Path(args.cover).resolve()
+    cache = out / ".cache"; cache.mkdir(parents=True, exist_ok=True)
+    spot = layout.spot_color(cover)
+    prop = layout.prop_color(spot)
+    tracks = sorted(album["tracks"], key=lambda t: t["n"])
+    year = album["releaseDate"][:4]
+    common = dict(spot=spot, prop=prop, artist=album["artist"], album=album["title"], year=year)
+    a = (review or {}).get("album")
+    posts = [p for p in POST_ORDER if any(t.get("post") == p for t in tracks)]
+    jobs, manifest, warns = [], [], []
+    for p in posts:
+        group = [t for t in tracks if t.get("post") == p][:19]
+        total = 1 + len(group)
+        key = f"p{p}"
+        variants = posts_specs(p, group)  # [(이름, 앨범 사양, [트랙 사양])]
+        files = {}
+        for vname, aspec, tspecs in variants:
+            check_rules(group, tspecs, warns)
+            aspec = {**aspec, "type": album.get("type", ""), "date": album["releaseDate"].replace("-", ".")}
+            if p != 1:
+                aspec.setdefault("bg", "ink")
+            png = out / f"{key}_01{vname}.png"
+            jobs.append((make_card(layout, photo, kind="album", spec=aspec, photos=photos, cover=cover, cache=cache,
+                                   warns=warns, label=f"{key} 앨범", ctx={**common, "page": f"01/{total:02d}", "review": a}), png))
+            files.setdefault(1, []).append(png)
+            typo_i = 0
+            for i, (t, s) in enumerate(zip(group, tspecs), 2):
+                r = (review or {}).get("tracks", {}).get(str(t["n"])) if review else None
+                if s["template"] in layout.TYPO and not s.get("bg"):
+                    s = {**s, "bg": ["paper", "ink", "spot"][typo_i % 3]}
+                if s["template"] in layout.TYPO:
+                    typo_i += 1
+                png = out / f"{key}_{i:02d}{vname}.png"
+                ctx = {**common, "page": f"{i:02d}/{total:02d}", "n": t["n"], "total": len(tracks), "title": t["title"],
+                       "is_title": bool(t.get("isTitle")), "review": r}
+                jobs.append((make_card(layout, photo, kind="track", spec=s, photos=photos, cover=cover, cache=cache,
+                                       warns=warns, label=f"{key} 트랙 {t['n']}", ctx=ctx), png))
+                files.setdefault(i, []).append(png)
+        manifest.append((p, key, group, files))
+    rw = layout.render(jobs, out)
+    warns += [f"{k}: {v}" for k, v in rw.items()]
+    return manifest, warns
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--album", required=True)
-    ap.add_argument("--review", required=True)
+    ap.add_argument("--review")
     ap.add_argument("--cover", required=True)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--motifs", default="", help='트랙 번호=모티프[/질감[/팔레트[/glow]]], 예 "1=ribbon/grain/accent/glow,2=rings/glow/split"')
+    ap.add_argument("--design", help="posts/<id>/design.json")
+    ap.add_argument("--options", help="아침 시안용 options.json")
     args = ap.parse_args()
 
-    album = json.load(open(args.album, encoding="utf-8"))
-    review = json.load(open(args.review, encoding="utf-8"))
-    album, review = album.get("data", album), review.get("data", review)
-    cover = pathlib.Path(args.cover).resolve()
+    load = lambda f: (lambda d: d.get("data", d))(json.load(open(f, encoding="utf-8")))
+    album = load(args.album)
+    review = load(args.review) if args.review else None
     out = pathlib.Path(args.out).resolve(); out.mkdir(parents=True, exist_ok=True)
-
     fetch_fonts()
-    from render import render_card
-    from point_color import point_colors, BLACK, WHITE
-    import graphics
     from PIL import Image
 
-    specs = parse_specs(args.motifs, graphics)
-    pt_dark = point_colors(cover, BLACK)[0]
-    tracks = sorted(album["tracks"], key=lambda t: t["n"])
-    posts = [p for p in POST_ORDER if any(t.get("post") == p for t in tracks)]
-    caps = captions(album, review, posts)
-    a = review["album"]
-    manifest = []
-    for p in posts:
-        group = [t for t in tracks if t.get("post") == p][:19]
-        total = 1 + len(group)
-        key = f"p{p}"
-        files = []
+    if args.options:
+        opt = json.load(open(args.options, encoding="utf-8"))
+        cards = opt["cards"]
 
-        def save(png, i):
+        def specs(p, group):
+            n = max(len(cards.get("album", [])), *(len(cards.get(str(t["n"]), [])) for t in group), 1)
+            pick = lambda lst, k, d: (lst[k] if k < len(lst) else lst[0]) if lst else d
+            return [("ABC"[k], pick(cards.get("album", []), k, default_spec("album", 0)),
+                     [pick(cards.get(str(t["n"]), []), k, default_spec("track", i)) for i, t in enumerate(group, 1)]) for k in range(n)]
+
+        manifest, warns = build(args, album, review, specs, opt.get("photos", {}), out, preview=True)
+        from PIL import ImageDraw
+        sheets = []
+        for p, key, group, files in manifest:
+            names = ["앨범"] + [t["title"] for t in group]
+            for i, pngs in sorted(files.items()):
+                Wt, Ht = 432, 540
+                s = Image.new("RGB", (len(pngs) * (Wt + 16) + 16, Ht + 72), "#2a2a2a")
+                d = ImageDraw.Draw(s)
+                for k, f in enumerate(pngs):
+                    s.paste(Image.open(f).convert("RGB").resize((Wt, Ht), Image.LANCZOS), (16 + k * (Wt + 16), 56))
+                    d.text((16 + k * (Wt + 16), 20), "ABC"[k], fill="#fff")
+                sp = out / f"sheet_{key}_{i:02d}.jpg"
+                s.save(sp, quality=86)
+                sheets.append({"card": "album" if i == 1 else str(group[i - 2]["n"]), "post": p, "name": names[i - 1], "sheet": sp.name})
+        (out / "sheets.json").write_text(json.dumps({"sheets": sheets, "warnings": warns}, ensure_ascii=False, indent=1), encoding="utf-8")
+        print(json.dumps({"sheets": [x["sheet"] for x in sheets], "warnings": warns}, ensure_ascii=False))
+        return
+
+    if not review:
+        sys.exit("게시용 렌더링에는 --review가 필요합니다")
+    design = json.load(open(args.design, encoding="utf-8")) if args.design else {"cards": {}, "photos": {}}
+    dc = design.get("cards", {})
+
+    def specs(p, group):
+        return [("", dc.get("album", default_spec("album", 0)),
+                 [dc.get(str(t["n"]), default_spec("track", i)) for i, t in enumerate(group, 1)])]
+
+    manifest, warns = build(args, album, review, specs, design.get("photos", {}), out)
+    caps = captions(album, review, [m[0] for m in manifest])
+    result = []
+    for p, key, group, files in manifest:
+        names = []
+        for i, pngs in sorted(files.items()):
             jpg = out / f"{key}_{i:02d}.jpg"
-            Image.open(png).convert("RGB").save(jpg, "JPEG", quality=94, subsampling=0)
-            pathlib.Path(png).unlink()
-            files.append(jpg.name)
-
-        png = out / f"{key}_01.png"
-        render_card(png, cover=cover, artist=album["artist"], title=album["title"], oneline=a["oneline"],
-                    score=float(a["stars"]), page=f"01/{total:02d}", theme="album" if p == 1 else "alt")
-        save(png, 1)
-        plan = plan_graphics(group, specs, graphics)
-        for i, (t, g) in enumerate(zip(group, plan), 2):
-            r = review.get("tracks", {}).get(str(t["n"]), {})
-            media = graphics.draw(g["motif"], t["title"], BLACK, pt_dark, style=g["style"], accent=WHITE,
-                                  palette=g["palette"], bg_glow=g["bg_glow"])
-            png = out / f"{key}_{i:02d}.png"
-            render_card(png, cover=cover, artist=album["artist"], title=t["title"], oneline=r.get("oneline", ""),
-                        score=float(r.get("stars", 0)), page=f"{i:02d}/{total:02d}", theme="track",
-                        recommended=bool(r.get("rec")), media=media)
-            save(png, i)
+            Image.open(pngs[0]).convert("RGB").save(jpg, "JPEG", quality=94, subsampling=0)
+            pngs[0].unlink()
+            names.append(jpg.name)
         (out / f"caption_{p}.txt").write_text(caps[p], encoding="utf-8")
-        manifest.append({"post": p, "files": files, "caption": f"caption_{p}.txt",
-                         "graphics": {str(t["n"]): g for t, g in zip(group, plan)}})
-    (out / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(json.dumps(manifest, ensure_ascii=False))
+        result.append({"post": p, "files": names, "caption": f"caption_{p}.txt",
+                       "design": {"album": dc.get("album", default_spec("album", 0)),
+                                  **{str(t["n"]): dc.get(str(t["n"]), default_spec("track", i)) for i, t in enumerate(group, 1)}}})
+    (out / "manifest.json").write_text(json.dumps({"posts": result, "warnings": warns}, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(json.dumps({"posts": [{k: r[k] for k in ("post", "files", "caption")} for r in result], "warnings": warns}, ensure_ascii=False))
 
 
 if __name__ == "__main__":

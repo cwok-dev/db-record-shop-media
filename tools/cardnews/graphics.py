@@ -836,7 +836,7 @@ def draw(motif, seed, bg, fg, style="grain", accent=None, palette="accent", bg_g
     return '<img src="data:image/png;base64,' + base64.b64encode(png).decode() + '">'
 
 
-def ribbon(seed, bg, fg):  # 이전 호출 방식 호환 (render.py 시안 코드)
+def ribbon(seed, bg, fg):  # 이전 호출 방식 호환
     return draw("ribbon", seed, bg, fg, palette="mono")
 
 

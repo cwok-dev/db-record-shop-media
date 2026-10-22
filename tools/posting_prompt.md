@@ -23,21 +23,20 @@
 
 ## 3. 카드 생성 (릴스는 만들지도 올리지도 않음)
 - 릴스는 사용자 지시로 보류합니다. 추천 트랙이 있어도 릴스 관련 작업을 하지 마십시오.
-- 트랙마다 스킬 4.7절의 모티프 37종·질감 4종·팔레트 5종·배경 빛(bg_glow) 중에서 트랙의 장르와 리뷰에 맞게 조합을 고릅니다. 4.7절 목록에 없는 모티프는 만들지 마십시오.
-  - 선 모티프는 질감 grain·glow만 씁니다(build_cards.py가 검사함). 선 모티프에는 팔레트 accent나 split을 우선합니다.
-  - 한 게시물 안에서는 37종을 모두 한 번씩 쓰기 전에는 모티프를 다시 쓰지 않고, 이웃 카드끼리는 절대 같은 모티프를 쓰지 않습니다(build_cards.py가 어기면 멈춤).
-  - 한 게시물 안의 팔레트는 두세 가지로 묶습니다.
-- `python3 -I tools/build_cards.py --album <albums JSON> --review <reviews JSON> --cover <표지 파일> --out W/cards --motifs "1=ribbon/grain/accent/glow,2=rings/glow/split,..."`
-  (형식: 트랙 번호=모티프/질감/팔레트[/glow]. 마지막 glow를 붙이면 배경 빛을 켭니다.)
-  → W/cards에 p1_01.jpg…, p2_…, premix_…, caption_<post>.txt, manifest.json이 생깁니다. 캡션은 스킬 7.5대로 이미 만들어집니다.
-- 만든 카드를 모두 확인합니다(여러 장을 한 장으로 모은 축소 이미지를 Read로 봐도 됩니다). 글자 넘침·폰트 대체·대비 문제가 없어야 합니다.
+- 카드 디자인은 아침 시안 작업에서 사용자가 고른 `posts/<album id>/design.json`을 씁니다(스킬 4.10). 직접 디자인을 고르거나 바꾸지 마십시오.
+  - design.json이 없고 `posts/<album id>/options.json`이 있으면 `python3 -I tools/pick_design.py posts/<album id>/options.json ""`로 A안을 확정합니다(보고에 "시안을 고르지 않아 A로 게시" 표시).
+  - 둘 다 없으면 `--design` 없이 실행합니다(표지로 만듦, 보고에 표시).
+- `python3 -I tools/build_cards.py --album <albums JSON> --review <reviews JSON> --cover <표지 파일> --out W/cards --design posts/<album id>/design.json`
+  → W/cards에 p1_01.jpg…, p2_…, premix_…, caption_<post>.txt, manifest.json({"posts": [...], "warnings": [...]})이 생깁니다. 사진은 design.json의 주소에서 다시 받습니다. 캡션은 스킬 7.5대로 이미 만들어집니다.
+- 만든 카드를 모두 확인합니다(여러 장을 한 장으로 모은 축소 이미지를 Read로 봐도 됩니다). 글자 넘침·폰트 대체·그림과 글자 겹침이 없어야 합니다.
+- warnings에 "사진을 못 받아 표지로 대신함"이 있으면 그 도메인을 7의 알림과 보고에 적습니다(사용자 결정: 막힐 때마다 알림). 그대로 게시는 진행합니다.
 
 ## 4. 이미지 호스팅
 - 아직 posts에 없는 게시물의 카드만 `posts/<album id>/`에 복사하고 커밋한 뒤, 정확히 `git push origin main`으로 푸시합니다(사용자가 main 직접 푸시를 허락함). 네트워크 실패 시 2·4·8·16초 간격으로 최대 4번 재시도.
 - `https://raw.githubusercontent.com/cwok-dev/db-record-shop-media/main/posts/<album id>/<파일>`이 200 image/jpeg인지 curl로 확인합니다.
 
 ## 5. 게시
-- manifest 순서(1 → 2 → remix)대로, posts에 없는 게시물마다 정확히 이 형식으로 실행합니다:
+- manifest의 posts 순서(1 → 2 → remix)대로, posts에 없는 게시물마다 정확히 이 형식으로 실행합니다:
   `python3 -I tools/ig_publish.py https://raw.githubusercontent.com/cwok-dev/db-record-shop-media/main/posts/<album id> W/cards/caption_<post>.txt <파일1> <파일2> ...`
   마지막 줄에 {"media_id", "permalink", ...} JSON이 나오면 성공입니다.
 - 성공할 때마다 즉시 ArtifactData update `reviews/<album id>`(직전에 읽은 version을 if_version으로)로 `posts`에 {"post": 1|2|"remix", "id": <media_id>, "permalink": <permalink>}를 추가합니다. 버전 충돌이면 다시 읽고 다시 씁니다.
@@ -50,4 +49,4 @@
 ## 7. 보고
 - 게시를 시도한 실행(성공 또는 실패)에서만 PushNotification 도구(ToolSearch "select:PushNotification")로 한국어 존댓말 한 줄 알림을 보냅니다. 예: "NMIXX 『Strange Muse』 게시했습니다: <permalink>" / "Yuhz 게시 실패: <사유>". 1단계에서 끝난 실행은 알림을 보내지 않습니다.
 - 마지막 메시지는 한국어 존댓말 3~5줄: 가수·앨범, 올린 게시물과 링크(permalink), 실패가 있었다면 사유. 토큰은 절대 포함하지 마십시오.
-- 트랙마다 고른 그래픽 조합과 이유(장르·리뷰 근거 한 줄)를 마지막 메시지 아래에 덧붙입니다.
+- 카드마다 쓴 템플릿과 의도(design.json의 why)를 마지막 메시지 아래에 덧붙입니다. A로 대신했거나 표지로 대신한 카드가 있으면 함께 적습니다.

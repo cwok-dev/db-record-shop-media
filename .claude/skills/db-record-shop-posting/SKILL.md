@@ -11,7 +11,8 @@ description: "@db_record_shop 케이팝 앨범 리뷰를 카드뉴스(1080x1350)
 
 | 시각 (Asia/Seoul) | 단계 | 담당 |
 |---|---|---|
-| 매일 07:50 | 신보 수집 → 리뷰 페이지에 앨범 기록 → 푸시 알림 | 예약 작업 "매일 아침 신보 수집" (지시문: 부록 B, 저장소 `meta/collector.collector_prompt`) |
+| 매일 07:07 | 신보 수집 → 리뷰 페이지에 앨범 기록 → 푸시 알림 | 예약 작업 "매일 아침 신보 수집" (지시문: 부록 B, 저장소 `meta/collector.collector_prompt`) |
+| 매일 07:43 | 사진 수집 → 카드마다 시안 A·B·C → 8시 무렵 사용자에게 전송 → 사용자가 고름 | 예약 작업 "카드 시안 고르기" (지시문: `tools/options_prompt.md`, 4.10) |
 | 08:00 ~ | 사용자가 리뷰 페이지에서 별점·한 줄 평·추천을 입력하고 발행 | 사용자 |
 | 18:00 | 발행 상태가 `scheduled`인 리뷰를 카드·릴스로 만들어 게시 | 게시 작업 (이 사양서) |
 | 18:00 ~ 다음 날 08:00 | 발행 즉시(`immediate`) 게시 | 게시 작업 (이 사양서) |
@@ -49,9 +50,9 @@ tracks: { "<n>": { stars, oneline, rec (추천 여부) } }
 
 | 게시물 | 1장 | 이후 |
 |---|---|---|
-| post 1 | 앨범 카드 (album 테마, 화이트) | post 1 트랙 카드, 트랙 순서대로 (track 테마) |
-| post 2 | 앨범 카드 (alt 테마, 포인트 컬러 배경) | post 2 트랙 카드 |
-| post "remix" | 앨범 카드 (alt 테마) | remix 트랙 카드 |
+| post 1 | 앨범 카드 (`glyph`, 포인트 컬러 배경) | post 1 트랙 카드, 트랙 순서대로 (타이포·사진 교대, 4.1) |
+| post 2 | 앨범 카드 (`glyph`, 잉크 배경) | post 2 트랙 카드 |
+| post "remix" | 앨범 카드 (`glyph`, 잉크 배경) | remix 트랙 카드 |
 | 릴스 | 추천(`rec: true`)된 트랙마다 1개. 추천이 없으면 릴스 없음 | |
 
 트랙 배정 규칙 (사용자 결정 2026-10-21: 캐러셀 최대 20장 = 앨범 카드 1장 + 트랙 카드 19장):
@@ -63,77 +64,76 @@ tracks: { "<n>": { stars, oneline, rec (추천 여부) } }
 
 페이지 번호(카드 우상단 `01/06`)는 게시물마다 1부터 센다. 분모는 그 게시물의 전체 장수다.
 
-## 4. 디자인 시스템 (카드 1080x1350)
+## 4. 디자인 시스템 (카드 1080x1350, 사용자 결정 2026-10-22)
 
-### 4.1 원칙
-- 흑백 + 포인트 컬러 1개의 네오 스위스 양식, 카세트테이프 플레이어와 아이팟을 연상하는 요소.
-- 흑백은 색조가 없는 중립 무채색만 쓴다: `#ffffff`, `#111111`, 보조 글씨 `#8c8c8c`.
-- 위로 갈수록 그림자가 길고 부드러워져 레이어 위계가 보이게 한다. 단, 별점에는 그림자를 쓰지 않고 색 대비만으로 띄운다(검은 배경에서 검은 그림자는 보이지 않는다).
+레퍼런스 탐구(사용자 제공 16장)에서 고른 A(흑백 하프톤+스팟 컬러)·B(타이포 포스터)·D(Y2K 콜라주)를 역할을 나눠 섞는다. 구현: `tools/cardnews/layout.py`(템플릿), `tools/cardnews/photo.py`(사진).
 
-### 4.2 테마
+### 4.1 원칙: 재료·리듬·액센트
+- **재료(A, 모든 장 공통)**: 포인트 컬러 하나 + 잉크 `#111111` + 종이 회색 `#e6e6e2`, 하프톤 사진, 3px 검은 테두리 라벨 상자, 점묘 그레인, 글꼴 넷(4.6). 재료가 같아야 구도가 달라도 한 계정으로 읽힌다.
+- **리듬(B)**: 트랙 카드는 **타이포 카드**(단색 면 + 거대한 제목 + 오린 사진)와 **사진 카드**(하프톤 사진 전면)를 번갈아 둔다. 게시물의 첫 트랙은 타이포 카드다. 앨범 카드는 표지 격이라 교대에서 뺀다.
+- **액센트(D)**: 장마다 소품 하나(테이프, 재생 창, 반짝이 별, 파형, 37종 모티프 액자 등)만 소품색으로 붙인다.
+- **의도**: 모든 장은 의도를 한 문장으로 설명할 수 있어야 한다. 구도·사진·소품은 다음 네 근거 중 하나에서만 고른다. ① 곡 제목 ② 곡 소개 ③ 앨범 안의 위치·역할(첫 곡, 타이틀, 반주곡, 마지막 곡 등) ④ 한 줄 평.
 
-| 테마 | 쓰임 | 배경 | 글씨·상단 바 | 별점 | 표지 프레임 |
-|---|---|---|---|---|---|
-| album | 게시물 1의 첫 장 | `#ffffff` | `#111111` | 포인트 컬러(흰 배경 기준 7:1 보정) | `#111111` |
-| alt | 게시물 2·리믹스 게시물 첫 장 | 포인트 컬러(글씨가 블랙이면 L +10) | 포인트 컬러 기준 블랙/화이트 | 글씨와 같은 무채색 | 글씨와 같은 무채색 |
-| track | 트랙 카드 | `#111111` | `#ffffff` | 포인트 컬러(검은 배경 기준 7:1 보정) | 은색 금속 (4.5 참고) |
+### 4.2 색
+- **포인트 컬러(spot)**: 표지의 주 유채색(4.3의 1번 규칙)과 같은 색상(H)으로, 채도 0.6 이상, L 0.6에서 시작해 잉크 글씨와 7:1 이상이 될 때까지 밝힌다. 흑백 표지는 `#ffd23f`.
+- **소품색**: 핫핑크 `#ff4f9a`. 포인트 컬러가 핑크 계열(색상 차 36° 미만)이면 라임 `#d7ff3d`. 소품색은 한 장에 한 군데만 쓴다.
+- **타이포 카드 배경**: 게시물 안에서 종이 → 잉크 → 포인트 컬러 순으로 돌린다(사양에서 바꿀 수 있음). 잉크 배경에서는 제목이 포인트 컬러이고 사진 위에서 반전(difference)되며 겹친다. 그 밖의 배경에서 제목은 잉크다.
+- **사진 카드**: 종이 위에 하프톤 사진을 곱하기(multiply)로 얹는다.
+- **별점**: 포인트 컬러 별, 잉크 바탕 상자. 숫자 점수는 쓰지 않는다.
 
-### 4.3 포인트 컬러 규칙
-1. 표지에서 가장 많이 쓰인 **유채색**을 쓴다. 무채색은 후순위다. 표지를 8색으로 줄인 팔레트에서 비중 2% 미만인 색은 무시한다. 채도 0.18 미만이거나 명도 0.08 미만 또는 0.94 초과면 무채색으로 본다.
-2. 유채색이 없는 흑백 표지는 표지의 블랙(가장 어두운 색)을 쓴다. 흰 배경 위에서 흰색이 되면 검은색, 검은 배경 위에서 어두운색이 되면 흰색을 쓴다.
-3. 배경과의 명도 대비는 항상 4.5:1 이상이어야 한다. 모자라면 HSL의 L을 10(0.1)씩 위아래로 옮겨, 기준을 넘는 색 중 원본에 가장 가까운 색을 쓴다. 같은 거리면 대비가 더 큰 쪽을 쓴다. **별점 색만은 기준을 7:1로 높인다**(album·track 테마).
-4. 요소마다 실제로 놓이는 배경을 기준으로 보정한다. 추천 스티커의 테두리·글씨는 흰 종이 위에 있으므로 흰색 기준이다.
-5. alt 테마는 포인트 컬러를 최대한 원본 그대로 배경에 쓰고, 그 색을 기준으로 블랙과 화이트 중 4.5:1을 넘는 쪽을 글씨로 쓴다. 둘 다 못 넘으면 포인트 컬러의 L을 가장 적게 옮기는 쪽을 택한다. 글씨가 블랙으로 정해지면 배경이 탁해 보이지 않도록 배경의 L을 10(0.1) 더 밝힌다(대비도 함께 커진다). 글씨가 화이트면 그대로 둔다.
+### 4.3 포인트 컬러 추출
+1. 표지에서 가장 많이 쓰인 **유채색**을 쓴다. 표지를 8색으로 줄인 팔레트에서 비중 2% 미만인 색은 무시한다. 채도 0.18 미만이거나 명도 0.08 미만 또는 0.94 초과면 무채색으로 본다.
+2. 유채색이 없는 흑백 표지는 4.2의 대체색을 쓴다.
 
-참조 구현(부록 A): `point_color.py` (저장소 `meta/collector.point_color_py`와 같은 코드). `python3 point_color.py <표지>`는 `{"base", "pointLight", "pointDark"}` JSON을 출력한다.
+참조 구현(부록 A): `point_color.py` (저장소 `meta/collector.point_color_py`와 같은 코드).
 
-### 4.4 레이아웃 (px, 1080x1350 기준)
-- **상단 바**: 좌우 56, 위 48, 높이 56, 아래 3px 실선(글씨색). 3열 그리드로 왼쪽 `DB RECORD SHOP`, 가운데 재생 버튼 아이콘 3개(되감기·재생·빨리감기, 높이 22, 간격 18), 오른쪽 페이지 번호 `01/06`. 22px, 굵게(700), 자간 0.08em. 하단에는 아무것도 두지 않는다(계정명 없음).
-- **본문 묶음**: 상단 바 아래 영역에서 세로·가로 가운데 정렬한다. 위에서부터 별점 → 중앙 이미지(제목 포함) → 한 줄 평 순서다.
-- **별점**: 별 5개, 각 108px, 간격 20, 가운데 정렬, 아래 여백 48. 0.5 단위는 별의 왼쪽 절반만 채운다. 채움과 외곽선(1.8) 모두 별점 색을 쓴다. 그림자·발광은 넣지 않는다. 숫자 점수는 쓰지 않는다.
-- **중앙 이미지 영역**: 760x760. 바깥 모서리 반경 26, 프레임 두께 16, 안쪽 모서리 반경 18. 안쪽 18은 바깥과 시각적으로 같은 곡률로 보이도록 보정한 값이다(수학적 동심원 값 10은 뾰족하게 보인다).
-- **한 줄 평**: 너비 760(표지와 같음), 표지와의 간격 64, 38px Light(300), 줄 간격 1.5, 왼쪽 정렬, 3줄 높이 고정, 넘치면 말줄임. 기준은 약 45자다.
+### 4.4 그리드·여백·간격 규칙
 
-### 4.5 중앙부 레이어 (아래 → 위)
-1. **그래픽 또는 표지**: 프레임 안쪽 꽉 차게, 모서리 반경 18. 제목이 어떤 표지 위에서도 읽히도록 아래쪽 40%에 어두운 그라디언트를 깐다(맨 아래 검정 60% → 22% 지점 25% → 40% 지점 0).
-2. **투명 글래스**: 색 없이 반사광만 둔다. 118° 대각선 하이라이트(왼쪽 위 흰색 16% → 22% 지점 5% → 23%에서 0), 31~38% 구간의 얇은 두 번째 띠(6%), 안쪽 1px 흰 테두리 14%, 위쪽 1px 하이라이트 28%.
-3. **프레임**: 두께 16의 링. 미세한 흑백 점 노이즈 질감을 깔고, 위쪽 18%는 흰 하이라이트, 아래쪽 18%는 어둡게 처리한다. 안쪽으로 짧은 그림자(inset 0 2px 3px 45%)를 드리워 아래 레이어보다 위에 있음을 보이고, 바깥으로 은은한 그림자(0 2px 4px 10%, 0 14px 32px 16%)를 준다.
-   - track 테마 프레임은 은색 금속이다. 무채색 반사광 띠만 쓰고(125° 그라데이션 `#d6d6d6 → #f4f4f4 → #a9a9a9 → #e9e9e9 → #9c9c9c → #dcdcdc`), 헤어라인 결은 넣지 않는다.
-4. **제목**: 그림 위 왼쪽 아래에 글자로 직접 놓는다(좌우 56, 아래 52). 아래에서 위로 쌓이므로 두 줄이 되어도 위로 늘어난다.
-   - 1줄: 가수명, 24px, 에스코어드림 Bold, 자간 0.14em, 대문자, 흰색 85%
-   - 2줄: 앨범명(앨범 카드) 또는 트랙명(트랙 카드), 72px, 페이퍼로지 ExtraBold, 흰색, 줄 간격 1.05, 자간 −0.01em, 간격 12
-5. **추천 스티커** (트랙 카드, 추천일 때만): 맨 위층. 견출지 모양의 네모 종이 스티커를 프레임 오른쪽 위 모서리에 걸쳐(오른쪽 −30, 위 −22) 5° 기울여 붙인다. 흰 종이(`#ffffff`)에 미세한 종이 노이즈, 바깥 반경 10, 안쪽 여백 9. 안쪽에 3px 포인트 컬러 테두리(흰색 기준 보정, 반경 6, 안쪽 여백 14·26)를 두른다. 텍스트 `추천`은 조선굴림 40px, 테두리와 같은 색이며 같은 색 1.6px 외곽선으로 굵게 한다(조선굴림은 한 굵기뿐). 그림자는 세 겹(0 1px 1px 18%, 0 4px 8px 16%, 0 16px 28px 22%)이다.
+| 규칙 | 값 | 의도 |
+|---|---|---|
+| 바깥 여백 | 상하좌우 48 | 인스타 프로필 격자는 4:5 카드를 3:4로 잘라 좌우를 약 34px씩 자른다. 48이면 그 안쪽이라 상단 라벨이 격자에서도 보인다. |
+| 가로 그리드 | 6칸: 칸 144, 사이 24, 내용 폭 984. 칸 시작 x = 48 + 168·i | 1/2·1/3·2/3로 모두 나뉘어 타이포·사진 카드가 같은 뼈대 위에서 구도를 바꾼다. |
+| 세로 단위 | 8의 배수(8·16·24·48)만 | 간격 종류가 적어야 장을 넘길 때 같은 계정으로 읽힌다. |
+| 고정 위치 | 상단 라벨 y=48(높이 40), 제목 시작 y=136, 한 줄 평은 아래 48에 붙임 | 장마다 바뀌는 건 가운데 그림뿐이고, 읽는 시작점과 끝점은 같은 자리다. |
+| 한 줄 평 폭 | 4칸(648) 또는 6칸(984) | 평은 진지한 본문이라 두 폭만 허용한다. 그림이 오른쪽에 걸리는 카드는 4칸, 그림이 화면 폭으로 깔리는 카드(플레이어·반복 격자)는 6칸. |
+| 그림과 한 줄 평 사이 | 48 이상 | 넘치면 그림 묶음을 줄인다(코드가 자동으로 줄이고 경고를 남긴다). |
+| 남는 세로 공간 | 그림 묶음은 제목과 한 줄 평 사이 가운데 | 그림이 작아도 아래가 비지 않게 한다. |
+| 별 터짐 모양 | 추천 표시에만 | 모양 하나에 뜻 하나. |
+
+### 4.5 카드 템플릿
+
+| 템플릿 | 계열 | 구성 | 언제 쓰나 (근거 예) |
+|---|---|---|---|
+| `glyph` | 앨범 | 앨범명 첫 글자를 거대하게, 글자 안을 하프톤 단체 사진으로 채움. 가수명·앨범명·발매일 라벨, 앨범 종류 소품색 라벨 | 앨범 카드. "이 앨범 = 이 사람들". 게시물 2·리믹스는 잉크 배경 |
+| `polaroid` | 타이포 | 거대한 제목 + 테이프로 붙인 폴라로이드(3칸) | 남겨 둘 장면: 첫 곡(출발), 설렘의 순간, 마지막 곡 |
+| `cutout` | 타이포 | 거대한 제목 + 모양으로 오린 사진(원 circle, 아치 arch, 프레임 frame, 4칸) | 제목·소개 속 사물: 달·해(원), 무대(아치), 영화·스크린(프레임) |
+| `grid` | 타이포 | 제목 + 괄호 부분 라벨 + 같은 사진 18칸(6×3), 한 칸만 소품색으로 짚기 | 반복·흔함·버전 차이: 반주곡, 리믹스, 다른 언어, "이런 곡이 많다"는 평 |
+| `player` | 사진 | 사진 전면 + 소품색 창 제목 줄 + 진행 막대(앨범 안 위치 n/전체) | 사진이 뮤직비디오 장면일 때(주로 타이틀곡) |
+| `full` | 사진 | 사진 전면 + 위쪽 포인트 컬러 띠 + 라벨 제목 + 소품 | 사진 한 장이 곡의 장면일 때. 소품: `sparkle`(빛·별), `wave`(소리·리프), `motif:<이름>`(4.9) |
+
+- 같은 37종 모티프 소품은 한 게시물 안에서 겹치지 않는다(`build_cards.py`가 검사).
+- 이웃한 트랙 카드가 같은 계열이면 리듬이 깨진다. 코드는 경고만 하고, 사용자가 고른 경우는 그대로 둔다.
 
 ### 4.6 타이포그래피
-- 앨범명·트랙명: **페이퍼로지** (ExtraBold 800)
-- 추천 스티커: **조선굴림** (+1.6px 같은 색 외곽선)
-- 그 밖의 모든 글자(가수명 포함): **에스코어드림** (Light 300, Medium 500, Bold 700)
-- 폰트 파일(GitHub raw로 받을 수 있음):
-  - `https://raw.githubusercontent.com/projectnoonnu/2408-3/main/Paperlogy-6SemiBold.woff2`, `…/Paperlogy-8ExtraBold.woff2`
-  - `https://raw.githubusercontent.com/projectnoonnu/noonfonts_six/master/S-CoreDream-3Light.woff`, `…/S-CoreDream-4Regular.woff`, `…/S-CoreDream-5Medium.woff`, `…/S-CoreDream-6Bold.woff`
-  - `https://raw.githubusercontent.com/projectnoonnu/noonfonts_20-04/master/ChosunGu.woff`
-- 폰트 교체는 사용자가 나중에 결정한다(후보: 프리텐다드, 원티드 산스, SUIT). IBM Plex 계열은 쓰지 않는다.
+- 제목: **페이퍼로지 Black(900)**. 화면 폭에 맞춰 코드가 자동으로 줄이고, 8자를 넘는 여러 단어 제목은 단어 경계에서 두 줄로 고르게 나눈다.
+- 라벨(상단·플래그·진행 막대·핀): **Space Mono Bold**.
+- 한 줄 평 등 본문: **에스코어드림** (Medium 500, Bold 700).
+- 추천 도장: **조선굴림**(외곽선 10px으로 굵게).
+- 폰트 파일은 `build_cards.py`의 `FONTS`에 주소가 있고 처음 실행 때 받는다.
 
-### 4.7 트랙 카드 중앙 그래픽
-표지 대신 트랙의 장르와 리뷰에서 아이디어를 얻은 그래픽을 넣는다. 그림은 **모양(모티프) × 질감(스타일) × 팔레트**의 조합이다(사용자 결정 2026-10-22).
-- **공통 원칙**: 단순한 형태 하나에 집중하고 여백을 넓게 둔다. 배경은 `#111111`이다.
-- **정렬**: 모양은 항상 가운데 축에 맞춘다. 한쪽으로 퍼지는 모양(입자, 밀린 원, 등고선 등)도 덩어리 전체의 중심이 가운데에 오게 한다.
-- **구도 변주**: 트랙 제목으로 고정한 난수로 가운데 축 기준 크기·회전만 바꾼다. 위치는 옮기지 않는다. 같은 곡은 항상 같은 그림이 나온다.
-- **질감 4종**
-  - `grain` 점묘 그레인: 밝기 필드 f(0~1)에 대해 `0.45·f + 0.55·(난수 < f)`로 점묘와 그라데이션을 섞는다.
-  - `halftone` 하프톤: 45° 격자의 점 크기로 명암을 낸다.
-  - `lines` 가는 선 해칭: 기울어진 평행선의 굵기로 명암을 낸다.
-  - `glow` 빛 번짐: 점 없이 넓게 퍼진 빛과 또렷한 심을 겹친다.
-  - 면 모티프는 넷 다 쓴다. 선 모티프는 하프톤·해칭을 쓰면 선이 끊겨 사라지므로 `grain`과 `glow`만 쓴다.
-- **팔레트 5종** (주색은 포인트 컬러(검은 배경 기준 보정), 두 번째 색은 화이트)
-  - `mono`: 포인트 컬러 하나
-  - `accent`: 모양은 포인트, 테두리·중심선 같은 세부는 화이트
-  - `duotone`: 어두운 곳은 포인트, 가장 밝은 곳은 화이트로 자연스럽게 넘어간다
-  - `split`: 가운데를 지나는 선으로 반을 가르거나 동심 띠로 나눠 포인트와 화이트를 번갈아 칠한다
-  - `tones`: 포인트 컬러를 어둡게·원래·밝게 3단계로 나눠 밝기에 따라 칠한다
-  - `bg_glow`: 어느 팔레트에든 켤 수 있다. 배경 가운데에 포인트 컬러가 옅게 번진다. 배경 `#111111` 규칙의 유일한 예외다.
-  - 가는 선 모티프는 밝은 부분이 적어 `duotone`·`tones`의 차이가 작으니 `accent`나 `split`을 우선한다.
-- **모티프 37종** (면: 질감 4종 모두 / 선: `grain`·`glow`)
+### 4.7 사진
+- 소스: 공식 콘셉트 포토, 단체 사진, 뮤직비디오 티저 스틸. 소속사가 언론에 배포한 기사 사진을 쓴다(X는 로그인·유료 API가 필요해 자동 수집 불가, 사용자 확인 2026-10-22). 표지는 사진이 없을 때의 대체다.
+- 처리: 크롭 영역(비율 `[x0, y0, x1, y1]`) 안에서 칸 비율에 맞는 가장 큰 사각형을 잘라(콜라주의 옆 칸을 섞지 않음) 45° 하프톤(칸 7px, 반복 격자는 4px)으로 바꾼다.
+- 원본 사진은 저장소에 올리지 않는다. `design.json`에는 주소와 크롭만 적고, 렌더링 때 다시 받는다.
+- 사진 서버 도메인이 막히면(프록시 403) 그 카드는 표지로 대신하고, **막힌 도메인을 사용자에게 알린다**(사용자 결정: 막힐 때마다 알림). 사용자가 환경의 Network access에 추가한다.
+- 출처 표기(캡션에 "사진: 소속사")는 아직 정하지 않았다(8장).
+
+### 4.8 추천 도장
+- 추천(`rec: true`) 트랙에만. 지름 300의 소품색 별 터짐, 잉크 외곽선 6과 그림자(10, 10), −12° 기울임. 위에 흰 `DB PICK` 라벨, 가운데 조선굴림 92px 흰 글씨 `추천`.
+- 자리: 카드의 주 그림(사진·모양·제목 라벨)의 오른쪽 위 모서리에 중심을 둔다(넓이 85%, 높이 15% 지점). 쪽 넘김에서 가장 먼저 눈이 가는 자리다.
+
+### 4.9 37종 모티프 (소품)
+그래픽 생성기 `graphics.py`(부록 A)의 모티프는 `full` 템플릿의 소품 `motif:<이름>`으로, 2칸 정사각 액자 안에 소품색으로 그린다.
 
 | 이름 | 종류 | 모양 |
 |---|---|---|
@@ -175,14 +175,11 @@ tracks: { "<n>": { stars, oneline, rec (추천 여부) } }
 | `swirl_star` | 선 | 소용돌이 별. 원 안의 날개가 바깥으로 갈수록 휘어진다 (별 모양 레퍼런스). |
 | `blob` | 면 | 흐린 덩어리. 울퉁불퉁한 덩어리의 한쪽 가장자리가 번진다 (grainy shapes). |
 
-  - `ribbon`의 예시는 NCT 127 「Fact Check」, `streaks`의 예시는 몬스타엑스 「대동단결」이다.
-  - 레퍼런스 출처: Geometric Gradient 포스터 시리즈, Ratcliffe Design 포스터, Sonnet 포스터 시리즈, HUD 아이콘, 수학 도형 와이어프레임, 별 모양, grainy shapes (사용자 제공 2026-10-22).
-- **고르는 사람과 규칙**: 모티프·질감·팔레트·배경 빛은 Claude가 곡의 장르와 리뷰를 읽고 고른다(사용자 결정). 사용자에게 매번 묻지 않는다.
-  - 한 게시물 안에서는 37종을 모두 한 번씩 쓰기 전에는 모티프를 다시 쓰지 않고, 이웃 카드끼리는 절대 같은 모티프를 쓰지 않는다(사용자 결정 2026-10-22). `build_cards.py`가 이 규칙을 검사한다.
-  - 한 게시물 안에서 팔레트는 많아야 두세 가지로 묶어 카드끼리 어수선해 보이지 않게 한다.
-  - 고른 조합과 고른 이유(장르·리뷰 근거 한 줄)를 게시 보고에 함께 적는다.
-- **새 모티프**를 더 추가할 때는 시안을 사용자에게 먼저 보여주고 확인을 받는다.
-- 참조 구현(부록 A): `graphics.py` — `draw(motif, seed, bg, fg, style, accent, palette, bg_glow)`가 카드 템플릿의 MEDIA 자리에 넣을 `<img>` 태그를 돌려준다. `ribbon(seed, bg, fg)`·`streaks(seed, bg, fg)`는 이전 호출 방식 호환용이다.
+### 4.10 아침 시안과 선택 (사용자 결정 2026-10-22, 처음 10일)
+1. 매일 07:43 시안 작업(`tools/options_prompt.md`)이 오늘 앨범의 사진을 모으고, 카드마다 서로 다른 근거에서 나온 사양 세 개(A·B·C)를 `posts/<id>/options.json`에 쓴다. A는 Claude의 추천안이다.
+2. `build_cards.py --options`로 카드마다 A·B·C를 나란히 놓은 시안을 만들어 8시 무렵 사용자에게 보낸다. 리뷰 작성 전이라 별점·한 줄 평 자리는 비워 둔다. 그래서 아침 시안의 근거는 ①~③에서 고른다.
+3. 사용자가 고르면 `tools/pick_design.py`가 `posts/<id>/design.json`을 만들고 `posts/design_log.jsonl`에 선택을 기록한다. 18시까지 고르지 않으면 A로 게시하고 보고에 적는다.
+4. 기록이 10개 앨범을 넘으면 시안 작업이 기록에서 찾은 규칙(어떤 근거·템플릿·소품을 고르는지)을 사용자에게 제안한다. 사용자가 승인하기 전에는 자동 선택으로 바꾸지 않는다.
 
 ## 5. 릴스 (1080x1920)
 
@@ -197,13 +194,11 @@ tracks: { "<n>": { stars, oneline, rec (추천 여부) } }
 
 ## 6. 렌더링 방법
 
-1. HTML 템플릿에 값을 채운다. 표지·그래픽은 data URI로, 폰트는 로컬 파일로 넣는다.
-2. Playwright Chromium에서 뷰포트를 카드 크기로 열고, `document.fonts.ready`를 기다린 뒤 스크린샷을 찍는다.
-3. 인스타그램은 **JPEG만** 받으므로 PNG를 sRGB JPEG(품질 92 이상, 8MB 미만)로 변환한다.
-4. 릴스는 배경 PNG와 회전하는 릴 PNG를 ffmpeg `rotate` + `overlay`로 합성한다.
-5. 만든 카드는 모두 열어서 확인한다. 글자 넘침, 폰트 대체, 대비 미달(포인트 컬러 4.5:1, 별점 7:1)이 없어야 한다.
-
-참조 구현(부록 A): `render.py`(`render_card(out, cover, artist, title, oneline, score, page, theme, recommended, media)`), `template_card.html`
+1. `tools/build_cards.py`가 사양(`design.json`)과 리뷰로 카드마다 HTML을 만든다. 사진은 하프톤 PNG로 바꿔 파일로, 폰트는 로컬 파일로 넣는다.
+2. Playwright Chromium(`/opt/pw-browsers/chromium`)에서 연 뒤, 브라우저 안에서 제목 크기 맞춤 → 그림 묶음 배치(4.4) → 추천 도장 자리를 계산하고 스크린샷을 찍는다. 규칙 때문에 그림을 줄였으면 `manifest.json`의 `warnings`에 남는다.
+3. 인스타그램은 **JPEG만** 받으므로 sRGB JPEG(품질 94)로 저장한다.
+4. 릴스는 배경 PNG와 회전하는 릴 PNG를 ffmpeg `rotate` + `overlay`로 합성한다(현재 보류).
+5. 만든 카드는 모두 열어서 확인한다. 글자 넘침, 폰트 대체, 그림과 글자의 겹침, 경고가 없어야 한다.
 
 ## 7. 인스타그램 게시
 
@@ -271,15 +266,17 @@ tracks: { "<n>": { stars, oneline, rec (추천 여부) } }
 
 ## 8. 아직 정해지지 않은 것 (사용자에게 물을 것)
 - **수집 규칙 반영**: 3장의 19곡 규칙을 "매일 아침 신보 수집" 예약 작업 지시문과 `meta/collector` 사본(부록 B 5단계)에 반영할지
-- **18:00 게시 예약 작업**: 아직 만들지 않았다. "레코드샵" 환경에서 만들어야 한다
+- **사진 출처 표기**: 기사 사진(소속사 배포)을 쓸 때 캡션에 "사진: 소속사명"을 넣을지
+- **자동 선택 규칙**: 4.10의 10개 앨범 기록 뒤 Claude가 제안하는 규칙을 승인할지
 - **폰트 교체 시점**
 
 ## 9. 완료 기준 체크리스트
 - [ ] 리뷰의 `status`가 `scheduled`(18:00 이후) 또는 `immediate`인 경우에만 게시했다
 - [ ] 게시물 구성과 장수가 3장의 규칙과 일치한다(게시물당 최대 20장)
 - [ ] 모든 카드가 1080x1350 sRGB JPEG이고, 릴스가 1080x1920 MP4(무음 AAC 포함)다
-- [ ] 포인트 컬러와 글씨의 대비가 모두 4.5:1 이상이고, 별점 색은 7:1 이상이다
-- [ ] 그림 위 제목이 표지 밝기와 상관없이 읽힌다
+- [ ] 트랙 카드가 타이포·사진 교대이고, 모든 장이 그리드 규칙(4.4)을 지킨다(`warnings` 없음)
+- [ ] 장마다 의도를 근거(4.1) 하나로 설명할 수 있다
+- [ ] 추천 트랙에 추천 도장이 붙었다
 - [ ] 캡션이 7.5 형식이고 해시태그가 5개 이하다
 - [ ] 게시 결과(`posts`, `status: posted`)를 저장소에 기록했다
 - [ ] 사용자에게 게시 링크와 함께 한국어 존댓말로 보고했다
@@ -288,244 +285,9 @@ tracks: { "<n>": { stars, oneline, rec (추천 여부) } }
 
 아래 파일을 한 폴더(예: `cardnews/`)에 그대로 저장하고, 4.6의 폰트 파일 7개를 `cardnews/fonts/`에 받아 둔다. 필요한 것: Python 3, Pillow, numpy, Playwright(Chromium), ffmpeg. 디자인 수치는 4장과 이 코드가 같아야 하며, 바꿀 때는 사용자 결정을 먼저 받는다.
 
-### template_card.html
+### 카드 레이아웃
 
-카드 템플릿. `{{...}}` 자리표시자를 render.py가 채운다. 폰트는 같은 폴더의 `fonts/`에서 읽는다.
-
-````html
-<!doctype html>
-<html lang="ko"><head><meta charset="utf-8">
-<style>
-  @font-face { font-family: 'Paperlogy'; font-weight: 600; src: url('fonts/Paperlogy-6SemiBold.woff2'); }
-  @font-face { font-family: 'Paperlogy'; font-weight: 800; src: url('fonts/Paperlogy-8ExtraBold.woff2'); }
-  @font-face { font-family: 'S-CoreDream'; font-weight: 300; src: url('fonts/S-CoreDream-3Light.woff'); }
-  @font-face { font-family: 'S-CoreDream'; font-weight: 400; src: url('fonts/S-CoreDream-4Regular.woff'); }
-  @font-face { font-family: 'S-CoreDream'; font-weight: 500; src: url('fonts/S-CoreDream-5Medium.woff'); }
-  @font-face { font-family: 'S-CoreDream'; font-weight: 700; src: url('fonts/S-CoreDream-6Bold.woff'); }
-  @font-face { font-family: 'ChosunGu'; src: url('fonts/ChosunGu.woff'); }
-
-  /* 앨범: 화이트 배경 + 블랙 글씨 / 트랙: 블랙 배경 + 화이트 글씨 (무채색만 사용) */
-  :root { --pt: {{POINT}}; --pt-label: {{POINT_LABEL}}; --star: {{STAR}}; --w: 760px; --noise: url({{NOISE}}); }
-  body.album { --bg: #ffffff; --ink: #111111; --mid: #8c8c8c; --frame: #111111; }
-  /* 두 번째 게시물 커버: 포인트 컬러 배경 + 무채색 글씨 (별점·프레임도 무채색) */
-  body.alt { --bg: {{ALT_BG}}; --ink: {{ALT_INK}}; --mid: {{ALT_INK}}; --frame: {{ALT_INK}}; }
-  body.track { --bg: #111111; --ink: #ffffff; --mid: #8c8c8c; --frame: #ffffff; }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 1080px; height: 1350px; }
-  body { background: var(--bg); color: var(--ink); font-family: 'S-CoreDream', sans-serif; position: relative; overflow: hidden; }
-
-  /* 상단 바: 브랜드 / 재생 버튼 / 페이지네이션 */
-  .topbar { position: absolute; left: 56px; right: 56px; top: 48px; height: 56px;
-    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
-    border-bottom: 3px solid var(--ink); font-size: 22px; font-weight: 700; letter-spacing: .08em; }
-  .topbar .page { text-align: right; }
-  .transport { display: flex; gap: 18px; align-items: center; }
-  .transport svg { height: 22px; fill: var(--ink); }
-
-  /* 상단 바 아래 영역에서 전체 내용을 가운데 정렬 */
-  .stage { position: absolute; left: 0; right: 0; top: 104px; bottom: 0;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; }
-
-  /* 별점: 그림자 없이 색 대비(7:1)로만 띄운다 */
-  .stars { display: flex; justify-content: center; gap: 20px; margin-bottom: 48px; }
-  .stars svg { width: 108px; height: 108px; overflow: visible; }
-
-  /* ── 중앙부 레이어 (아래 → 위) ──────────────────────────
-     1 그래픽 · 2 투명 글래스 · 3 프레임 · 4 제목 · 5 추천 스티커
-     위 레이어일수록 그림자가 길고 부드러워져 높이 차이가 드러난다. */
-  :root { --fw: 16px; --r: 26px; --ri: 18px; /* 안쪽 라운드: 같은 곡률로 보이도록 바깥과 동심원 값(10px) 사이로 보정 */ }
-  .screen { position: relative; width: var(--w); height: var(--w); }
-  .screen > * { position: absolute; }
-
-  /* 1 그래픽 */
-  .media { inset: var(--fw); border-radius: var(--ri); overflow: hidden; z-index: 1; }
-  .media img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  /* 제목이 어떤 표지 위에서도 읽히도록 아래쪽 40%를 어둡게 */
-  .media::after { content: ''; position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,.6) 0%, rgba(0,0,0,.25) 22%, rgba(0,0,0,0) 40%); }
-
-  /* 2 투명 글래스: 색 없이 반사광과 가장자리 빛만 */
-  .glass { inset: var(--fw); border-radius: var(--ri); z-index: 2; pointer-events: none;
-    background:
-      linear-gradient(118deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.05) 22%, rgba(255,255,255,0) 23%),
-      linear-gradient(118deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.06) 31%, rgba(255,255,255,0) 38%);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), inset 0 1px 0 rgba(255,255,255,.28); }
-
-  /* 3 프레임: 얇은 링 + 미세한 질감 + 위쪽 하이라이트, 안쪽으로 짧은 그림자 */
-  .frame { inset: 0; z-index: 4; border-radius: var(--r); pointer-events: none;
-    box-shadow: 0 2px 4px rgba(0,0,0,.10), 0 14px 32px rgba(0,0,0,.16); }
-  .frame::before { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: var(--fw);
-    background:
-      linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0) 18%, rgba(0,0,0,0) 82%, rgba(0,0,0,.12)),
-      var(--noise), var(--frame);
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 760'%3E%3Cpath fill-rule='evenodd' d='M26 0H734A26 26 0 0 1 760 26V734A26 26 0 0 1 734 760H26A26 26 0 0 1 0 734V26A26 26 0 0 1 26 0ZM34 16H726A18 18 0 0 1 744 34V726A18 18 0 0 1 726 744H34A18 18 0 0 1 16 726V34A18 18 0 0 1 34 16Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 760'%3E%3Cpath fill-rule='evenodd' d='M26 0H734A26 26 0 0 1 760 26V734A26 26 0 0 1 734 760H26A26 26 0 0 1 0 734V26A26 26 0 0 1 26 0ZM34 16H726A18 18 0 0 1 744 34V726A18 18 0 0 1 726 744H34A18 18 0 0 1 16 726V34A18 18 0 0 1 34 16Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat; }
-  .frame::after { content: ''; position: absolute; inset: var(--fw); border-radius: var(--ri);
-    box-shadow: inset 0 2px 3px rgba(0,0,0,.45), inset 0 0 0 1px rgba(0,0,0,.25); }
-
-  /* 트랙(검은 배경): 은색 금속 반사광 */
-  body.track .frame::before { background:
-      linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0) 14%, rgba(0,0,0,0) 86%, rgba(0,0,0,.18)),
-      linear-gradient(125deg, #d6d6d6 0%, #f4f4f4 18%, #a9a9a9 38%, #e9e9e9 55%, #9c9c9c 74%, #dcdcdc 100%); }
-
-  /* 4 제목: 그림 위 왼쪽 아래 */
-  .meta { left: 56px; right: 56px; bottom: 52px; z-index: 5; }
-  .meta .artist { font-size: 24px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.85); }
-  .meta .title { font-family: 'Paperlogy'; font-size: 72px; font-weight: 800; letter-spacing: -.01em; line-height: 1.05;
-    margin-top: 12px; color: #ffffff; word-break: keep-all; }
-
-  /* 5 추천 스티커 (추천 트랙만): 네모 종이 스티커를 프레임 오른쪽 위에 비뚤게 붙임 */
-  .rec { right: -30px; top: -22px; z-index: 6; transform: rotate(5deg);
-    background: var(--noise), #ffffff; border-radius: 10px; padding: 9px;
-    box-shadow: 0 1px 1px rgba(0,0,0,.18), 0 4px 8px rgba(0,0,0,.16), 0 16px 28px rgba(0,0,0,.22); }
-  .rec span { display: block; border: 3px solid var(--pt-label); border-radius: 6px; padding: 14px 26px;
-    font-family: 'ChosunGu'; font-size: 40px; line-height: 1; color: var(--pt-label);
-    -webkit-text-stroke: 1.6px var(--pt-label); /* 조선굴림은 한 굵기뿐이라 같은 색 외곽선으로 굵게 */ }
-
-  /* 한 줄 평: 표지 너비에 맞춤, 3줄 높이 고정 */
-  .oneline { width: var(--w); height: calc(38px * 1.5 * 3); margin-top: 64px;
-    font-size: 38px; font-weight: 300; line-height: 1.5; word-break: keep-all;
-    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-</style></head>
-<body class="{{THEME}}">
-  <div class="topbar">
-    <span>DB RECORD SHOP</span>
-    <span class="transport">
-      <svg viewBox="0 0 32 20"><path d="M16 0v20L0 10zM32 0v20L16 10z"/></svg>
-      <svg viewBox="0 0 16 20"><path d="M0 0v20l16-10z"/></svg>
-      <svg viewBox="0 0 32 20"><path d="M0 0v20l16-10zM16 0v20l16-10z"/></svg>
-    </span>
-    <span class="page">{{PAGE}}</span>
-  </div>
-
-  <div class="stage">
-    <div class="stars">{{STARS}}</div>
-    <div class="screen">
-      <div class="media">{{MEDIA}}</div>
-      <div class="glass"></div>
-      <div class="frame"></div>
-      <div class="meta">
-        <div class="artist">{{ARTIST}}</div>
-        <div class="title">{{TITLE}}</div>
-      </div>
-      {{REC}}
-    </div>
-    <div class="oneline">{{ONELINE}}</div>
-  </div>
-</body></html>
-````
-
-### render.py
-
-카드 렌더러. `python3 render.py`로 시안 4장을 만든다.
-
-````python
-"""카드뉴스 HTML 템플릿을 1080x1350 PNG로 렌더링."""
-import base64, html, mimetypes, pathlib
-from playwright.sync_api import sync_playwright
-from point_color import point_colors, star_color, alt_colors, WHITE, BLACK
-import graphics
-
-HERE = pathlib.Path(__file__).resolve().parent
-TEMPLATE = HERE / "template_card.html"
-STAR = '<path d="M12 1.5l3.1 6.6 7.2.9-5.3 5 1.4 7.1L12 17.6 5.6 21.1 7 14 1.7 9l7.2-.9z"/>'
-
-
-def stars_svg(score, size=None):
-    """5점 만점, 0.5 단위 별점. 색은 별점 색(--star, 배경 대비 7:1)."""
-    out = []
-    for i in range(5):
-        fill = max(0.0, min(1.0, score - i)) * 100  # 100, 50, 0
-        gid = f"g{i}"
-        style = f' style="width:{size}px;height:{size}px"' if size else ""
-        out.append(
-            f'<svg viewBox="0 0 24 24"{style}><defs><linearGradient id="{gid}">'
-            f'<stop offset="{fill}%" stop-color="var(--star)"/><stop offset="{fill}%" stop-color="transparent"/>'
-            f'</linearGradient></defs><g fill="url(#{gid})" stroke="var(--star)" stroke-width="1.8" '
-            f'stroke-linejoin="round">{STAR}</g></svg>')
-    return "".join(out)
-
-
-def rec_html(recommended):
-    """추천 트랙이면 프레임 오른쪽 위에 네모 스티커. 아니면 표시하지 않음."""
-    return '<div class="rec"><span>추천</span></div>' if recommended else ""
-
-
-def noise_tile(size=160, seed=7, alpha=14):
-    """프레임·추천 스티커에 까는 미세한 질감 타일(투명 바탕에 흑백 점)."""
-    import io, numpy as np
-    from PIL import Image
-    rng = np.random.default_rng(seed)
-    v = rng.random((size, size))
-    rgba = np.zeros((size, size, 4), np.uint8)
-    rgba[..., :3] = np.where(v[..., None] > .5, 255, 0)
-    rgba[..., 3] = (np.abs(v - .5) * 2 * alpha).astype(np.uint8)
-    buf = io.BytesIO(); Image.fromarray(rgba).save(buf, "PNG")
-    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
-
-
-NOISE = None
-
-
-def data_uri(path):
-    mime = mimetypes.guess_type(str(path))[0] or "image/png"
-    return f"data:{mime};base64," + base64.b64encode(pathlib.Path(path).read_bytes()).decode()
-
-
-def html_to_png(doc, out_png, size=(1080, 1350), transparent=False):
-    tmp = HERE / "_render.html"
-    tmp.write_text(doc, encoding="utf-8")
-    with sync_playwright() as p:
-        b = p.chromium.launch()
-        pg = b.new_page(viewport={"width": size[0], "height": size[1]})
-        pg.goto(tmp.as_uri(), wait_until="networkidle")
-        pg.evaluate("document.fonts.ready")
-        if 'data-ready' in doc or "dataset.ready" in doc:
-            pg.wait_for_function("document.body.dataset.ready === '1'")
-        pg.screenshot(path=str(HERE / out_png), omit_background=transparent)
-        b.close()
-    tmp.unlink()
-
-
-def render_card(out_png, *, cover, artist, title, oneline, score, page,
-                theme="album", recommended=None, media=None):
-    """album: media 없이 표지 사용 / track: media에 그래픽 SVG, recommended에 True/False."""
-    """theme: album(흰 배경) / track(검은 배경) / alt(두 번째 게시물 커버, 포인트 컬러 배경)"""
-    alt_bg, alt_ink = alt_colors(HERE / cover)
-    if theme == "alt":
-        pt, pt_label = alt_ink, point_colors(HERE / cover, WHITE)[1]
-        star = alt_ink
-    else:
-        bg = WHITE if theme == "album" else BLACK
-        pt, pt_label = point_colors(HERE / cover, bg)
-        star = star_color(HERE / cover, bg)
-    media = media or f'<img src="{data_uri(HERE / cover)}">'
-    global NOISE
-    NOISE = NOISE or noise_tile()
-    doc = TEMPLATE.read_text(encoding="utf-8")
-    for k, v in {
-        "NOISE": NOISE, "ALT_BG": alt_bg, "ALT_INK": alt_ink,
-        "THEME": theme, "PAGE": page, "POINT": pt, "POINT_LABEL": pt_label, "STAR": star, "MEDIA": media, "REC": rec_html(recommended),
-        "STARS": stars_svg(score), "ARTIST": html.escape(artist), "TITLE": html.escape(title),
-        "ONELINE": html.escape(oneline),
-    }.items():
-        doc = doc.replace("{{" + k + "}}", v)
-    html_to_png(doc, out_png)
-    return pt, pt_label
-
-
-if __name__ == "__main__":
-    common = dict(cover="sample_cover.png", artist="ARTIST NAME", score=3.5,
-                  oneline="한 줄 평이 들어갈 자리입니다. 최대 세 줄까지 왼쪽 정렬로 표시되며, 넘치면 말줄임 처리됩니다.")
-    pt, _ = point_colors(HERE / "sample_cover.png", BLACK)
-    render_card("mock_album.png", title="Album Title Here", page="01/06", theme="album", **common)
-    render_card("mock_album_alt.png", title="Album Title Here", page="01/04", theme="alt", **common)
-    render_card("mock_track_ribbon.png", title="Fact Check", page="02/06", theme="track", recommended=True,
-                media=graphics.ribbon("Fact Check", BLACK, pt), **{**common, "artist": "NCT 127"})
-    render_card("mock_track_streaks.png", title="대동단결", page="03/06", theme="track", recommended=False,
-                media=graphics.streaks("대동단결", BLACK, WHITE), **{**common, "artist": "MONSTA X"})
-    print("done")
-````
+카드 템플릿은 저장소 `tools/cardnews/layout.py`, 사진 처리는 `tools/cardnews/photo.py`가 원본이다(이전 `template_card.html`·`render.py`는 2026-10-22 디자인 변경으로 삭제).
 
 ### point_color.py
 
@@ -1525,7 +1287,7 @@ def draw(motif, seed, bg, fg, style="grain", accent=None, palette="accent", bg_g
     return '<img src="data:image/png;base64,' + base64.b64encode(png).decode() + '">'
 
 
-def ribbon(seed, bg, fg):  # 이전 호출 방식 호환 (render.py 시안 코드)
+def ribbon(seed, bg, fg):  # 이전 호출 방식 호환
     return draw("ribbon", seed, bg, fg, palette="mono")
 
 
