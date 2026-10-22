@@ -1,0 +1,342 @@
+{
+ "credit": "플레디스엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16251710_2060041_416_crop.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16251710",
+   "note": "'12 o'clock' 뮤직비디오 장면 2x2 콜라주(흰 기둥, 누운 얼굴, 벽 앞, 초원 위 두 사람)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16251710_2060042_423.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16251710",
+   "note": "뮤직비디오 장면 세로 3단(우로보로스 고리와 두 옆얼굴, 근접 얼굴, 어두운 옆얼굴)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16250373_2058623_83_crop.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16250373",
+   "note": "뮤직비디오 티저 장면 2x2 콜라주(두 얼굴 근접, 손 얹은 얼굴, 검은 재킷, 두 사람)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16250373_2058624_89.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16250373",
+   "note": "뮤직비디오 티저 장면(위: 우로보로스 고리와 두 옆얼굴, 아래: 어두운 두 얼굴)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "glyph",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.5
+    ],
+    "basis": "소개",
+    "why": "두 개의 꿈이 우로보로스처럼 맞물린다는 소개대로, 고리를 사이에 둔 두 사람의 옆얼굴로 D를 채웁니다."
+   },
+   {
+    "template": "glyph",
+    "photo": "p1",
+    "crop": [
+     0.5,
+     0.5,
+     1.0,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "두 사람의 첫 유닛 앨범이라 초원 위에 나란히 선 장면으로 '이 앨범 = 이 두 사람'을 보여 줍니다."
+   },
+   {
+    "template": "glyph",
+    "basis": "제목",
+    "why": "흰 여백뿐인 표지를 글자 안에 그대로 넣어 'DREAMSCAPE'라는 이름과 꿈결 같은 질감을 앞세웁니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "polaroid",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.0,
+     0.5,
+     0.5
+    ],
+    "basis": "위치",
+    "why": "앨범을 여는 첫 곡이라, 하얀 빛 속에 서 있는 장면을 꿈에 들어서는 첫 장면으로 폴라로이드에 남깁니다."
+   },
+   {
+    "template": "cutout",
+    "shape": "circle",
+    "photo": "p2",
+    "crop": [
+     0.1,
+     0.36,
+     0.9,
+     0.66
+    ],
+    "basis": "소개",
+    "why": "꿈속으로 천천히 가라앉는 곡이라는 소개를 따라, 눈을 마주한 근접 얼굴을 둥근 창 안에 가둡니다."
+   },
+   {
+    "template": "grid",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     0.5,
+     0.5
+    ],
+    "basis": "제목",
+    "why": "'Like you(너처럼)'라는 제목처럼 서로 닮아 가는 두 얼굴을 같은 칸으로 반복합니다."
+   }
+  ],
+  "2": [
+   {
+    "template": "player",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.33
+    ],
+    "basis": "위치",
+    "why": "타이틀곡이라 뮤직비디오의 우로보로스 고리 장면을 재생 화면에 올려 '지금 재생 중'으로 보여 줍니다."
+   },
+   {
+    "template": "full",
+    "photo": "p2",
+    "crop": [
+     0.15,
+     0.34,
+     0.85,
+     0.66
+    ],
+    "props": [
+     "motif:dial"
+    ],
+    "basis": "제목",
+    "why": "'12 o'clock'이라는 제목을 시계 문자판 같은 계기판 소품으로 짚고, 정면을 응시하는 뮤직비디오 장면을 깝니다."
+   },
+   {
+    "template": "full",
+    "photo": "p4",
+    "crop": [
+     0.5,
+     0.5,
+     1.0,
+     1.0
+    ],
+    "props": [
+     "motif:eclipse"
+    ],
+    "basis": "소개",
+    "why": "낮과 밤의 12시를 넘나든다는 소개를 겹쳐 밀리는 원(일식) 소품으로 그리고, 어둠 속 얼굴 장면을 씁니다."
+   }
+  ],
+  "3": [
+   {
+    "template": "cutout",
+    "shape": "frame",
+    "photo": "p1",
+    "crop": [
+     0.5,
+     0.5,
+     1.0,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "일상을 벗어나는 해방감을 노래한다는 소개대로, 초원 풍경을 창틀(프레임) 너머 바깥 세상으로 보여 줍니다."
+   },
+   {
+    "template": "polaroid",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.5
+    ],
+    "basis": "제목",
+    "why": "'Outside'라는 제목처럼 하늘이 트인 바깥 장면을 폴라로이드 한 장으로 붙입니다."
+   },
+   {
+    "template": "cutout",
+    "shape": "arch",
+    "basis": "위치",
+    "why": "타이틀곡 바로 뒤 숨을 고르는 자리라, 사진 대신 흰 표지를 아치에 넣어 여백을 한 번 보여 줍니다."
+   }
+  ],
+  "4": [
+   {
+    "template": "full",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     0.5,
+     0.5
+    ],
+    "props": [
+     "motif:venn"
+    ],
+    "basis": "제목",
+    "why": "'One plus one'이라는 제목을 겹친 두 원(벤 다이어그램)으로 짚고, 맞닿은 두 얼굴 장면을 깝니다."
+   },
+   {
+    "template": "player",
+    "photo": "p3",
+    "crop": [
+     0.5,
+     0.5,
+     1.0,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "둘이 온전히 하나가 되어 가는 사랑이라는 소개대로, 나란히 놓인 두 얼굴 장면을 재생 화면에 올립니다."
+   },
+   {
+    "template": "full",
+    "photo": "p1",
+    "crop": [
+     0.5,
+     0.5,
+     1.0,
+     1.0
+    ],
+    "props": [
+     "motif:coil"
+    ],
+    "basis": "위치",
+    "why": "7곡 중 한가운데(4번) 곡이라, 이어지는 고리 소품으로 앨범의 순환 구조 한복판임을 보여 줍니다."
+   }
+  ],
+  "5": [
+   {
+    "template": "grid",
+    "photo": "p4",
+    "crop": [
+     0.5,
+     0.5,
+     1.0,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "유닛 앨범 안의 첫 솔로곡이라, 괄호 속 'JOSHUA Solo'를 라벨로 짚고 18칸 중 한 칸만 표시합니다."
+   },
+   {
+    "template": "cutout",
+    "shape": "circle",
+    "basis": "소개",
+    "why": "꿈 이면의 복잡한 감정을 다룬다는 소개대로, 사진 없이 흰 표지를 둥근 창에 넣어 속을 비워 둡니다."
+   },
+   {
+    "template": "cutout",
+    "shape": "arch",
+    "photo": "p3",
+    "crop": [
+     0.5,
+     0.0,
+     1.0,
+     0.5
+    ],
+    "basis": "제목",
+    "why": "'Not personal'이라는 제목의 거리 두기를, 손으로 얼굴을 가린 장면을 무대 아치에 넣어 표현합니다."
+   }
+  ],
+  "6": [
+   {
+    "template": "full",
+    "props": [
+     "motif:blob"
+    ],
+    "basis": "제목",
+    "why": "'컬러링'이라는 제목처럼 색이 번지는 덩어리 소품을 흰 표지 위에 얹어 정한의 색을 칠합니다.",
+    "lines": [
+     "컬러링",
+     "(JEONGHAN Solo)"
+    ]
+   },
+   {
+    "template": "full",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.67,
+     1.0,
+     1.0
+    ],
+    "props": [
+     "sparkle"
+    ],
+    "basis": "소개",
+    "why": "몽환적인 음색이라는 소개를 반짝이 소품으로 짚고, 어둠 속 옆얼굴 장면을 깝니다.",
+    "lines": [
+     "컬러링",
+     "(JEONGHAN Solo)"
+    ]
+   },
+   {
+    "template": "full",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.5
+    ],
+    "props": [
+     "motif:swirl_star"
+    ],
+    "basis": "위치",
+    "why": "두 번째 솔로곡이자 마지막 곡 직전이라, 소용돌이 별로 꿈이 절정에 닿는 자리를 표시합니다.",
+    "lines": [
+     "컬러링",
+     "(JEONGHAN Solo)"
+    ]
+   }
+  ],
+  "7": [
+   {
+    "template": "polaroid",
+    "photo": "p1",
+    "crop": [
+     0.5,
+     0.5,
+     1.0,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "앨범을 닫는 마지막 곡이라, 초원 위를 걸어가는 두 사람을 마지막 장면으로 폴라로이드에 남깁니다."
+   },
+   {
+    "template": "cutout",
+    "shape": "circle",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.33
+    ],
+    "basis": "소개",
+    "why": "꿈이 깨지는 순간마저 낭만으로 받아들인다는 소개대로, 우로보로스 고리 장면을 둥글게 오려 순환을 닫습니다."
+   },
+   {
+    "template": "grid",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.5,
+     0.5,
+     1.0
+    ],
+    "basis": "제목",
+    "why": "'No looking back'처럼 고개를 돌린 옆얼굴을 반복하고 한 칸만 짚어 뒤돌아보지 않는 한 사람을 남깁니다."
+   }
+  ]
+ }
+}
