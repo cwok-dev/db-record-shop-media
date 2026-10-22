@@ -1,0 +1,110 @@
+{
+ "credit": "피나클엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://images.khan.co.kr/article/2026/10/13/news-p.v1.20261013.2691f0bb0d064a378da18064aac3f8b7_P1.png",
+   "page": "https://sports.khan.co.kr/en/article/202610131137007",
+   "note": "콘셉트 포토 1: 잔디밭 나무 아래 여덟 명 단체"
+  },
+  "p2": {
+   "url": "https://images.khan.co.kr/article/2026/10/13/news-p.v1.20261013.71ae36a1feb04b6d9281073ca8411385_P1.png",
+   "page": "https://sports.khan.co.kr/en/article/202610131137007",
+   "note": "콘셉트 포토 1 개인 콜라주(야외, 근접)"
+  },
+  "p3": {
+   "url": "https://images.khan.co.kr/article/2026/10/13/news-p.v1.20261013.057d588205eb41de85781becd716963f_P1.png",
+   "page": "https://sports.khan.co.kr/en/article/202610131137007",
+   "note": "콘셉트 포토 3: 흰 옷 단체, 사다리"
+  },
+  "p4": {
+   "url": "https://images.khan.co.kr/article/2026/10/13/news-p.v1.20261013.3f065e19d48c4923929c26347c3a4362_P1.png",
+   "page": "https://sports.khan.co.kr/en/article/202610131137007",
+   "note": "콘셉트 포토 2 개인 콜라주(음료·디저트 소품)"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "glyph",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.15,
+    1.0,
+    0.7
+   ],
+   "basis": "소개",
+   "why": "과거·현재·미래의 '우리'를 잇는다는 소개대로 여덟 명이 한데 엉킨 단체 사진으로 B를 채웁니다."
+  },
+  "1": {
+   "template": "polaroid",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.18,
+    1.0,
+    0.68
+   ],
+   "basis": "위치",
+   "why": "앨범의 첫 곡이자 출발이라, 잔디밭에 모인 단체 장면을 폴라로이드로 남겨 둡니다."
+  },
+  "2": {
+   "template": "full",
+   "photo": "p3",
+   "crop": [
+    0.0,
+    0.03,
+    1.0,
+    0.95
+   ],
+   "props": [
+    "wave"
+   ],
+   "basis": "소개",
+   "why": "일렉기타 리프와 808 베이스가 맞물리는 곡이라 단체 전신 사진에 파형 소품을 얹습니다."
+  },
+  "3": {
+   "template": "cutout",
+   "shape": "circle",
+   "photo": "p2",
+   "crop": [
+    0.29,
+    0.47,
+    0.62,
+    1.0
+   ],
+   "lines": [
+    "Moon",
+    "light"
+   ],
+   "basis": "제목",
+   "why": "제목의 달을 둥근 오림으로 옮기고, Moon/light로 나눠 글자를 크게 둡니다."
+  },
+  "4": {
+   "template": "full",
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.47,
+    0.29,
+    1.0
+   ],
+   "props": [
+    "sparkle"
+   ],
+   "basis": "소개",
+   "why": "어둠 속에서 발견한 작은 빛을 따라가는 곡이라 반짝이 별 소품을 붙입니다."
+  },
+  "5": {
+   "template": "grid",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.18,
+    1.0,
+    0.68
+   ],
+   "basis": "평",
+   "why": "'밴드사운드 가미한 팝이 너무 많다'는 평을 18칸 반복으로 '흔함'으로 옮깁니다."
+  }
+ }
+}
