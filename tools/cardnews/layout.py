@@ -227,6 +227,18 @@ background:{PAPER} url('{c.img(W, H)}') 0 0/{W}px {H}px;-webkit-background-clip:
     return bg, css, body
 
 
+def spin_arcs(s, color):
+    """LP 왼쪽 바깥의 호 세 줄: 판이 도는 움직임(모션 라인). 판 중심을 공유하고 바깥으로 갈수록 가늘고 짧아진다."""
+    cx, cy, r0 = -s // 3 + s * 9 // 20, s // 20 + s * 9 // 20, s * 9 // 20
+    paths = []
+    for i, (gap, a0, a1, w) in enumerate([(28, 128, 236, 10), (60, 142, 222, 7), (92, 156, 206, 4)]):
+        r = r0 + gap
+        x0, y0 = cx + r * math.cos(math.radians(a0)), cy - r * math.sin(math.radians(a0))
+        x1, y1 = cx + r * math.cos(math.radians(a1)), cy - r * math.sin(math.radians(a1))
+        paths.append(f"<path d='M{x0:.0f} {y0:.0f} A{r} {r} 0 0 0 {x1:.0f} {y1:.0f}' stroke='{color}' stroke-width='{w}' fill='none' stroke-linecap='round'/>")
+    return f"<svg style='position:absolute;left:0;top:0;overflow:visible' width='1' height='1'>{''.join(paths)}</svg>"
+
+
 def t_sleeve(c):
     """앨범 카드: 실제 앨범 표지를 레코드 슬리브처럼 크게 놓고, 뒤로 LP가 비어져 나온다. 첫 장에서 어떤 앨범인지 바로 보인다.
     표지는 하프톤으로 바꾸지 않는다(앨범의 얼굴이라 원본 그대로)."""
@@ -247,7 +259,7 @@ border:3px solid {INK};box-shadow:8px 8px 0 rgba(0,0,0,.35)}}
 <div class='abs name'><div data-fit data-maxw='984' data-maxh='140' class='lbl big' style='width:max-content'>{esc(c.artist)}</div><br>
 <div class='lbl' style='font:700 26px SCDream;padding:10px 14px 8px;margin-top:-3px'>{esc(c.album)} · {esc(c.spec.get('date', ''))}</div><br>
 <div class='type'>{esc(c.spec.get('type', ''))}</div></div>
-<div class='abs zone' data-zone='center' data-after='.name' data-origin='top right'><div class='disc'></div><div class='sleeve anchor'></div></div>
+<div class='abs zone' data-zone='center' data-after='.name' data-origin='top right'>{spin_arcs(s, INK if main else PAPER)}<div class='disc'></div><div class='sleeve anchor'></div></div>
 {foot(c, dark=not main)}"""
     return bg, css, body
 
