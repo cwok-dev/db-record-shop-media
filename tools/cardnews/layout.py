@@ -111,6 +111,7 @@ function zones(){const f=document.querySelector('.foot');const limit=f.getBoundi
  return warn}
 function stamp(){const s=document.querySelector('.recst'),a=document.querySelector('.anchor');if(!s||!a)return;
  const r=a.getBoundingClientRect();let cx=r.left+.85*r.width,cy=r.top+.15*r.height;
+ if(s.dataset.pos==='below')cy=r.bottom+16+150;  // 사양 stamp: below → 주 그림 아래 16에 붙임
  cx=Math.min(Math.max(cx,158),1080-158);cy=Math.min(Math.max(cy,236),1350-158);
  s.style.left=(cx-150)+'px';s.style.top=(cy-150)+'px';}
 function band(){const b=document.querySelector('.band'),t=document.querySelector('.title');
@@ -177,7 +178,8 @@ def foot(c, wide=False, dark=False):
 def rec_stamp(c):
     if not c.rec:
         return ""
-    return ("<div class='recst' style='left:0;top:0'><div class='sh'></div><div class='ol'></div><div class='fg'></div>"
+    pos = f" data-pos='{c.spec['stamp']}'" if c.spec.get("stamp") else ""
+    return (f"<div class='recst'{pos} style='left:0;top:0'><div class='sh'></div><div class='ol'></div><div class='fg'></div>"
             "<div class='tx'><i>DB PICK</i><b>추천</b></div></div>")
 
 
