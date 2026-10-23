@@ -112,6 +112,8 @@ function zones(){const f=document.querySelector('.foot');const limit=f.getBoundi
 function stamp(){const s=document.querySelector('.recst'),a=document.querySelector('.anchor');if(!s||!a)return;
  const r=a.getBoundingClientRect();let cx=r.left+.85*r.width,cy=r.top+.15*r.height;
  if(s.dataset.pos==='below')cy=r.bottom+16+150;  // 사양 stamp: below → 주 그림 아래 16에 붙임
+ if(s.dataset.pos==='foot'){const f=document.querySelector('.foot .one')||document.querySelector('.foot');const q=f.getBoundingClientRect();
+  cx=q.right+16+150;cy=q.top+q.height/2;}  // 사양 stamp: foot → 한 줄 평 상자 오른쪽 16에 붙여 얼굴을 피함
  cx=Math.min(Math.max(cx,158),1080-158);cy=Math.min(Math.max(cy,236),1350-158);
  s.style.left=(cx-150)+'px';s.style.top=(cy-150)+'px';}
 function band(){const b=document.querySelector('.band'),t=document.querySelector('.title');
