@@ -109,8 +109,8 @@ function zones(){const f=document.querySelector('.foot');const limit=f.getBoundi
   const r=el.getBoundingClientRect();if(r.bottom>limit+1){const s=Math.max(.45,(limit-r.top)/r.height);
    el.style.transformOrigin=el.dataset.origin||'top center';el.style.transform='scale('+s.toFixed(3)+')';warn.push(el.className+' 축소 '+s.toFixed(2));}});
  return warn}
-function stamp(){const s=document.querySelector('.recst'),a=document.querySelector('.anchor');if(!s||!a)return;
- const r=a.getBoundingClientRect();let cx=r.left+.85*r.width,cy=r.top+.15*r.height;
+function stamp(){const s=document.querySelector('.recst'),a=document.querySelector('.anchor');if(!s||(!a&&s.dataset.pos!=='foot'))return;
+ const r=a?a.getBoundingClientRect():{left:0,top:0,width:0,height:0,bottom:0};let cx=r.left+.85*r.width,cy=r.top+.15*r.height;
  if(s.dataset.pos==='below')cy=r.bottom+16+150;  // 사양 stamp: below → 주 그림 아래 16에 붙임
  if(s.dataset.pos==='foot'){const f=document.querySelector('.foot .one')||document.querySelector('.foot');const q=f.getBoundingClientRect();
   cx=q.right+16+150;cy=q.top+q.height/2;}  // 사양 stamp: foot → 한 줄 평 상자 오른쪽 16에 붙여 얼굴을 피함
