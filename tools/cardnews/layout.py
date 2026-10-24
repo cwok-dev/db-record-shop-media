@@ -22,8 +22,8 @@ TOP_HEAD, TOP_TITLE = 48, 136
 INK, PAPER = "#111111", "#e6e6e2"
 PINK, LIME = "#ff4f9a", "#d7ff3d"
 SPOT_FALLBACK = "#ffd23f"  # 흑백 표지
-TYPO = {"polaroid", "cutout", "grid", "serpent", "cinema", "gable"}
-PHOTO = {"player", "full", "cctv", "clipboard", "desktop", "notch"}
+TYPO = {"polaroid", "cutout", "grid", "serpent", "cinema", "gable", "motion"}
+PHOTO = {"player", "full", "cctv", "clipboard", "desktop", "notch", "issue", "torn"}
 BURST = ("polygon(50% 0,58% 30%,85% 12%,70% 40%,100% 45%,72% 58%,92% 85%,60% 70%,52% 100%,42% 72%,"
          "12% 90%,28% 60%,0 50%,28% 40%,10% 14%,40% 30%)")
 STAR = "M50 4 L62 37 L97 38 L69 59 L79 93 L50 73 L21 93 L31 59 L3 38 L38 37 Z"
@@ -323,7 +323,15 @@ background:{PAPER} url('{c.img(w, h)}') 0 0/cover;box-shadow:0 0 0 16px {ring}}}
     zone = "data-zone='fixed'" if bgname == "ink" and shape != "wide" else "data-zone='center' data-after='.title'"
     if big:
         zone = "data-zone='after' data-after='.title' data-over='foot'"
-    body = f"""<div class='abs shape anchor' {zone} data-origin='top right'></div>
+    arc = ""
+    if big:  # 원 둘레 왼쪽 위를 따라 휘는 문구: 곡 소개 첫 문장(없으면 가수·앨범·트랙). 레퍼런스: Unique 포스터
+        text = first_sentence(c.blurb) or f"{c.artist} — {c.album} · TRACK {c.n:02d}"
+        R, pad = d // 2 + 44, 80
+        col = INK if bgname != "ink" else c.spot
+        arc = (f"<svg style='position:absolute;left:-{pad}px;top:-{pad}px;overflow:visible' width='{d + 2 * pad}' height='{d + 2 * pad}'>"
+               f"<path id='arc' d='M{d // 2 + pad} {d // 2 + pad - R} A{R} {R} 0 1 1 {d // 2 + pad - .1} {d // 2 + pad - R}' fill='none'/>"
+               f"<text style='font:700 30px SCDream;fill:{col};letter-spacing:.02em'><textPath href='#arc' startOffset='74%'>{esc(text)}</textPath></text></svg>")
+    body = f"""<div class='abs shape anchor' {zone} data-origin='top right'>{arc}</div>
 {title_block(c, 236, 992, 410, resolve(c, color_name), blend)}<div class='grain' style='opacity:.25'></div>
 {head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', False), dark=bgname == 'ink')}"""
     return bg, css, body
@@ -386,7 +394,7 @@ def t_player(c):
 
 
 def prop_html(c, p, i):
-    """사진 카드의 소품. sparkle: 반짝이 별 셋 / wave: 파형 / motif:<이름>: 37종 그래픽 액자."""
+    """사진 카드의 소품. sparkle: 반짝이 별 셋 / wave: 파형 / zoom: 별 모양 확대 액자 셋 / motif:<이름>: 37종 그래픽 액자."""
     if p == "sparkle":
         def star(x, y, s, r):
             return (f"<svg class='abs' style='left:{x}px;top:{y}px;transform:rotate({r}deg);z-index:5' width='{s}' height='{s}' viewBox='-4 -4 108 108'>"
@@ -397,6 +405,14 @@ def prop_html(c, p, i):
         pts = " ".join(f"{i / 120 * W:.0f},{y0 + 110 * math.exp(-((i - 60) / 28) ** 2) * math.sin(i * .9) * math.cos(i * .23):.0f}" for i in range(121))
         return (f"<svg class='abs' style='left:0;top:0;z-index:5' width='{W}' height='{H}'><polyline points='{pts}' fill='none' stroke='{INK}' stroke-width='16' stroke-linejoin='round'/>"
                 f"<polyline points='{pts}' fill='none' stroke='{c.prop}' stroke-width='9' stroke-linejoin='round'/></svg>")
+    if p == "zoom":  # 별 모양 액자에 사진 일부를 확대(레퍼런스: DANG 포스터). 자리는 사양 zooms로
+        pts = ",".join(f"{x}% {y}%" for x, y in ((50, 4), (62, 37), (97, 38), (69, 59), (79, 93), (50, 73), (21, 93), (31, 59), (3, 38), (38, 37)))
+        z = zooms(c, [[.3, .08, .7, .4], [.15, .45, .55, .75], [.5, .45, .9, .8]])
+        def star(x, y, s, r, sub):
+            return (f"<div class='abs' style='left:{x}px;top:{y}px;width:{s}px;height:{s}px;transform:rotate({r}deg);z-index:5;clip-path:polygon({pts});background:{INK}'>"
+                    f"<div style='position:absolute;inset:0;clip-path:polygon({pts});transform:scale(.9);background:{c.prop}'></div>"
+                    f"<div style='position:absolute;inset:0;clip-path:polygon({pts});transform:scale(.82);background:{PAPER} url(\"{c.img(s, s, sub=sub)}\") 0 0/cover'></div></div>")
+        return star(X[3] + 20, TOP_TITLE + 400, 340, 8, z[0]) + star(M - 10, TOP_TITLE + 560, 250, -14, z[1]) + star(X[4] + 10, TOP_TITLE + 700, 220, 18, z[2])
     if p.startswith("motif:"):
         import base64, graphics
         name = p.split(":", 1)[1]
@@ -510,6 +526,12 @@ def t_cctv(c):
 {foot(c, wide=c.spec.get('wide', False))}"""
     return bg, css, body
 
+def zooms(c, defaults):
+    """사양 "zooms"(사진 안의 확대할 부분, 비율 [x0, y0, x1, y1] 목록). 빈 자리는 템플릿 기본값."""
+    z = c.spec.get("zooms") or []
+    return [z[i] if i < len(z) and z[i] else d for i, d in enumerate(defaults)]
+
+
 def first_sentence(text):
     """곡 소개의 첫 문장."""
     import re
@@ -542,23 +564,17 @@ clip-path:polygon(0 {base - peak}px,{px}px 0,{W}px {base - peak}px,{W}px 100%,0 
 
 
 def t_clipboard(c):
-    """사진 카드 + 벽에 집게로 찍은 종이: 종이 위 하프톤 사진, 클립, 소품색·잉크 이름판(TRACK/제목),
-    아래를 가로지르는 찢은 테이프 띠에 곡 소개 첫 문장. 곡 소개에 할 말이 많을 때. 레퍼런스: Q&A 메모지."""
+    """사진 카드 + 벽에 집게로 찍은 종이: 종이 위 하프톤 사진, 클립, 소품색·잉크 이름판(TRACK/제목).
+    이름판은 아래 끝을 사진 아래 끝에 맞추고 오른쪽으로 비어져 나온다(사용자 결정 2026-10-24). 레퍼런스: Q&A 메모지."""
     sx, sy, sw, sh = 72, 112, 936, 940  # 종이
-    pw, ph = 760, 660  # 사진
-    about = first_sentence(c.blurb) or f"{c.artist} 『{c.album}』의 {c.n}번째 곡."
+    pw, ph = 760, 812  # 사진: 종이 아래 여백 68
     css = f"""
 body{{background:#d9d9d4}}
 .sheet{{left:{sx}px;top:{sy}px;width:{sw}px;height:{sh}px;background:#f3f3ef;border:3px solid {INK};box-shadow:10px 10px 0 rgba(0,0,0,.25);transform:rotate(-1deg)}}
 .ph{{left:{sx + 56}px;top:{sy + 60}px;width:{pw}px;height:{ph}px;background:{PAPER} url('{c.img(pw, ph)}') 0 0/cover;border:3px solid {INK};transform:rotate(-1deg)}}
-.plate{{right:{W - (sx + 56 + pw) - 120}px;top:{sy + 60 + ph - 230}px;z-index:4;text-align:right}}
+.plate{{right:{W - (sx + 56 + pw) - 120}px;bottom:{H - (sy + 60 + ph)}px;z-index:4;text-align:right;transform:rotate(-1deg);transform-origin:bottom right}}
 .plate .a{{display:inline-block;background:{c.prop};border:3px solid {INK};font:700 30px 'SpaceMono';padding:10px 16px 6px}}
 .plate .b{{display:block;width:max-content;margin-left:auto;margin-top:-3px;background:{INK};color:{PAPER};font:900 92px/1 Paperlogy;letter-spacing:-.03em;padding:18px 26px 10px}}
-.strip{{left:20px;top:{sy + 60 + ph - 40}px;width:{W - 40}px;background:{c.prop};opacity:.94;transform:rotate(-1.5deg);padding:30px 70px 34px;z-index:5;
-clip-path:polygon(0 4%,3% 0,6% 6%,94% 0,97% 5%,100% 2%,98% 30%,100% 55%,97% 80%,100% 100%,60% 97%,3% 100%,0 96%,2% 70%,0 45%,2% 22%);
-background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 3px,transparent 3px 9px)}}
-.strip .q{{display:inline-block;background:{INK};color:{PAPER};font:700 24px 'SpaceMono';padding:8px 14px 6px;margin-bottom:14px}}
-.strip p{{font:500 34px/1.5 SCDream;color:{INK};display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}}
 .clip{{left:{W // 2 - 70}px;top:{sy - 50}px;z-index:6}} .pclip{{left:{sx + sw - 130}px;top:{sy - 30}px;z-index:6;transform:rotate(18deg)}}
 """
     clip = (f"<svg class='abs clip' width='140' height='100' viewBox='0 0 140 100'><path d='M30 4 L50 60 M110 4 L90 60' stroke='#777' stroke-width='6' fill='none'/>"
@@ -566,8 +582,7 @@ background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 3px,tra
     pclip = (f"<svg class='abs pclip' width='70' height='170' viewBox='0 0 70 170'><path d='M20 150 V30 a15 15 0 0 1 30 0 V140 a10 10 0 0 1 -20 0 V45' "
              f"stroke='#8a8a86' stroke-width='6' fill='none' stroke-linecap='round'/></svg>")
     body = f"""<div class='grain' style='opacity:.4'></div><div class='abs sheet'></div><div class='abs ph anchor'></div>
-<div class='abs plate'><span class='a'>TRACK {c.n:02d}</span><span class='b' data-fit data-maxw='{W - 2 * M - 200}' data-maxh='140'>{esc(c.title)}</span></div>
-<div class='abs strip'><span class='q'>ABOUT ▸ {esc(c.title)}</span><p>{esc(about)}</p></div>{clip}{pclip}
+<div class='abs plate'><span class='a'>TRACK {c.n:02d}</span><span class='b' data-fit data-maxw='{W - 2 * M - 200}' data-maxh='140'>{esc(c.title)}</span></div>{clip}{pclip}
 {head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
     return "#d9d9d4", css, body
 
@@ -595,14 +610,15 @@ display:flex;align-items:center;gap:18px;padding:0 24px;z-index:6}}
 .menu{{left:{M}px;top:{TOP_TITLE + 380}px;width:260px;background:{PAPER};border:3px solid {INK};box-shadow:6px 6px 0 {INK};z-index:7;font:500 24px/1 SCDream;padding:8px 0}}
 .menu div{{padding:11px 18px}} .menu .on{{background:{INK};color:{PAPER}}} .menu hr{{border:0;border-top:2px solid {INK};margin:6px 0}}
 """
+    z = zooms(c, [[.1, .02, .9, .7], [.45, .1, 1, .75], [.15, .5, .85, 1]])
     menu = (f"<div class='abs menu'><div>열기</div><div class='on'>다시 듣기</div><div>앨범에 추가</div><hr><div>정보 보기</div><div>공유</div></div>")
     body = f"""<div class='abs photo'></div><div class='grain'></div>
 <div class='abs search'><svg width='50' height='50' viewBox='0 0 100 100'><circle cx='42' cy='42' r='28' fill='none' stroke='{INK}' stroke-width='10'/>
 <path d='M63 63 L90 90' stroke='{INK}' stroke-width='12' stroke-linecap='round'/></svg><b>{esc(c.title)}</b><u></u></div>
 {folder(M, TOP_TITLE + 150, c.album)}{folder(X[5] - 30, TOP_TITLE + 170, f"TRACK {c.n:02d}")}
-{win(X[1] + 40, TOP_TITLE + 290, 560, 500, [.1, .02, .9, .7], f"IMG_{c.n:02d}01.jpg", 3)}
-{win(X[3] + 60, TOP_TITLE + 430, 420, 420, [.45, .1, 1, .75], f"IMG_{c.n:02d}02.jpg", 4)}
-{win(X[1] + 120, TOP_TITLE + 640, 380, 300, [.15, .5, .85, 1], f"IMG_{c.n:02d}03.jpg", 5).replace("class='abs win'", "class='abs win anchor'")}
+{win(X[1] + 40, TOP_TITLE + 290, 560, 500, z[0], f"IMG_{c.n:02d}01.jpg", 3)}
+{win(X[3] + 60, TOP_TITLE + 430, 420, 420, z[1], f"IMG_{c.n:02d}02.jpg", 4)}
+{win(X[1] + 120, TOP_TITLE + 640, 380, 300, z[2], f"IMG_{c.n:02d}03.jpg", 5).replace("class='abs win'", "class='abs win anchor'")}
 {menu}{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
     return PAPER, css, body
 
@@ -629,6 +645,93 @@ writing-mode:vertical-rl;font:900 64px/1 Paperlogy;letter-spacing:.02em;white-sp
 <div data-fit data-maxw='640' data-maxh='300' style='font:900 140px/.92 Paperlogy;letter-spacing:-.04em;width:max-content'>{"<br>".join(esc(x) for x in (c.spec.get("lines") or split_lines(c.title)))}</div></div>
 <div class='abs nt n2'><b>{c.n:02d}</b><span>/ {c.total:02d}<br>TRACK</span></div>
 <div class='abs nt n3' data-fit data-maxw='140' data-maxh='620'><i>✱</i>{esc(c.artist)}</div>
+{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
+    return PAPER, css, body
+
+def t_motion(c):
+    """타이포 카드 + 흔들린 제목: 스캔라인 종이 위에 포인트 컬러 거대 제목을 가로로 흔들리게(모션 블러) 두고,
+    하프톤 사진을 곱하기로 얹어 사진의 밝은 곳으로 제목이 비친다. 구석에 같은 사진의 다른 부분을 확대한 기울어진 액자.
+    속도·움직임·춤·질주가 제목이나 소개에 있을 때. 배경은 종이 고정(c.bg 무시). 레퍼런스: Skater 포스터."""
+    col = c.spot
+    fw, fh = 250, 300
+    z = zooms(c, [[.2, .1, .8, .6]])
+    lines = "<br>".join(esc(x) for x in (c.spec.get("lines") or split_lines(c.title)))
+    css = f"""
+body{{background:{PAPER} repeating-linear-gradient(to bottom,rgba(17,17,17,.06) 0 2px,transparent 2px 6px)}}
+.mt{{left:{M - 16}px;top:{TOP_TITLE - 10}px;font:900 330px/.8 Paperlogy;letter-spacing:-.05em;color:{col};width:max-content;filter:url(#mb);z-index:1}}
+.mt2{{opacity:.55;filter:url(#mb2);transform:translateX(26px)}}
+.photo{{left:0;top:{TOP_TITLE + 150}px;width:{W}px;height:{H - TOP_TITLE - 150}px;background:url('{c.img(W, H - TOP_TITLE - 150)}') 0 0/cover;mix-blend-mode:multiply;z-index:2;
+-webkit-mask-image:linear-gradient(transparent,#000 22%);mask-image:linear-gradient(transparent,#000 22%)}}
+.fr{{right:{M + 10}px;top:{TOP_TITLE + 520}px;width:{fw}px;background:{col};border:3px solid {INK};box-shadow:8px 8px 0 {INK};padding:14px 14px 0;transform:rotate(-7deg);z-index:5}}
+.fr div{{height:{fh}px;background:{PAPER} url('{c.img(fw - 34, fh, sub=z[0])}') 0 0/cover;border:2px solid {INK}}}
+.fr p{{font:900 30px/1 Paperlogy;padding:12px 2px 12px;text-align:right}}
+.num{{left:{M}px;top:{TOP_TITLE + 640}px;font:900 110px/.9 Paperlogy;color:{col};-webkit-text-stroke:3px {INK};paint-order:stroke fill;z-index:5}}
+"""
+    body = f"""<svg width='0' height='0' style='position:absolute'><filter id='mb' x='-10%' width='120%'><feGaussianBlur stdDeviation='9 0'/></filter>
+<filter id='mb2' x='-10%' width='120%'><feGaussianBlur stdDeviation='22 0'/></filter></svg>
+<div class='abs mt mt2' data-fit data-maxw='1000' data-maxh='560'>{lines}</div><div class='abs mt title' data-fit data-maxw='1000' data-maxh='560'>{lines}</div>
+<div class='abs photo'></div><div class='grain' style='opacity:.25'></div>
+<div class='abs fr anchor'><div></div><p>TRACK {c.n:02d}</p></div>
+<div class='abs num'>{c.n:02d}<br>/{c.total:02d}</div>
+{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
+    return PAPER, css, body
+
+
+def t_issue(c):
+    """사진 카드 + 잡지 표지: 위쪽 종이 띠에 포인트 컬러 거대 제목, 아래는 포인트 컬러 판에 하프톤 사진을 곱하기로.
+    큰 트랙 번호, 얼굴 일부를 가늘게 확대한 띠 둘(왼쪽), 작은 확대 사진과 가수명(오른쪽), 오른쪽 아래 바코드.
+    인물 사진이 좋은 곡, 앨범을 대표하는 곡(근거: 위치). 레퍼런스: 생일 잡지 표지."""
+    top = TOP_TITLE + 260
+    z = zooms(c, [[.2, .12, .8, .3], [.25, .3, .75, .45], [.1, .4, .6, 1]])
+    code = hashlib.sha1((c.title + str(c.n)).encode()).hexdigest()
+    bars = "".join(f"<rect x='{i * 6}' y='0' width='{1 + int(code[i % 40], 16) % 4}' height='60' fill='{INK}'/>" for i in range(44))
+    css = f"""
+.tt{{left:{M - 10}px;top:{TOP_TITLE - 6}px;font:900 260px/.84 Paperlogy;letter-spacing:-.05em;color:{c.spot};-webkit-text-stroke:3px {INK};width:max-content;z-index:3}}
+.panel{{left:0;top:{top}px;width:{W}px;height:{H - top}px;background:{c.spot}}}
+.photo{{left:0;top:{top}px;width:{W}px;height:{H - top}px;background:url('{c.img(W, H - top)}') 0 0/cover;mix-blend-mode:multiply}}
+.big{{left:{M}px;top:{top + 120}px;color:{PAPER};font:900 170px/.85 Paperlogy;-webkit-text-stroke:4px {INK};paint-order:stroke fill;z-index:4}}
+.big span{{display:block;font:700 30px 'SpaceMono';-webkit-text-stroke:0;color:{INK};background:{PAPER};border:3px solid {INK};padding:8px 12px 4px;width:max-content;margin-top:10px}}
+.sl{{left:{M}px;width:330px;height:96px;border:4px solid {PAPER};outline:3px solid {INK};z-index:4}}
+.side{{right:{M}px;top:{top + 90}px;width:230px;z-index:4;text-align:right}}
+.side p{{font:900 40px/1 Paperlogy;color:{PAPER};-webkit-text-stroke:2px {INK};paint-order:stroke fill;margin-bottom:12px;white-space:nowrap}}
+.side div{{height:300px;border:4px solid {PAPER};outline:3px solid {INK};background:{PAPER} url('{c.img(222, 292, sub=z[2])}') 0 0/cover}}
+.bc{{right:{M}px;bottom:{M}px;background:{PAPER};border:3px solid {INK};padding:12px 14px 6px;z-index:6;text-align:center;font:700 16px 'SpaceMono'}}
+"""
+    body = f"""<div class='abs panel'></div><div class='abs photo'></div><div class='grain'></div>
+<div class='abs tt title' data-fit data-maxw='1000' data-maxh='300'>{esc(c.title)}</div>
+<div class='abs big anchor'>{c.n:02d}<span>/ {c.total:02d} TRACK</span></div>
+<div class='abs sl' style='top:{top + 470}px;background:{PAPER} url("{c.img(322, 88, sub=z[0])}") 0 0/cover'></div>
+<div class='abs sl' style='top:{top + 600}px;left:{M + 60}px;background:{PAPER} url("{c.img(322, 88, sub=z[1])}") 0 0/cover'></div>
+<div class='abs side'><p data-fit data-maxw='230' data-maxh='44'>{esc(c.artist)}</p><div></div></div>
+<div class='abs bc'><svg width='264' height='60'>{bars}</svg><br>{code[:12].upper()}</div>
+{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
+    return PAPER, css, body
+
+
+def t_torn(c):
+    """사진 카드 + 찢은 띠: 하프톤 사진 전면 가운데를 종이째 찢어 낸 띠에 같은 사진의 일부(눈 등)를 확대해 붙이고,
+    세리프 제목이 띠 위아래로 갈라진다(한 줄 제목이면 아래는 가수명). 띠 가운데 작은 이탤릭 가수명.
+    시선·보기·드러냄·비밀이 제목이나 소개에 있을 때. 레퍼런스: HOLD YOUR VISION 포스터."""
+    z = zooms(c, [[.15, .12, .85, .38]])
+    ln = c.spec.get("lines") or split_lines(c.title)
+    up, down = ln[0], (ln[1] if len(ln) > 1 else "")
+    sy, sh = TOP_TITLE + 380, 300
+    jag = ",".join(f"{x}% {y}%" for x, y in [(0, 6), (5, 0), (11, 7), (17, 2), (24, 8), (31, 1), (38, 6), (46, 0), (53, 7), (61, 2), (68, 8), (76, 1), (83, 6),
+          (90, 0), (96, 7), (100, 3), (100, 95), (94, 100), (87, 93), (80, 99), (72, 92), (65, 100), (57, 94), (49, 100), (41, 92), (34, 99), (26, 93), (19, 100), (11, 94), (4, 100), (0, 92)])
+    css = f"""
+.photo{{inset:0;background:url('{c.img(W, H)}') 0 0/cover;mix-blend-mode:multiply}}
+.tear{{left:-30px;top:{sy}px;width:{W + 60}px;height:{sh}px;transform:rotate(-3deg);z-index:3;filter:drop-shadow(0 8px 0 rgba(0,0,0,.25))}}
+.tear .ed{{position:absolute;inset:-14px 0;background:#fbfbf8;clip-path:polygon({jag})}}
+.tear .im{{position:absolute;inset:0;clip-path:polygon({jag});background:{PAPER} url('{c.img(W + 60, sh, sub=z[0])}') 0 0/cover}}
+.tear em{{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font:400 54px/1 Chosun;font-style:italic;color:{PAPER};-webkit-text-stroke:6px {INK};paint-order:stroke fill;z-index:2}}
+.tw{{left:50%;transform:translateX(-50%);width:max-content;text-align:center;font:400 220px/.9 Chosun;color:{c.spot};-webkit-text-stroke:5px {INK};paint-order:stroke fill;z-index:4;white-space:nowrap}}
+.side{{right:{M}px;top:{TOP_TITLE}px;border-left:4px solid {INK};border-right:4px solid {INK};padding:6px 14px;font:400 56px/1.05 Chosun;text-align:center;background:{PAPER};z-index:5}}
+"""
+    body = f"""<div class='abs photo'></div><div class='grain'></div>
+<div class='abs tw title' data-fit data-maxw='984' data-maxh='210' style='top:{sy - 220}px'>{esc(up)}</div>
+<div class='abs tear anchor'><div class='ed'></div><div class='im'></div><em>{esc(c.artist)}</em></div>
+{f"<div class='abs tw' data-fit data-maxw='984' data-maxh='210' style='top:{sy + sh + 30}px'>{esc(down)}</div>" if down else ""}
+<div class='abs side'>{c.n:02d}<br>—<br>{c.total:02d}</div>
 {head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
     return PAPER, css, body
 
@@ -763,7 +866,8 @@ def t_colorblock(c):
 TEMPLATES = {"sleeve": t_sleeve, "glyph": t_glyph, "polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid,
              "player": t_player, "full": t_full, "serpent": t_serpent, "cinema": t_cinema, "cctv": t_cctv,
              "jewelcase": t_jewelcase, "nowplaying": t_nowplaying, "colorblock": t_colorblock,
-             "gable": t_gable, "clipboard": t_clipboard, "desktop": t_desktop, "notch": t_notch}
+             "gable": t_gable, "clipboard": t_clipboard, "desktop": t_desktop, "notch": t_notch,
+             "motion": t_motion, "issue": t_issue, "torn": t_torn}
 
 
 def page_html(c):
