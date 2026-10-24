@@ -611,8 +611,8 @@ transform:rotate(-14deg);display:flex;flex-direction:column;align-items:center;j
 
 def t_colorblock(c):
     """앨범 카드: 화면 전체를 포인트 컬러 판으로 쓰고 위쪽에 하프톤 사진(없으면 표지)을 곱하기로 얹는다.
-    아래쪽에 앨범명을 거대하게 한 줄로 두어 오른쪽 끝에서 잘려 나가게 하고, 가수·메타·진행 막대를 붙인다.
-    앨범명이 짧고 강할 때. 레퍼런스: 단색 앱 카드 + 잘린 큰 제목."""
+    아래쪽에 앨범명을 거대하게 한 줄로 두되 다 보이도록 폭에 맞춰 줄이고(사용자 결정 2026-10-24), 가수·메타·진행 막대를 붙인다.
+    앨범명이 짧고 강할 때. 레퍼런스: 단색 앱 카드 + 큰 제목."""
     main = c.bg != "ink"
     bg = c.spot if main else INK
     fg = INK if main else PAPER
@@ -621,7 +621,7 @@ def t_colorblock(c):
 .photo{{left:0;top:0;width:{W}px;height:720px;background:url('{c.img(W, 720)}') 0 0/cover;mix-blend-mode:{'multiply' if main else 'screen'};opacity:{1 if main else .55};
 -webkit-mask-image:linear-gradient(#000 45%,transparent 92%);mask-image:linear-gradient(#000 45%,transparent 92%)}}
 .blk{{left:{M}px;right:0;color:{fg};z-index:4}}
-.blk h1{{font:900 300px/.82 Paperlogy;letter-spacing:-.06em;white-space:nowrap;margin-left:-14px}}
+.blk h1{{font:900 300px/.82 Paperlogy;letter-spacing:-.06em;white-space:nowrap;margin-left:-14px;width:max-content}}
 .blk h2{{font:700 64px/1.1 SCDream;margin-top:18px}}
 .blk .mt{{display:flex;align-items:center;gap:14px;font:700 24px 'SpaceMono';margin-top:14px}}
 .blk .mt i{{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle,{bg} 0 18%,{fg} 20%)}}
@@ -631,7 +631,7 @@ def t_colorblock(c):
 .pr .pb{{width:110px;height:110px;border-radius:50%;background:{PAPER};border:3px solid {INK};box-shadow:6px 6px 0 {INK};display:flex;align-items:center;justify-content:center}}
 """
     body = f"""<div class='abs photo'></div><div class='grain'></div>{head(c, dark=not main)}
-<div class='abs blk anchor' data-zone='above-foot'><h1>{esc(c.album)}</h1><h2>{esc(c.artist)}</h2>
+<div class='abs blk anchor' data-zone='above-foot'><h1 data-fit data-maxw='{W - 2 * M + 14}' data-maxh='300'>{esc(c.album)}</h1><h2>{esc(c.artist)}</h2>
 <div class='mt'><i></i>{esc(c.spec.get('type', ''))} · {esc(c.spec.get('date', ''))} · {n:02d} TRACKS</div>
 <div class='pr'><div class='rl'></div><div class='pb'><svg width='54' height='54' viewBox='0 0 100 100'><path d='M30 18v64l56-32z' fill='{INK}'/></svg></div></div></div>
 {foot(c, dark=not main)}"""
