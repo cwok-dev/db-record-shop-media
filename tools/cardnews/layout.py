@@ -106,7 +106,8 @@ function zones(){const f=document.querySelector('.foot');const limit=f.getBoundi
    el.style.top='0px';const h=el.getBoundingClientRect().height;let t=top0;
    if(mode==='center')t=top0+Math.max(0,(limit-top0-h)/2);el.style.top=Math.floor(t/8)*8+'px';}
   if(mode==='above-foot'){const h=el.getBoundingClientRect().height;el.style.top=Math.floor((limit-h)/8)*8+'px';}
-  const r=el.getBoundingClientRect();if(r.bottom>limit+1){const s=Math.max(.45,(limit-r.top)/r.height);
+  const lim=el.dataset.over==='foot'?1350-48:limit;  // data-over=foot: 한 줄 평 아래로 깔려도 되고 바깥 여백만 지킨다
+  const r=el.getBoundingClientRect();if(r.bottom>lim+1){const s=Math.max(.45,(lim-r.top)/r.height);
    el.style.transformOrigin=el.dataset.origin||'top center';el.style.transform='scale('+s.toFixed(3)+')';warn.push(el.className+' 축소 '+s.toFixed(2));}});
  return warn}
 function stamp(){const s=document.querySelector('.recst'),a=document.querySelector('.anchor');if(!s||(!a&&s.dataset.pos!=='foot'))return;
@@ -279,19 +280,20 @@ border:3px solid {INK};box-shadow:8px 8px 0 rgba(0,0,0,.35)}}
 
 
 def t_polaroid(c):
-    """타이포 카드 + 테이프로 붙인 폴라로이드: 기념사진처럼 남겨 둘 장면(첫 곡, 출발, 기억 등)."""
+    """타이포 카드 + 테이프로 붙인 폴라로이드: 기념사진처럼 남겨 둘 장면(첫 곡, 출발, 기억 등).
+    사진이 화면을 채우도록 크게(폭 720) 두고, 아래쪽은 한 줄 평 상자 밑으로 깔려도 된다."""
     bgname = c.bg or "paper"
     bg = resolve(c, bgname)
     color = resolve(c, typo_colors(bgname)[0])
-    w = span(3)
+    w, ph = 720, 520
     css = f"""
-.zone{{left:{X[3]}px;width:{w}px}}
-.pol{{position:relative;padding:14px 14px 54px;background:#fff;border:3px solid {INK};box-shadow:8px 8px 0 {INK};transform:rotate(4deg)}}
-.pol .ph{{height:296px;background:{PAPER} url('{c.img(w - 28, 296)}') 0 0/cover;border:2px solid {INK}}}
-.pol p{{position:absolute;left:18px;bottom:14px;font:700 20px 'SpaceMono'}}
+.zone{{left:{W - M - w}px;width:{w}px}}
+.pol{{position:relative;padding:18px 18px 64px;background:#fff;border:3px solid {INK};box-shadow:8px 8px 0 {INK};transform:rotate(4deg)}}
+.pol .ph{{height:{ph}px;background:{PAPER} url('{c.img(w - 36, ph)}') 0 0/cover;border:2px solid {INK}}}
+.pol p{{position:absolute;right:22px;bottom:18px;font:700 24px 'SpaceMono'}}
 """
     body = f"""<div class='grain'></div>{title_block(c, 250, 992, 430, color)}
-<div class='abs zone' data-zone='center' data-after='.title' data-origin='top right'><div class='pol anchor'><div class='ph'></div>
+<div class='abs zone' data-zone='after' data-after='.title' data-over='foot' data-origin='top right'><div class='pol anchor'><div class='ph'></div>
 <p>{esc(c.artist)} — {esc(c.year)}</p></div>
 <div class='tape' style='left:-34px;top:-8px;transform:rotate(-24deg)'></div><div class='tape' style='right:-14px;top:12px;transform:rotate(30deg)'></div></div>
 {head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', False), dark=bgname == 'ink')}"""
@@ -304,8 +306,11 @@ def t_cutout(c):
     bg = resolve(c, bgname)
     color_name, blend = typo_colors(bgname)
     ring = c.spot if bgname != "spot" else INK
-    d = span(4) if bgname == "ink" else span(3)  # 제목 아래에 놓일 때는 3칸(줄어들지 않게)
     shape = c.spec.get("shape", "circle")
+    d = span(4) if bgname == "ink" else span(3)  # 제목 아래에 놓일 때는 3칸(줄어들지 않게)
+    big = shape == "circle" and bgname != "ink"  # 제목 아래 원: 크게(지름 720) 두고 한 줄 평 상자 밑으로 깔려도 된다
+    if big:
+        d = 720
     radius = {"circle": "50%", "arch": f"{d // 2}px {d // 2}px 0 0", "frame": "0", "wide": "0"}[shape]
     # wide: 사진 한 칸을 자르지 않고 화면 폭 전체에 띄운다(크롭 비율 그대로).
     w, h, x = (W, round(W * c.spec.get("aspect", .5)), 0) if shape == "wide" else (d, d, W - M - d)
@@ -315,6 +320,8 @@ background:{PAPER} url('{c.img(w, h)}') 0 0/cover;box-shadow:0 0 0 16px {ring}}}
 """
     # 잉크 배경: 제목이 사진 위에서 반전되며 겹친다. 그 밖의 배경: 겹치면 읽기 어려워 제목 아래 남는 공간 가운데에 둔다.
     zone = "data-zone='fixed'" if bgname == "ink" and shape != "wide" else "data-zone='center' data-after='.title'"
+    if big:
+        zone = "data-zone='after' data-after='.title' data-over='foot'"
     body = f"""<div class='abs shape anchor' {zone} data-origin='top right'></div>
 {title_block(c, 236, 992, 410, resolve(c, color_name), blend)}<div class='grain' style='opacity:.25'></div>
 {head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', False), dark=bgname == 'ink')}"""

@@ -93,8 +93,17 @@ def default_spec(kind, i):
     return {"template": "cutout"} if i % 2 == 1 else {"template": "full"}
 
 
-def check_rules(group, specs, warns):
-    """게시물 안 규칙: 이웃 카드가 같은 계열이면 리듬이 깨진다(경고만). 37종 모티프 소품은 한 게시물에서 겹치지 않는다."""
+def photo_key(spec, photos):
+    """카드가 실제로 보여 줄 사진 이름. sleeve·사진 미지정·없는 사진 이름은 표지("cover")다."""
+    if spec["template"] == "sleeve":
+        return "cover"
+    return spec["photo"] if spec.get("photo") in photos else "cover"
+
+
+def check_rules(group, specs, warns, aspec, photos, strict=True):
+    """게시물 안 규칙: 이웃 카드가 같은 계열이면 리듬이 깨진다(경고만). 37종 모티프 소품은 한 게시물에서 겹치지 않는다.
+    앨범 카드부터 이어지는 카드에 같은 사진(표지 포함)을 연달아 쓰지 않는다. 아침 시안(strict=False)은 A·B·C가
+    따로 골라지는 안이라 경고만 남긴다."""
     from layout import TYPO
     fam = [("typo" if s["template"] in TYPO else "photo") for s in specs]
     for i in range(1, len(fam)):
@@ -107,14 +116,25 @@ def check_rules(group, specs, warns):
                 if p in seen:
                     sys.exit(f"이 게시물에서 이미 쓴 모티프 소품: {p} (트랙 {t['n']})")
                 seen.add(p)
+    names = ["앨범"] + [f"트랙 {t['n']}" for t in group]
+    keys = [photo_key(s, photos) for s in [aspec] + list(specs)]
+    for i in range(1, len(keys)):
+        if keys[i] == keys[i - 1]:
+            msg = f"{names[i]}: 앞 카드({names[i - 1]})와 같은 사진 {keys[i]} (연속 사진 규칙)"
+            if strict:
+                sys.exit(msg)
+            warns.append(msg)
 
 
-def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, label, used=None):
-    """사양 하나로 Card를 만든다. 사진을 못 받으면 표지로 바꾸고 경고를 남긴다. used: 사진을 실제로 쓴 카드 이름 모음."""
+def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, label, used=None, shown=None, key=None):
+    """사양 하나로 Card를 만든다. 사진을 못 받으면 표지로 바꾸고 경고를 남긴다. used: 사진을 실제로 쓴 카드 이름 모음.
+    shown[key]: 이 카드가 실제로 보여 준 사진 이름(표지 대체 후 연속 사진 확인용)."""
     src = cover
     if spec.get("photo"):
         src = photos.get(spec["photo"], {}).get("url") or photos.get(spec["photo"], {}).get("file") or cover
     crop = spec.get("crop") if src != cover else None
+    if shown is not None:
+        shown[key] = photo_key(spec, photos)
 
     def img(w, h, cell=7):
         nonlocal src, crop
@@ -126,6 +146,8 @@ def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, la
         except photo.PhotoError as e:
             warns.append(f"{label}: 사진을 못 받아 표지로 대신함 ({e})")
             src, crop = cover, None
+            if shown is not None:
+                shown[key] = "cover"
             return photo.slot(src, None, w, h, cache, cell).as_uri()
 
     return layout.Card(kind=kind, spec=spec, img=img, bg=spec.get("bg"), **ctx)
@@ -143,7 +165,7 @@ def build(args, album, review, posts_specs, photos, out, preview=False):
     common = dict(cover=cover.as_uri(), spot=spot, prop=prop, artist=album["artist"], album=album["title"], year=year)
     a = (review or {}).get("album")
     posts = [p for p in POST_ORDER if any(t.get("post") == p for t in tracks)]
-    jobs, manifest, warns, used = [], [], [], {}
+    jobs, manifest, warns, used, shown, seqs = [], [], [], {}, {}, []
     for p in posts:
         group = [t for t in tracks if t.get("post") == p][:19]
         total = 1 + len(group)
@@ -151,15 +173,17 @@ def build(args, album, review, posts_specs, photos, out, preview=False):
         variants = posts_specs(p, group)  # [(이름, 앨범 사양, [트랙 사양])]
         files = {}
         for vname, aspec, tspecs in variants:
-            check_rules(group, tspecs, warns)
+            check_rules(group, tspecs, warns, aspec, photos, strict=not preview)
+            seq = []
             aspec = {**aspec, "type": album.get("type", ""), "date": album["releaseDate"].replace("-", ".")}
             if p != 1:
                 aspec.setdefault("bg", "ink")
             png = out / f"{key}_01{vname}.png"
             jobs.append((make_card(layout, photo, kind="album", spec=aspec, photos=photos, cover=cover, cache=cache,
-                                   warns=warns, label=f"{key} 앨범", used=used.setdefault(p, set()),
+                                   warns=warns, label=f"{key} 앨범", used=used.setdefault(p, set()), shown=shown, key=png,
                                    ctx={**common, "page": f"01/{total:02d}", "review": a, "blurb": (album.get("description") or {}).get("text")}), png))
             files.setdefault(1, []).append(png)
+            seq.append((f"{key} 앨범", png))
             typo_i = 0
             for i, (t, s) in enumerate(zip(group, tspecs), 2):
                 r = (review or {}).get("tracks", {}).get(str(t["n"])) if review else None
@@ -171,11 +195,18 @@ def build(args, album, review, posts_specs, photos, out, preview=False):
                 ctx = {**common, "page": f"{i:02d}/{total:02d}", "n": t["n"], "total": len(tracks), "title": t["title"],
                        "is_title": bool(t.get("isTitle")), "review": r, "blurb": (t.get("description") or {}).get("text")}
                 jobs.append((make_card(layout, photo, kind="track", spec=s, photos=photos, cover=cover, cache=cache,
-                                       warns=warns, label=f"{key} 트랙 {t['n']}", used=used.setdefault(p, set()), ctx=ctx), png))
+                                       warns=warns, label=f"{key} 트랙 {t['n']}", used=used.setdefault(p, set()), ctx=ctx,
+                                       shown=shown, key=png), png))
                 files.setdefault(i, []).append(png)
+                seq.append((f"{key} 트랙 {t['n']}", png))
+            seqs.append(seq)
         manifest.append((p, key, group, files))
     rw = layout.render(jobs, out)
     warns += [f"{k}: {v}" for k, v in rw.items()]
+    for seq in seqs:  # 사진을 못 받아 표지로 대신한 카드가 이웃과 겹치는지(렌더링 뒤에만 알 수 있어 경고)
+        for (a, pa), (b, pb) in zip(seq, seq[1:]):
+            if shown.get(pa) == shown.get(pb):
+                warns.append(f"{b}: 표지 대체로 앞 카드({a})와 같은 사진 {shown[pb]} (연속 사진 규칙)")
     return manifest, warns, used
 
 
