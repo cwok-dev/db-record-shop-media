@@ -10,7 +10,7 @@ python3 -I tools/build_cards.py --album <albums JSON> --cover <표지> --out <�
 
 design.json  {"photos": {"p1": {"url": ..., "page": 기사 주소}}, "cards": {"album": 사양, "1": 사양, ...}}
 options.json {"photos": {...}, "cards": {"album": [A, B, C], "1": [A, B, C], ...}}
-사양         {"template": sleeve|glyph|jewelcase|nowplaying|colorblock|polaroid|cutout|grid|player|full|serpent|cinema|cctv, "photo": "p1", "crop": [x0, y0, x1, y1](비율),
+사양         {"template": sleeve|glyph|jewelcase|nowplaying|colorblock|polaroid|cutout|grid|gable|player|full|serpent|cinema|cctv|clipboard|desktop|notch, "photo": "p1", "crop": [x0, y0, x1, y1](비율),
               "bg": paper|ink|spot(타이포 카드), "shape": circle|arch|frame|wide(cutout, wide는 화면 폭 전체·"aspect" 높이/폭 비율, 기본 0.5), "props": ["sparkle"|"wave"|"motif:<이름>"],
               "wide": true|false(한 줄 평 6칸), "lines": ["Moon", "light"](제목 줄바꿈 직접 지정),
               "basis": 제목|소개|위치|평, "why": 의도 한 문장}
@@ -126,6 +126,14 @@ def check_rules(group, specs, warns, aspec, photos, strict=True):
             warns.append(msg)
 
 
+def sub_crop(crop, sub):
+    """크롭 영역 crop 안에서 sub(비율)만큼을 다시 자른 영역."""
+    if not sub:
+        return crop
+    x0, y0, x1, y1 = crop or (0, 0, 1, 1)
+    return [x0 + (x1 - x0) * sub[0], y0 + (y1 - y0) * sub[1], x0 + (x1 - x0) * sub[2], y0 + (y1 - y0) * sub[3]]
+
+
 def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, label, used=None, shown=None, key=None):
     """사양 하나로 Card를 만든다. 사진을 못 받으면 표지로 바꾸고 경고를 남긴다. used: 사진을 실제로 쓴 카드 이름 모음.
     shown[key]: 이 카드가 실제로 보여 준 사진 이름(표지 대체 후 연속 사진 확인용)."""
@@ -136,10 +144,11 @@ def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, la
     if shown is not None:
         shown[key] = photo_key(spec, photos)
 
-    def img(w, h, cell=7):
+    def img(w, h, cell=7, sub=None):
+        """sub: 크롭 영역 안의 다시 자를 부분(비율). 한 카드 안에서 같은 사진의 다른 부분을 확대해 쓸 때."""
         nonlocal src, crop
         try:
-            uri = photo.slot(src, crop, w, h, cache, cell).as_uri()
+            uri = photo.slot(src, sub_crop(crop, sub), w, h, cache, cell).as_uri()
             if src != cover and used is not None:
                 used.add(label)
             return uri
@@ -148,7 +157,7 @@ def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, la
             src, crop = cover, None
             if shown is not None:
                 shown[key] = "cover"
-            return photo.slot(src, None, w, h, cache, cell).as_uri()
+            return photo.slot(src, sub_crop(None, sub), w, h, cache, cell).as_uri()
 
     return layout.Card(kind=kind, spec=spec, img=img, bg=spec.get("bg"), **ctx)
 

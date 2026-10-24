@@ -22,8 +22,8 @@ TOP_HEAD, TOP_TITLE = 48, 136
 INK, PAPER = "#111111", "#e6e6e2"
 PINK, LIME = "#ff4f9a", "#d7ff3d"
 SPOT_FALLBACK = "#ffd23f"  # 흑백 표지
-TYPO = {"polaroid", "cutout", "grid", "serpent", "cinema"}
-PHOTO = {"player", "full", "cctv"}
+TYPO = {"polaroid", "cutout", "grid", "serpent", "cinema", "gable"}
+PHOTO = {"player", "full", "cctv", "clipboard", "desktop", "notch"}
 BURST = ("polygon(50% 0,58% 30%,85% 12%,70% 40%,100% 45%,72% 58%,92% 85%,60% 70%,52% 100%,42% 72%,"
          "12% 90%,28% 60%,0 50%,28% 40%,10% 14%,40% 30%)")
 STAR = "M50 4 L62 37 L97 38 L69 59 L79 93 L50 73 L21 93 L31 59 L3 38 L38 37 Z"
@@ -510,6 +510,128 @@ def t_cctv(c):
 {foot(c, wide=c.spec.get('wide', False))}"""
     return bg, css, body
 
+def first_sentence(text):
+    """곡 소개의 첫 문장."""
+    import re
+    t = " ".join((text or "").split())
+    m = re.match(r"(.+?[.!?。])(\s|$)", t)
+    return m.group(1) if m else t
+
+
+def t_gable(c):
+    """타이포 카드 + 지붕 모양 사진: 거대한 제목 아래로 사진이 박공지붕(오각형)으로 잘려 화면 아래를 가장자리까지 채우고,
+    지붕 꼭대기가 제목 둘째 줄로 파고든다. 집·방·공간·장소가 제목이나 소개에 있을 때. 레퍼런스: 모델하우스 포스터."""
+    bgname = c.bg or "paper"
+    bg = resolve(c, bgname)
+    color_name, blend = typo_colors(bgname)
+    peak, base, px = TOP_TITLE + 200, TOP_TITLE + 430, X[2] + 40  # 지붕 꼭대기 y, 처마 y, 꼭대기 x
+    h = H - peak
+    css = f"""
+.roof{{left:0;top:{peak}px;width:{W}px;height:{h}px;background:{PAPER} url('{c.img(W, h)}') 0 0/cover;
+clip-path:polygon(0 {base - peak}px,{px}px 0,{W}px {base - peak}px,{W}px 100%,0 100%)}}
+.eave{{left:0;top:{peak}px;width:{W}px;height:{base - peak}px;z-index:3}}
+.info{{right:{M}px;top:{base + 32}px;text-align:right;z-index:5}}
+.info .lbl{{display:table;margin-left:auto;margin-bottom:-3px;font:700 24px 'SpaceMono'}}
+"""
+    edge = f"<svg class='abs eave' viewBox='0 0 {W} {base - peak}' preserveAspectRatio='none'><polyline points='0,{base - peak} {px},2 {W},{base - peak}' fill='none' stroke='{c.spot if bgname != 'spot' else INK}' stroke-width='12'/></svg>"
+    body = f"""<div class='abs roof anchor'></div>{edge}<div class='grain' style='opacity:.25'></div>
+{title_block(c, 250, 992, 430, resolve(c, color_name), blend)}
+<div class='abs info'><span class='lbl' style='background:{c.prop}'>TRACK {c.n:02d}</span><span class='lbl'>{esc(c.artist)} · {esc(c.year)}</span></div>
+{head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', False), dark=bgname == 'ink')}"""
+    return bg, css, body
+
+
+def t_clipboard(c):
+    """사진 카드 + 벽에 집게로 찍은 종이: 종이 위 하프톤 사진, 클립, 소품색·잉크 이름판(TRACK/제목),
+    아래를 가로지르는 찢은 테이프 띠에 곡 소개 첫 문장. 곡 소개에 할 말이 많을 때. 레퍼런스: Q&A 메모지."""
+    sx, sy, sw, sh = 72, 112, 936, 940  # 종이
+    pw, ph = 760, 660  # 사진
+    about = first_sentence(c.blurb) or f"{c.artist} 『{c.album}』의 {c.n}번째 곡."
+    css = f"""
+body{{background:#d9d9d4}}
+.sheet{{left:{sx}px;top:{sy}px;width:{sw}px;height:{sh}px;background:#f3f3ef;border:3px solid {INK};box-shadow:10px 10px 0 rgba(0,0,0,.25);transform:rotate(-1deg)}}
+.ph{{left:{sx + 56}px;top:{sy + 60}px;width:{pw}px;height:{ph}px;background:{PAPER} url('{c.img(pw, ph)}') 0 0/cover;border:3px solid {INK};transform:rotate(-1deg)}}
+.plate{{right:{W - (sx + 56 + pw) - 120}px;top:{sy + 60 + ph - 230}px;z-index:4;text-align:right}}
+.plate .a{{display:inline-block;background:{c.prop};border:3px solid {INK};font:700 30px 'SpaceMono';padding:10px 16px 6px}}
+.plate .b{{display:block;width:max-content;margin-left:auto;margin-top:-3px;background:{INK};color:{PAPER};font:900 92px/1 Paperlogy;letter-spacing:-.03em;padding:18px 26px 10px}}
+.strip{{left:20px;top:{sy + 60 + ph - 40}px;width:{W - 40}px;background:{c.prop};opacity:.94;transform:rotate(-1.5deg);padding:30px 70px 34px;z-index:5;
+clip-path:polygon(0 4%,3% 0,6% 6%,94% 0,97% 5%,100% 2%,98% 30%,100% 55%,97% 80%,100% 100%,60% 97%,3% 100%,0 96%,2% 70%,0 45%,2% 22%);
+background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 3px,transparent 3px 9px)}}
+.strip .q{{display:inline-block;background:{INK};color:{PAPER};font:700 24px 'SpaceMono';padding:8px 14px 6px;margin-bottom:14px}}
+.strip p{{font:500 34px/1.5 SCDream;color:{INK};display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}}
+.clip{{left:{W // 2 - 70}px;top:{sy - 50}px;z-index:6}} .pclip{{left:{sx + sw - 130}px;top:{sy - 30}px;z-index:6;transform:rotate(18deg)}}
+"""
+    clip = (f"<svg class='abs clip' width='140' height='100' viewBox='0 0 140 100'><path d='M30 4 L50 60 M110 4 L90 60' stroke='#777' stroke-width='6' fill='none'/>"
+            f"<path d='M10 52 H130 L120 96 H20 Z' fill='{INK}'/><rect x='10' y='52' width='120' height='10' fill='#333'/></svg>")
+    pclip = (f"<svg class='abs pclip' width='70' height='170' viewBox='0 0 70 170'><path d='M20 150 V30 a15 15 0 0 1 30 0 V140 a10 10 0 0 1 -20 0 V45' "
+             f"stroke='#8a8a86' stroke-width='6' fill='none' stroke-linecap='round'/></svg>")
+    body = f"""<div class='grain' style='opacity:.4'></div><div class='abs sheet'></div><div class='abs ph anchor'></div>
+<div class='abs plate'><span class='a'>TRACK {c.n:02d}</span><span class='b' data-fit data-maxw='{W - 2 * M - 200}' data-maxh='140'>{esc(c.title)}</span></div>
+<div class='abs strip'><span class='q'>ABOUT ▸ {esc(c.title)}</span><p>{esc(about)}</p></div>{clip}{pclip}
+{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
+    return "#d9d9d4", css, body
+
+
+def t_desktop(c):
+    """사진 카드 + 컴퓨터 화면 콜라주: 사진을 바탕화면처럼 깔고, 같은 사진의 다른 부분을 확대한 사진 창 셋을 겹친다.
+    검색창에 곡 제목, 폴더 둘(앨범·트랙), 메뉴 목록. 창틀은 우리 재료(3px 테두리·종이 제목줄). 검색·파일·화면·온라인일 때.
+    레퍼런스: 데스크톱 화면 콜라주."""
+    def win(x, y, w, h, sub, name, z):
+        return (f"<div class='abs win' style='left:{x}px;top:{y}px;width:{w}px;z-index:{z}'><div class='tb'><span>{esc(name)}</span>"
+                f"<span><i>_</i><i>□</i><i>×</i></span></div><div style='height:{h}px;background:{PAPER} url(\"{c.img(w - 6, h, sub=sub)}\") 0 0/cover'></div></div>")
+    def folder(x, y, label):
+        return (f"<div class='abs fd' style='left:{x}px;top:{y}px'><svg width='130' height='100' viewBox='0 0 130 100'><path d='M4 18 h44 l10 12 h68 v66 H4 Z' "
+                f"fill='{c.prop}' stroke='{INK}' stroke-width='4'/></svg><span>{esc(label)}</span></div>")
+    css = f"""
+.photo{{inset:0;background:url('{c.img(W, H)}') 0 0/cover;mix-blend-mode:multiply}}
+.win{{border:3px solid {INK};box-shadow:8px 8px 0 {INK};background:{PAPER}}}
+.win .tb{{display:flex;justify-content:space-between;align-items:center;height:44px;padding:0 8px 0 14px;border-bottom:3px solid {INK};font:700 20px 'SpaceMono'}}
+.win .tb i{{display:inline-block;width:28px;height:26px;border:3px solid {INK};font:700 16px/20px 'SpaceMono';text-align:center;font-style:normal;margin-left:5px}}
+.search{{left:{X[2]}px;top:{TOP_TITLE + 8}px;right:{M}px;height:96px;background:{PAPER};border:3px solid {INK};box-shadow:8px 8px 0 {INK};
+display:flex;align-items:center;gap:18px;padding:0 24px;z-index:6}}
+.search b{{font:900 54px/1 Paperlogy;letter-spacing:-.03em;background:{c.prop};padding:8px 6px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:560px}}
+.search u{{width:4px;height:58px;background:{INK}}}
+.fd{{z-index:4;text-align:center;width:150px}} .fd span{{display:inline-block;background:{PAPER};border:2px solid {INK};font:700 18px 'SpaceMono';padding:5px 8px 3px;margin-top:4px;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.menu{{left:{M}px;top:{TOP_TITLE + 380}px;width:260px;background:{PAPER};border:3px solid {INK};box-shadow:6px 6px 0 {INK};z-index:7;font:500 24px/1 SCDream;padding:8px 0}}
+.menu div{{padding:11px 18px}} .menu .on{{background:{INK};color:{PAPER}}} .menu hr{{border:0;border-top:2px solid {INK};margin:6px 0}}
+"""
+    menu = (f"<div class='abs menu'><div>열기</div><div class='on'>다시 듣기</div><div>앨범에 추가</div><hr><div>정보 보기</div><div>공유</div></div>")
+    body = f"""<div class='abs photo'></div><div class='grain'></div>
+<div class='abs search'><svg width='50' height='50' viewBox='0 0 100 100'><circle cx='42' cy='42' r='28' fill='none' stroke='{INK}' stroke-width='10'/>
+<path d='M63 63 L90 90' stroke='{INK}' stroke-width='12' stroke-linecap='round'/></svg><b>{esc(c.title)}</b><u></u></div>
+{folder(M, TOP_TITLE + 150, c.album)}{folder(X[5] - 30, TOP_TITLE + 170, f"TRACK {c.n:02d}")}
+{win(X[1] + 40, TOP_TITLE + 290, 560, 500, [.1, .02, .9, .7], f"IMG_{c.n:02d}01.jpg", 3)}
+{win(X[3] + 60, TOP_TITLE + 430, 420, 420, [.45, .1, 1, .75], f"IMG_{c.n:02d}02.jpg", 4)}
+{win(X[1] + 120, TOP_TITLE + 640, 380, 300, [.15, .5, .85, 1], f"IMG_{c.n:02d}03.jpg", 5).replace("class='abs win'", "class='abs win anchor'")}
+{menu}{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
+    return PAPER, css, body
+
+
+def t_notch(c):
+    """사진 카드 + 홈 파인 액자: 사진이 종이 테두리 안을 거의 채우고, 사진 모서리를 둥글게 파낸 종이 홈에
+    제목(왼쪽 위), 트랙 번호(왼쪽), 세로 가수명(오른쪽)을 넣는다. 인물 근접 사진이 좋을 때. 레퍼런스: 인터뷰 포스터."""
+    px, py, pw = M, 104, W - 2 * M
+    ph = H - M - py
+    r = 44
+    css = f"""
+.ph{{left:{px}px;top:{py}px;width:{pw}px;height:{ph}px;border-radius:{r}px;background:{PAPER} url('{c.img(pw, ph)}') 0 0/cover;border:3px solid {INK}}}
+.nt{{background:{PAPER};z-index:4}}
+.n1{{left:{px - 3}px;top:{py - 3}px;padding:28px 40px 30px 28px;border-radius:0 0 {r}px 0;border-right:3px solid {INK};border-bottom:3px solid {INK}}}
+.n1 .k{{font:700 22px 'SpaceMono';margin-bottom:12px}} .n1 .k b{{color:{c.prop};-webkit-text-stroke:1px {INK}}}
+.n2{{left:{px - 3}px;top:{py + 560}px;padding:26px 30px 26px 28px;border-radius:0 {r}px {r}px 0;border:3px solid {INK};border-left:0;text-align:left}}
+.n2 b{{display:block;font:900 120px/.9 Paperlogy;letter-spacing:-.04em}} .n2 span{{font:700 22px/1.6 'SpaceMono'}}
+.n3{{right:{M - 3}px;top:{py + 300}px;padding:30px 22px;border-radius:{r}px 0 0 {r}px;border:3px solid {INK};border-right:0;
+writing-mode:vertical-rl;font:900 64px/1 Paperlogy;letter-spacing:.02em;white-space:nowrap}}
+.n3 i{{font-style:normal;color:{c.prop};-webkit-text-stroke:2px {INK};margin-bottom:18px}}
+"""
+    body = f"""<div class='abs ph'></div><div class='grain' style='opacity:.25'></div>
+<div class='abs nt n1 anchor'><div class='k'><b>✱</b> {esc(c.album)} · {esc(c.year)}</div>
+<div data-fit data-maxw='640' data-maxh='300' style='font:900 140px/.92 Paperlogy;letter-spacing:-.04em;width:max-content'>{"<br>".join(esc(x) for x in (c.spec.get("lines") or split_lines(c.title)))}</div></div>
+<div class='abs nt n2'><b>{c.n:02d}</b><span>/ {c.total:02d}<br>TRACK</span></div>
+<div class='abs nt n3' data-fit data-maxw='140' data-maxh='620'><i>✱</i>{esc(c.artist)}</div>
+{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
+    return PAPER, css, body
+
 
 def album_name(c, left, top, maxw):
     """앨범 카드 공통 이름판: 가수명 큰 라벨 + 앨범명·발매일 라벨 + 앨범 종류 소품색 라벨."""
@@ -640,7 +762,8 @@ def t_colorblock(c):
 
 TEMPLATES = {"sleeve": t_sleeve, "glyph": t_glyph, "polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid,
              "player": t_player, "full": t_full, "serpent": t_serpent, "cinema": t_cinema, "cctv": t_cctv,
-             "jewelcase": t_jewelcase, "nowplaying": t_nowplaying, "colorblock": t_colorblock}
+             "jewelcase": t_jewelcase, "nowplaying": t_nowplaying, "colorblock": t_colorblock,
+             "gable": t_gable, "clipboard": t_clipboard, "desktop": t_desktop, "notch": t_notch}
 
 
 def page_html(c):
