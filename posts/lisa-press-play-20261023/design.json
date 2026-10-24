@@ -1,0 +1,107 @@
+{
+ "credit": "소니뮤직엔터테인먼트코리아",
+ "photos": {
+  "p1": {
+   "url": "https://images.khan.co.kr/article/2026/10/23/news-p.v1.20261023.4715a03b81094052bef45cb430879231_P1.jpg",
+   "page": "https://sports.khan.co.kr/en/article/202610231540007/",
+   "note": "PRESS PLAY 콘셉트 포토: 흰 배경, 징 박힌 의상"
+  },
+  "p2": {
+   "url": "https://images.khan.co.kr/article/2026/10/23/news-p.v1.20261023.bc578574ad974c3e9ea76bdb1fbc5400_P1.jpg",
+   "page": "https://sports.khan.co.kr/en/article/202610231540007/",
+   "note": "PRESS PLAY 콘셉트 포토: 푸른 배경, 휘날리는 머리"
+  },
+  "p3": {
+   "url": "https://images.khan.co.kr/article/2026/09/04/news-p.v1.20260904.243f740ad0da48789216a25034749699_P1.jpg",
+   "page": "https://sports.khan.co.kr/en/article/202609041138007/",
+   "note": "SaWaDiKa 뮤직비디오 장면: 툭툭"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "sleeve",
+   "basis": "위치",
+   "why": "게시물 첫 장이라 실제 표지를 레코드 슬리브처럼 크게 놓아 어떤 앨범인지 바로 보이게 합니다."
+  },
+  "1": {
+   "template": "cctv",
+   "photo": "p3",
+   "crop": [
+    0.12,
+    0.0,
+    0.88,
+    1.0
+   ],
+   "basis": "위치",
+   "why": "방콕 거리에서 포착한 듯한 감시 모니터 프레임에, 툭툭 장면을 전면으로 깔고 소품색 감지 박스로 'SaWaDiKa'를 짚습니다."
+  },
+  "2": {
+   "template": "full",
+   "photo": "p3",
+   "crop": [
+    0.32,
+    0.0,
+    0.68,
+    0.5
+   ],
+   "props": [
+    "motif:dial"
+   ],
+   "basis": "제목",
+   "why": "V12 엔진이라는 제목을 툭툭을 탄 장면과 계기판 소품으로 옮깁니다."
+  },
+  "3": {
+   "template": "serpent",
+   "photo": "p2",
+   "crop": [
+    0.28,
+    0.0,
+    0.72,
+    1.0
+   ],
+   "basis": "제목",
+   "why": "포인트 컬러 바탕에 거대한 제목을 두고, 휘날리는 머리의 세로 사진이 뱀처럼 비스듬히 감기며 종이 띠가 몸통을 끊습니다."
+  },
+  "4": {
+   "template": "cinema",
+   "photo": "p1",
+   "crop": [
+    0.08,
+    0.0,
+    0.92,
+    1.0
+   ],
+   "basis": "제목",
+   "why": "영화감독 이름이 제목이라 시네마 선언문 포스터로: 거대한 제목·듀오톤 스틸·이름판과 곡 소개 본문을 조밀하게 짭니다."
+  },
+  "5": {
+   "template": "cutout",
+   "shape": "wide",
+   "aspect": 0.4,
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.2,
+    1.0,
+    0.8
+   ],
+   "basis": "제목",
+   "why": "'잘라 낸다'는 제목대로 사진을 화면 폭의 가로 띠로 싹둑 잘라 붙입니다."
+  },
+  "6": {
+   "template": "full",
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.3,
+    0.6,
+    1.0
+   ],
+   "props": [
+    "motif:streaks"
+   ],
+   "basis": "위치",
+   "why": "앨범의 마지막 곡이라 엔딩 크레디트의 빛기둥 같은 소품으로 끝맺습니다."
+  }
+ }
+}
