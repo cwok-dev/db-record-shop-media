@@ -10,13 +10,13 @@ python3 -I tools/build_cards.py --album <albums JSON> --cover <표지> --out <�
 
 design.json  {"photos": {"p1": {"url": ..., "page": 기사 주소}}, "cards": {"album": 사양, "1": 사양, ...}}
 options.json {"photos": {...}, "cards": {"album": [A, B, C], "1": [A, B, C], ...}}
-사양         {"template": sleeve|glyph|jewelcase|nowplaying|colorblock|polaroid|cutout|grid|gable|motion|player|full|serpent|cinema|cctv|clipboard|desktop|notch|issue|torn, "photo": "p1", "crop": [x0, y0, x1, y1](비율),
+사양         {"template": nowplaying|colorblock|polaroid|cutout|grid|gable|motion|player|full|serpent|cinema|cctv|clipboard|desktop|notch|issue|torn, "photo": "p1", "crop": [x0, y0, x1, y1](비율),
               "bg": paper|ink|spot(타이포 카드), "shape": circle|arch|frame|wide(cutout, wide는 화면 폭 전체·"aspect" 높이/폭 비율, 기본 0.5), "props": ["sparkle"|"wave"|"zoom"|"motif:<이름>"],
               "zooms": [[x0, y0, x1, y1], ...](크롭 영역 안에서 확대할 부분, 비율: desktop 창 셋·zoom 소품 별 셋·motion 액자·issue 띠 둘+작은 사진·torn 띠),
               "wide": true|false(한 줄 평 6칸), "lines": ["Moon", "light"](제목 줄바꿈 직접 지정),
               "basis": 제목|소개|위치|평, "why": 의도 한 문장}
 design.json·options.json의 "credit": 사진 출처(소속사명). 사진을 쓴 카드가 있으면 캡션에 "사진: <credit>"을 넣는다.
-사양이 없는 카드는 표지로 만든다(앨범 sleeve, 트랙은 타이포 cutout·사진 full을 번갈아).
+사양이 없는 카드는 표지로 만든다(앨범 nowplaying, 트랙은 타이포 cutout·사진 full을 번갈아).
 
 출력: <out>/p1_01.jpg …, p2_…, premix_…, caption_<post>.txt, manifest.json (warnings 포함)
 """
@@ -88,15 +88,15 @@ def captions(album, review, posts, credit=None):
 
 
 def default_spec(kind, i):
-    """사양이 없을 때: 표지 사진으로 앨범은 sleeve, 트랙은 타이포(cutout)·사진(full)을 번갈아."""
+    """사양이 없을 때: 표지 사진으로 앨범은 nowplaying, 트랙은 타이포(cutout)·사진(full)을 번갈아."""
     if kind == "album":
-        return {"template": "sleeve"}
+        return {"template": "nowplaying"}
     return {"template": "cutout"} if i % 2 == 1 else {"template": "full"}
 
 
 def photo_key(spec, photos):
-    """카드가 실제로 보여 줄 사진 이름. sleeve·jewelcase·nowplaying·사진 미지정·없는 사진 이름은 표지("cover")다."""
-    if spec["template"] in ("sleeve", "jewelcase", "nowplaying"):  # 표지 원본만 쓰는 앨범 템플릿
+    """카드가 실제로 보여 줄 사진 이름. nowplaying·사진 미지정·없는 사진 이름은 표지("cover")다."""
+    if spec["template"] == "nowplaying":  # 표지 원본만 쓰는 앨범 템플릿
         return "cover"
     return spec["photo"] if spec.get("photo") in photos else "cover"
 

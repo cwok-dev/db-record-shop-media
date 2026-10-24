@@ -110,8 +110,10 @@ function zones(){const f=document.querySelector('.foot');const limit=f.getBoundi
   const r=el.getBoundingClientRect();if(r.bottom>lim+1){const s=Math.max(.45,(lim-r.top)/r.height);
    el.style.transformOrigin=el.dataset.origin||'top center';el.style.transform='scale('+s.toFixed(3)+')';warn.push(el.className+' 축소 '+s.toFixed(2));}});
  return warn}
-function stamp(){const s=document.querySelector('.recst'),a=document.querySelector('.anchor');if(!s||(!a&&s.dataset.pos!=='foot'))return;
+function stamp(){const s=document.querySelector('.recst'),a=document.querySelector('.anchor'),at=document.querySelector('.stampat');
+ if(!s||(!a&&!at&&s.dataset.pos!=='foot'))return;
  const r=a?a.getBoundingClientRect():{left:0,top:0,width:0,height:0,bottom:0};let cx=r.left+.85*r.width,cy=r.top+.15*r.height;
+ if(at&&!s.dataset.pos){const q=at.getBoundingClientRect();cx=q.left+q.width/2;cy=q.top+q.height/2;}  // 템플릿이 정한 도장 자리
  if(s.dataset.pos==='below')cy=r.bottom+16+150;  // 사양 stamp: below → 주 그림 아래 16에 붙임
  if(s.dataset.pos==='foot'){const f=document.querySelector('.foot .one')||document.querySelector('.foot');const q=f.getBoundingClientRect();
   cx=q.right+16+150;cy=q.top+q.height/2;}  // 사양 stamp: foot → 한 줄 평 상자 오른쪽 16에 붙여 얼굴을 피함
@@ -212,72 +214,7 @@ def label_title(c, size, maxw, maxh, top):
 
 # ---------- 템플릿 ----------
 
-def t_glyph(c):
-    """앨범 카드: 앨범명 첫 글자가 곧 그림. 글자 안의 사진이 '이 앨범 = 이 사람들'을 말한다."""
-    main = c.bg != "ink"
-    bg = c.spot if main else INK
-    stroke = INK if main else PAPER
-    g = next((ch for ch in c.album if ch.isalnum()), "?")
-    sub = f"{c.spec.get('type', '')}"
-    css = f"""
-.G{{left:0;top:0;width:{W}px;height:{H}px;padding:{TOP_TITLE + 26}px 0 0 {M - 16}px;font:900 940px/.78 'Paperlogy';letter-spacing:-.06em;
-background:{PAPER} url('{c.img(W, H)}') 0 0/{W}px {H}px;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:4px {stroke}}}
-.name{{right:{M}px;top:{TOP_TITLE}px;text-align:right;z-index:4}}
-.name .big{{font:900 96px/1 'Paperlogy';padding:10px 18px 4px}}
-.type{{display:inline-block;margin-top:24px;background:{c.prop};border:3px solid {INK};box-shadow:6px 6px 0 {INK};padding:10px 16px 8px;font:700 28px 'SCDream';transform:rotate(-4deg)}}
-"""
-    body = f"""<div class='grain'></div><div class='abs G'>{esc(g)}</div>{head(c, dark=not main)}
-<div class='abs name'><div data-fit data-maxw='560' data-maxh='140' class='lbl big' style='width:max-content;margin-left:auto'>{esc(c.artist)}</div>
-<div class='lbl' style='font:700 26px SCDream;padding:10px 14px 8px;margin-top:-3px'>{esc(c.album)} · {esc(c.spec.get('date', ''))}</div><br>
-<div class='type'>{esc(sub)}</div></div>{foot(c, dark=not main)}"""
-    return bg, css, body
 
-
-def spin_arcs(s, color):
-    """LP 왼쪽 바깥의 호: 판이 도는 움직임(모션 라인). 판 중심을 공유하는 같은 굵기(4px)의 가는 호 6줄을 32 간격으로 긋는다.
-    호의 양 끝이 두 직선 위에 놓이도록 길이를 정해, 바깥으로 갈수록 줄어드는 모양이 왼쪽을 향한 삼각형으로 보인다."""
-    cx, cy, r0 = -s // 3 + s * 9 // 20, s // 20 + s * 9 // 20, s * 9 // 20
-    rs = [r0 + 28 + 32 * i for i in range(6)]
-    t1 = math.radians(60)  # 가장 안쪽 호의 반각
-    x1, h1 = rs[0] * math.cos(t1), rs[0] * math.sin(t1)  # 판 중심에서 왼쪽으로 잰 거리, 위아래 높이
-    xa = rs[-1] + 32  # 삼각형 꼭짓점: 가장 바깥 호 바로 왼쪽
-    paths = []
-    for r in rs:
-        lo, hi = 0.0, t1  # 끝점이 꼭짓점과 안쪽 끝점을 잇는 직선 위에 오는 반각을 이분법으로(바깥 호는 안쪽보다 짧다)
-        for _ in range(40):
-            t = (lo + hi) / 2
-            if r * math.sin(t) > h1 * (xa - r * math.cos(t)) / (xa - x1):
-                hi = t
-            else:
-                lo = t
-        x0, y0 = cx - r * math.cos(t), cy - r * math.sin(t)
-        paths.append(f"<path d='M{x0:.0f} {y0:.0f} A{r} {r} 0 0 0 {x0:.0f} {2 * cy - y0:.0f}' stroke='{color}' stroke-width='4' fill='none' stroke-linecap='round'/>")
-    return f"<svg style='position:absolute;left:0;top:0;overflow:visible' width='1' height='1'>{''.join(paths)}</svg>"
-
-
-def t_sleeve(c):
-    """앨범 카드: 실제 앨범 표지를 레코드 슬리브처럼 크게 놓고, 뒤로 LP가 비어져 나온다. 첫 장에서 어떤 앨범인지 바로 보인다.
-    표지는 하프톤으로 바꾸지 않는다(앨범의 얼굴이라 원본 그대로)."""
-    main = c.bg != "ink"
-    bg = c.spot if main else INK
-    s = 584  # 4칸(648)에서 라벨·한 줄 평 사이 공간에 맞춘 정사각(8의 배수)
-    css = f"""
-.name{{left:{M}px;top:{TOP_TITLE}px;z-index:4}}
-.name .big{{font:900 96px/1 'Paperlogy';padding:10px 18px 4px}}
-.type{{display:inline-block;margin-top:24px;background:{c.prop};border:3px solid {INK};box-shadow:6px 6px 0 {INK};padding:10px 16px 8px;font:700 28px 'SCDream';transform:rotate(-4deg)}}
-.zone{{left:{W - M - s}px;width:{s}px;height:{s}px}}
-.disc{{position:absolute;left:-{s // 3}px;top:{s // 20}px;width:{s * 9 // 10}px;height:{s * 9 // 10}px;border-radius:50%;
-background:radial-gradient(circle,{c.spot} 0 15%,{INK} 15.5% 17%,transparent 17.5%),repeating-radial-gradient(circle,#1c1c1c 0 3px,#2a2a2a 3px 5px);
-border:3px solid {INK};box-shadow:8px 8px 0 rgba(0,0,0,.35)}}
-.sleeve{{position:absolute;inset:0;background:{PAPER} url('{c.cover}') 0 0/cover;border:3px solid {INK};box-shadow:10px 10px 0 {INK}}}
-"""
-    body = f"""<div class='grain'></div>{head(c, dark=not main)}
-<div class='abs name'><div data-fit data-maxw='984' data-maxh='140' class='lbl big' style='width:max-content'>{esc(c.artist)}</div><br>
-<div class='lbl' style='font:700 26px SCDream;padding:10px 14px 8px;margin-top:-3px'>{esc(c.album)} · {esc(c.spec.get('date', ''))}</div><br>
-<div class='type'>{esc(c.spec.get('type', ''))}</div></div>
-<div class='abs zone' data-zone='center' data-after='.name' data-origin='top right'>{spin_arcs(s, INK if main else PAPER)}<div class='disc'></div><div class='sleeve anchor'></div></div>
-{foot(c, dark=not main)}"""
-    return bg, css, body
 
 
 def t_polaroid(c):
@@ -438,8 +375,8 @@ def t_full(c):
 
 def t_serpent(c):
     """세리프 분할 + 뱀(레퍼런스 ②): 포인트 컬러 바탕에 거대한 제목을 두고, 가운데로 사진이 뱀처럼
-    비스듬히 감긴다. 가로 종이 띠가 몸통을 끊는다. 곡선·뱀·휘감김이 제목에 있을 때(Cobra 등).
-    배경은 포인트 컬러 고정(c.bg 무시)."""
+    비스듬히 감긴다. 곡선·뱀·휘감김이 제목에 있을 때(Cobra 등). 추천 도장은 사진 몸통 가운데 높이의 오른쪽
+    (예전 트랙 정보 띠 자리, 사용자 결정 2026-10-24). 배경은 포인트 컬러 고정(c.bg 무시)."""
     bg = c.spot
     w = span(3)
     x = (W - w) // 2
@@ -447,26 +384,24 @@ def t_serpent(c):
     css = f"""
 .snake{{left:{x}px;top:{TOP_TITLE + 150}px;width:{w}px;height:760px;background:{PAPER} url('{uri}') 0 0/cover;
 mix-blend-mode:multiply;border:3px solid {INK};box-shadow:12px 12px 0 rgba(0,0,0,.28);transform:rotate(-5deg);z-index:1}}
-.bar{{left:{M}px;width:{span(6)}px;top:{TOP_TITLE + 452}px;background:{PAPER};border:3px solid {INK};box-shadow:8px 8px 0 {INK};
-padding:18px 24px;z-index:3;display:flex;justify-content:space-between;align-items:center;font:700 26px 'SpaceMono';color:{INK};transform:rotate(-1.5deg)}}
-.bar b{{font-weight:700}} .bar .dot{{width:18px;height:18px;background:{c.prop};border:3px solid {INK};border-radius:50%}}
 .ghost{{left:{M - 8}px;bottom:{M + 180}px;font:900 230px/.8 'Paperlogy';letter-spacing:-.05em;color:{INK};opacity:.12;z-index:0;width:max-content}}
 """
     body = f"""<div class='grain'></div>
 <div class='abs ghost'>{esc((c.spec.get('lines') or split_lines(c.title))[-1])}</div>
 {title_block(c, 234, 992, 300, INK)}
 <div class='abs snake'></div>
-<div class='abs bar'><span><b>{esc(c.artist)}</b> — {esc(c.album)}</span><span style='display:flex;align-items:center;gap:12px'>TRK {c.n:02d}<span class='dot'></span></span></div>
+<div class='abs stampat' style='left:{W - M - 300}px;top:{TOP_TITLE + 337}px;width:300px;height:300px'></div>
 {head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
     return bg, css, body
 
 
 def t_cinema(c):
-    """시네마 선언문(레퍼런스 ③): 어두운 바탕에 거대한 포인트색 제목, 모노 카테고리 줄, 듀오톤 스틸과
-    이름판, 조밀한 본문(곡 소개). 영화적 콘셉트·감독명이 제목일 때(Tarantino 등). 배경 잉크 고정."""
+    """시네마 선언문(레퍼런스 ③): 어두운 바탕에 거대한 포인트색 제목, 모노 카테고리 줄, 내용 폭 전체의
+    2.39:1 시네마스코프 듀오톤 스틸과 이름판(곡 소개 본문은 빼고 영화 화면 비율로, 사용자 결정 2026-10-24).
+    영화적 콘셉트·감독명이 제목일 때(Tarantino 등). 배경 잉크 고정."""
     bg = INK
-    blurb = esc(c.blurb or "")
-    sw, sh = span(3), 496
+    sw = span(6)
+    sh = round(sw / 2.39)
     uri = c.img(sw, sh)
     cats = " &nbsp;&nbsp;·&nbsp;&nbsp; ".join([esc(c.artist), esc(c.album), f"TRACK {c.n:02d}", esc(c.year)])
     css = f"""
@@ -475,16 +410,11 @@ def t_cinema(c):
 .still{{left:{M}px;top:{TOP_TITLE + 320}px;width:{sw}px;height:{sh}px;background:{c.spot};z-index:2;box-shadow:12px 12px 0 rgba(0,0,0,.5)}}
 .still .ph{{position:absolute;inset:0;background:url('{uri}') 0 0/cover;mix-blend-mode:multiply}}
 .still .plate{{position:absolute;left:8px;bottom:8px;background:{c.spot};color:{INK};font:900 46px/.9 'Paperlogy';letter-spacing:-.03em;padding:8px 12px 4px;z-index:3}}
-.body{{left:{X[3]}px;top:{TOP_TITLE + 320}px;width:{span(3)}px;font:400 22px/1.56 'SCDream';color:{PAPER};text-align:justify;z-index:5}}
-.body .lead{{color:{c.spot};font-weight:700}}
 """
-    lead, _, rest = (blurb.partition("다.") if "다." in blurb else (blurb, "", ""))
-    lead_html = f"<span class='lead'>{lead}{'다.' if rest else ''}</span>{rest}" if blurb else ""
     body = f"""<div class='grain' style='opacity:.5'></div>
 {title_block(c, 168, 992, 250, c.spot)}
 <div class='abs rule'></div><div class='abs cats'>{cats}</div>
-<div class='abs still'><div class='ph'></div><div class='plate'>{esc(c.artist)}</div></div>
-<div class='abs body'>{lead_html}</div>
+<div class='abs still anchor'><div class='ph'></div><div class='plate'>{esc(c.artist)}</div></div>
 {head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
     return bg, css, body
 
@@ -736,50 +666,6 @@ def t_torn(c):
     return PAPER, css, body
 
 
-def album_name(c, left, top, maxw):
-    """앨범 카드 공통 이름판: 가수명 큰 라벨 + 앨범명·발매일 라벨 + 앨범 종류 소품색 라벨."""
-    return (f"<div class='abs name' style='left:{left}px;top:{top}px;z-index:4'><div data-fit data-maxw='{maxw}' data-maxh='140' class='lbl big' "
-            f"style='width:max-content;font:900 96px/1 Paperlogy;padding:10px 18px 4px'>{esc(c.artist)}</div><br>"
-            f"<div class='lbl' style='font:700 26px SCDream;padding:10px 14px 8px;margin-top:-3px'>{esc(c.album)} · {esc(c.spec.get('date', ''))}</div><br>"
-            f"<div style='display:inline-block;margin-top:24px;background:{c.prop};border:3px solid {INK};box-shadow:6px 6px 0 {INK};"
-            f"padding:10px 16px 8px;font:700 28px SCDream;transform:rotate(-4deg)'>{esc(c.spec.get('type', ''))}</div></div>")
-
-
-def t_jewelcase(c):
-    """앨범 카드: 투명 CD 케이스 둘을 비스듬히 겹친다. 앞은 실제 표지(원본), 뒤는 뒷면 속지의 수록곡 목록(타이틀곡은 포인트 컬러).
-    스티커는 우리 정보만(신보·발매일). 수록곡이 많거나 목록 자체가 볼거리일 때. 레퍼런스: 스티커 붙인 CD 케이스."""
-    main = c.bg != "ink"
-    bg = c.spot if main else INK
-    s1, s2 = 460, 490  # 뒤 케이스, 앞 케이스
-    tr = c.tracks or []
-    rows = tr if len(tr) <= 8 else tr[:7]  # 속지 높이에 8줄까지
-    lis = "".join(f"<li{' class=t' if t else ''}><b>{n:02d}</b>{esc(title)}</li>" for n, title, t in rows)
-    if len(tr) > len(rows):
-        lis += f"<li><b>··</b>외 {len(tr) - len(rows)}곡</li>"
-    css = f"""
-.zone{{left:{M}px;width:{s1 + 440}px;height:{s2 + 90}px}}
-.case{{position:absolute;border:3px solid {INK};box-shadow:10px 10px 0 {INK};background:rgba(255,255,255,.35)}}
-.case:after{{content:'';position:absolute;inset:0;border:10px solid rgba(255,255,255,.55);pointer-events:none}}
-.case .hinge{{position:absolute;left:0;top:0;bottom:0;width:30px;border-right:3px solid {INK};
-background:repeating-linear-gradient(0deg,rgba(255,255,255,.75) 0 10px,rgba(255,255,255,.35) 10px 14px);z-index:2}}
-.back{{left:0;top:0;width:{s1}px;height:{s1}px;transform:rotate(-6deg)}}
-.back .ins{{position:absolute;inset:14px 14px 14px 44px;overflow:hidden;background:{INK};color:{PAPER};padding:30px 28px}}
-.back .ins p{{font:700 24px 'SpaceMono';color:{c.spot};margin-bottom:18px}}
-.back ol{{list-style:none}} .back li{{font:500 26px/1.5 'SCDream';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:360px}}
-.back li b{{font:700 20px 'SpaceMono';margin-right:14px;opacity:.6}} .back li.t{{color:{c.spot}}} .back li.t b{{opacity:1}}
-.front{{left:450px;top:90px;width:{s2}px;height:{s2}px;transform:rotate(4deg)}}
-.front .cv{{position:absolute;inset:14px 14px 14px 44px;background:{PAPER} url('{c.cover}') 0 0/cover}}
-.stk{{position:absolute;z-index:5;border:3px solid {INK};display:flex;align-items:center;justify-content:center;text-align:center}}
-.stk.new{{right:-36px;top:70px;width:200px;height:110px;border-radius:50%;background:{c.prop};transform:rotate(14deg);font:900 44px/1 Paperlogy}}
-.stk.date{{left:480px;bottom:-34px;background:{PAPER};padding:10px 14px 8px;font:700 22px 'SpaceMono';transform:rotate(-5deg)}}
-"""
-    body = f"""<div class='grain'></div>{head(c, dark=not main)}{album_name(c, M, TOP_TITLE, 984)}
-<div class='abs zone' data-zone='center' data-after='.name' data-origin='top left'>
-<div class='case back'><div class='hinge'></div><div class='ins'><p>TRACKLIST · {len(tr):02d}</p><ol>{lis}</ol></div></div>
-<div class='case front anchor'><div class='hinge'></div><div class='cv'></div></div>
-<div class='stk new'>신보</div><div class='stk date'>RELEASED {esc(c.spec.get('date', ''))}</div></div>
-{foot(c, dark=not main)}"""
-    return bg, css, body
 
 
 def ctl_svg(kind, size, color):
@@ -863,9 +749,9 @@ def t_colorblock(c):
     return bg, css, body
 
 
-TEMPLATES = {"sleeve": t_sleeve, "glyph": t_glyph, "polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid,
+TEMPLATES = {"polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid,
              "player": t_player, "full": t_full, "serpent": t_serpent, "cinema": t_cinema, "cctv": t_cctv,
-             "jewelcase": t_jewelcase, "nowplaying": t_nowplaying, "colorblock": t_colorblock,
+             "nowplaying": t_nowplaying, "colorblock": t_colorblock,
              "gable": t_gable, "clipboard": t_clipboard, "desktop": t_desktop, "notch": t_notch,
              "motion": t_motion, "issue": t_issue, "torn": t_torn}
 
