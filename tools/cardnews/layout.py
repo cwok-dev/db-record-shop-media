@@ -22,8 +22,8 @@ TOP_HEAD, TOP_TITLE = 48, 136
 INK, PAPER = "#111111", "#e6e6e2"
 PINK, LIME = "#ff4f9a", "#d7ff3d"
 SPOT_FALLBACK = "#ffd23f"  # 흑백 표지
-TYPO = {"polaroid", "cutout", "grid"}
-PHOTO = {"player", "full"}
+TYPO = {"polaroid", "cutout", "grid", "serpent", "cinema"}
+PHOTO = {"player", "full", "cctv"}
 BURST = ("polygon(50% 0,58% 30%,85% 12%,70% 40%,100% 45%,72% 58%,92% 85%,60% 70%,52% 100%,42% 72%,"
          "12% 90%,28% 60%,0 50%,28% 40%,10% 14%,40% 30%)")
 STAR = "M50 4 L62 37 L97 38 L69 59 L79 93 L50 73 L21 93 L31 59 L3 38 L38 37 Z"
@@ -126,7 +126,7 @@ class Card:
     """카드 한 장의 값. img(w, h, cell)은 이 카드 사진 칸의 파일 URI를 돌려준다."""
 
     def __init__(self, *, kind, spec, spot, prop, artist, album, year, page, n=None, total=None, title="",
-                 is_title=False, review=None, bg=None, img=None, cover=None):
+                 is_title=False, review=None, bg=None, img=None, cover=None, blurb=None):
         self.__dict__.update(locals()); del self.__dict__["self"]
 
     @property
@@ -412,7 +412,99 @@ def t_full(c):
     return PAPER, css, body
 
 
-TEMPLATES = {"sleeve": t_sleeve, "glyph": t_glyph, "polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid, "player": t_player, "full": t_full}
+def t_serpent(c):
+    """세리프 분할 + 뱀(레퍼런스 ②): 포인트 컬러 바탕에 거대한 제목을 두고, 가운데로 사진이 뱀처럼
+    비스듬히 감긴다. 가로 종이 띠가 몸통을 끊는다. 곡선·뱀·휘감김이 제목에 있을 때(Cobra 등).
+    배경은 포인트 컬러 고정(c.bg 무시)."""
+    bg = c.spot
+    w = span(3)
+    x = (W - w) // 2
+    uri = c.img(w, 760)
+    css = f"""
+.snake{{left:{x}px;top:{TOP_TITLE + 150}px;width:{w}px;height:760px;background:{PAPER} url('{uri}') 0 0/cover;
+mix-blend-mode:multiply;border:3px solid {INK};box-shadow:12px 12px 0 rgba(0,0,0,.28);transform:rotate(-5deg);z-index:1}}
+.bar{{left:{M}px;width:{span(6)}px;top:{TOP_TITLE + 452}px;background:{PAPER};border:3px solid {INK};box-shadow:8px 8px 0 {INK};
+padding:18px 24px;z-index:3;display:flex;justify-content:space-between;align-items:center;font:700 26px 'SpaceMono';color:{INK};transform:rotate(-1.5deg)}}
+.bar b{{font-weight:700}} .bar .dot{{width:18px;height:18px;background:{c.prop};border:3px solid {INK};border-radius:50%}}
+.ghost{{left:{M - 8}px;bottom:{M + 180}px;font:900 230px/.8 'Paperlogy';letter-spacing:-.05em;color:{INK};opacity:.12;z-index:0;width:max-content}}
+"""
+    body = f"""<div class='grain'></div>
+<div class='abs ghost'>{esc((c.spec.get('lines') or split_lines(c.title))[-1])}</div>
+{title_block(c, 234, 992, 300, INK)}
+<div class='abs snake'></div>
+<div class='abs bar'><span><b>{esc(c.artist)}</b> — {esc(c.album)}</span><span style='display:flex;align-items:center;gap:12px'>TRK {c.n:02d}<span class='dot'></span></span></div>
+{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
+    return bg, css, body
+
+
+def t_cinema(c):
+    """시네마 선언문(레퍼런스 ③): 어두운 바탕에 거대한 포인트색 제목, 모노 카테고리 줄, 듀오톤 스틸과
+    이름판, 조밀한 본문(곡 소개). 영화적 콘셉트·감독명이 제목일 때(Tarantino 등). 배경 잉크 고정."""
+    bg = INK
+    blurb = esc(c.blurb or "")
+    sw, sh = span(3), 496
+    uri = c.img(sw, sh)
+    cats = " &nbsp;&nbsp;·&nbsp;&nbsp; ".join([esc(c.artist), esc(c.album), f"TRACK {c.n:02d}", esc(c.year)])
+    css = f"""
+.cats{{left:{M}px;top:{TOP_TITLE + 268}px;font:700 22px 'SpaceMono';letter-spacing:.04em;color:{c.spot};z-index:5}}
+.rule{{left:{M}px;top:{TOP_TITLE + 252}px;width:{span(6)}px;height:3px;background:{c.spot};z-index:5}}
+.still{{left:{M}px;top:{TOP_TITLE + 320}px;width:{sw}px;height:{sh}px;background:{c.spot};z-index:2;box-shadow:12px 12px 0 rgba(0,0,0,.5)}}
+.still .ph{{position:absolute;inset:0;background:url('{uri}') 0 0/cover;mix-blend-mode:multiply}}
+.still .plate{{position:absolute;left:8px;bottom:8px;background:{c.spot};color:{INK};font:900 46px/.9 'Paperlogy';letter-spacing:-.03em;padding:8px 12px 4px;z-index:3}}
+.body{{left:{X[3]}px;top:{TOP_TITLE + 320}px;width:{span(3)}px;font:400 22px/1.56 'SCDream';color:{PAPER};text-align:justify;z-index:5}}
+.body .lead{{color:{c.spot};font-weight:700}}
+"""
+    lead, _, rest = (blurb.partition("다.") if "다." in blurb else (blurb, "", ""))
+    lead_html = f"<span class='lead'>{lead}{'다.' if rest else ''}</span>{rest}" if blurb else ""
+    body = f"""<div class='grain' style='opacity:.5'></div>
+{title_block(c, 168, 992, 250, c.spot)}
+<div class='abs rule'></div><div class='abs cats'>{cats}</div>
+<div class='abs still'><div class='ph'></div><div class='plate'>{esc(c.artist)}</div></div>
+<div class='abs body'>{lead_html}</div>
+{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
+    return bg, css, body
+
+
+def t_cctv(c):
+    """CCTV 감지(레퍼런스 ⑥): 감시 모니터 프레임. 전면 하프톤 사진 위에 소품색 감지 박스와 모노 라벨,
+    모서리 카메라 정보·타임스탬프·장면 번호. 거리·추적·포착 장면일 때(SaWaDiKa 등). 바탕 종이(사진 전면)."""
+    bg = PAPER
+    uri = c.img(W, H)
+    code = hashlib.sha1((c.title + str(c.n)).encode()).hexdigest()[:5].upper()
+    ts = f"{(13 + c.n) % 24:02d}:{(c.n * 7) % 60:02d}:{(c.n * 11) % 60:02d}"
+
+    def det(x, y, w, h, label):
+        corners = "".join(f"<i class='c {k}'></i>" for k in ("tl", "tr", "bl", "br"))
+        return (f"<div class='abs det' style='left:{x}px;top:{y}px;width:{w}px;height:{h}px'>"
+                f"<span class='tab'>{esc(label)}</span>{corners}</div>")
+
+    boxes = (det(X[1], TOP_TITLE + 232, span(2) + 48, 336, "OBJECT ▸ " + c.title.upper())
+             + det(X[4] - 16, TOP_TITLE + 712, span(2) + 16, 206, "ID ▸ #" + code))
+    css = f"""
+.photo{{inset:0;background:url('{uri}') 0 0/cover;mix-blend-mode:multiply}}
+.scan{{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,rgba(17,17,17,.10) 0 2px,transparent 2px 5px);z-index:3;pointer-events:none}}
+.frame{{position:absolute;left:20px;top:20px;right:20px;bottom:20px;border:3px solid {INK};z-index:4;pointer-events:none}}
+.frame::before,.frame::after{{content:'';position:absolute;width:26px;height:26px;border:4px solid {INK}}}
+.frame::before{{left:-2px;top:-2px;border-right:0;border-bottom:0}} .frame::after{{right:-2px;bottom:-2px;border-left:0;border-top:0}}
+.cv{{position:absolute;background:{PAPER};border:2px solid {INK};padding:8px 11px 6px;font:700 20px/1.35 'SpaceMono';color:{INK};letter-spacing:.02em;z-index:6}}
+.cv .rec{{display:inline-block;width:14px;height:14px;border-radius:50%;background:{c.prop};margin-right:7px;vertical-align:0}}
+.det{{position:absolute;border:3px solid {c.prop};z-index:5}}
+.det .tab{{position:absolute;left:-3px;top:-33px;background:{c.prop};color:{INK};font:700 18px/1 'SpaceMono';padding:7px 10px 5px;white-space:nowrap}}
+.det .c{{position:absolute;width:13px;height:13px;border:4px solid {c.prop}}}
+.det .tl{{left:-4px;top:-4px;border-right:0;border-bottom:0}} .det .tr{{right:-4px;top:-4px;border-left:0;border-bottom:0}}
+.det .bl{{left:-4px;bottom:-4px;border-right:0;border-top:0}} .det .br{{right:-4px;bottom:-4px;border-left:0;border-top:0}}
+"""
+    body = f"""<div class='abs photo'></div><div class='scan'></div><div class='grain' style='opacity:.3'></div><div class='frame'></div>
+<div class='cv' style='left:44px;top:40px'><span class='rec'></span>CCTV {c.n:02d}<br>{esc(c.artist)} — {esc(c.album)}</div>
+<div class='cv' style='right:44px;top:40px;text-align:right'>CAMERA {c.n} · {esc(c.page)}<br>{ts}</div>
+<div class='cv' style='left:44px;top:138px'>{c.n:02d}/{c.total:02d} SCANNING…<br>▸ {esc(c.title)}</div>
+{boxes}
+{foot(c, wide=c.spec.get('wide', False))}"""
+    return bg, css, body
+
+
+TEMPLATES = {"sleeve": t_sleeve, "glyph": t_glyph, "polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid,
+             "player": t_player, "full": t_full, "serpent": t_serpent, "cinema": t_cinema, "cctv": t_cctv}
 
 
 def page_html(c):

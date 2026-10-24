@@ -157,7 +157,8 @@ def build(args, album, review, posts_specs, photos, out, preview=False):
                 aspec.setdefault("bg", "ink")
             png = out / f"{key}_01{vname}.png"
             jobs.append((make_card(layout, photo, kind="album", spec=aspec, photos=photos, cover=cover, cache=cache,
-                                   warns=warns, label=f"{key} 앨범", used=used.setdefault(p, set()), ctx={**common, "page": f"01/{total:02d}", "review": a}), png))
+                                   warns=warns, label=f"{key} 앨범", used=used.setdefault(p, set()),
+                                   ctx={**common, "page": f"01/{total:02d}", "review": a, "blurb": (album.get("description") or {}).get("text")}), png))
             files.setdefault(1, []).append(png)
             typo_i = 0
             for i, (t, s) in enumerate(zip(group, tspecs), 2):
@@ -168,7 +169,7 @@ def build(args, album, review, posts_specs, photos, out, preview=False):
                     typo_i += 1
                 png = out / f"{key}_{i:02d}{vname}.png"
                 ctx = {**common, "page": f"{i:02d}/{total:02d}", "n": t["n"], "total": len(tracks), "title": t["title"],
-                       "is_title": bool(t.get("isTitle")), "review": r}
+                       "is_title": bool(t.get("isTitle")), "review": r, "blurb": (t.get("description") or {}).get("text")}
                 jobs.append((make_card(layout, photo, kind="track", spec=s, photos=photos, cover=cover, cache=cache,
                                        warns=warns, label=f"{key} 트랙 {t['n']}", used=used.setdefault(p, set()), ctx=ctx), png))
                 files.setdefault(i, []).append(png)
