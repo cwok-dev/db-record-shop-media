@@ -820,39 +820,6 @@ def t_flyer(c):
     return PAPER, css, body
 
 
-def t_records(c):
-    """앨범 카드: 기울어진 레코드 두 장. 잉크 바탕에 흐린 무지개 띠(포인트 컬러·소품색), 뒤에 테두리만 남은 거대 앨범명,
-    레이블이 표지인 판 두 장이 원근으로 겹치고, 그 위를 가로지르는 이탤릭 세리프 가수명, 반짝이 별, 발매일 라벨.
-    레퍼런스: R&B release party 포스터."""
-    rd = 620
-    def rec(x, y, rot):
-        return (f"<div class='abs rec' style='left:{x}px;top:{y}px;transform:perspective(1400px) rotateX(52deg) rotateZ({rot}deg)'>"
-                f"<div class='lb'></div></div>")
-    def spark(x, y, s, col):
-        return (f"<svg class='abs' style='left:{x}px;top:{y}px;z-index:6' width='{s}' height='{s}' viewBox='-4 -4 108 108'>"
-                f"<path d='{SPARK}' fill='{col}' stroke='{INK}' stroke-width='3'/></svg>")
-    css = f"""
-.bands{{left:0;right:0;top:{TOP_TITLE + 330}px;height:520px;filter:blur(3px);opacity:.75;
-background:repeating-linear-gradient(to bottom,{c.spot} 0 26px,{INK} 26px 34px,{c.prop} 34px 60px,{INK} 60px 68px,#3a3a3a 68px 92px,{INK} 92px 100px)}}
-.bands:after{{content:'';position:absolute;inset:0;background:{GRAIN};opacity:.6}}
-.ghost{{left:50%;transform:translateX(-50%);top:{TOP_TITLE - 4}px;width:max-content;font:900 200px/.9 Paperlogy;letter-spacing:-.05em;color:{PAPER};z-index:2}}
-.rec{{width:{rd}px;height:{rd}px;border-radius:50%;border:3px solid {c.spot};z-index:3;box-shadow:0 30px 40px rgba(0,0,0,.6);
-background:repeating-radial-gradient(circle,#1d1d1d 0 3px,#2c2c2c 3px 6px)}}
-.rec .lb{{position:absolute;left:50%;top:50%;width:230px;height:230px;margin:-115px;border-radius:50%;background:{PAPER} url('{c.cover}') 0 0/cover;border:3px solid {INK}}}
-.script{{left:{M + 30}px;top:{TOP_TITLE + 170}px;font:700 132px/1 Chosun;font-synthesis:weight;font-style:italic;color:{c.prop};-webkit-text-stroke:8px {INK};paint-order:stroke fill;
-transform:rotate(-9deg);z-index:5;width:max-content}}
-.dt{{left:{M}px;background:{c.spot};color:{INK};border:3px solid {INK};font:900 44px/1 Paperlogy;padding:12px 18px 6px;z-index:6}}
-"""
-    body = f"""<div class='abs bands'></div><div class='grain' style='opacity:.4'></div>
-<div class='abs ghost title' data-fit data-maxw='1040' data-maxh='190'>{esc(c.album)}</div>
-{rec(250, TOP_TITLE + 430, -24)}{rec(170, TOP_TITLE + 260, -18).replace("class='abs rec'", "class='abs rec anchor'")}
-<div class='abs script' data-fit data-maxw='900' data-maxh='150'>{esc(c.artist)}</div>
-{spark(X[5] - 10, TOP_TITLE + 150, 110, c.spot)}{spark(M, TOP_TITLE + 420, 70, PAPER)}{spark(X[4] + 40, TOP_TITLE + 640, 60, c.prop)}{spark(X[3], TOP_TITLE + 120, 50, PAPER)}
-<div class='abs dt' style='top:{TOP_TITLE + 790}px'>RELEASE {esc(c.spec.get('date', ''))}</div>
-{head(c, dark=True)}{foot(c, dark=True)}"""
-    return INK, css, body
-
-
 def t_live(c):
     """앨범 카드: 공연 포스터. 종이 바탕에 큰 하프톤 사진판, 왼쪽 위에 가수명, 오른쪽 아래에 앨범명을 소품색 거대 글자로 사진에 걸치고,
     오른쪽 위에 발매일과 화살표. 레퍼런스: MUSIC LIVE 포스터."""
@@ -895,7 +862,7 @@ def t_neon(c):
 
 TEMPLATES = {"polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid,
              "player": t_player, "full": t_full, "serpent": t_serpent, "cinema": t_cinema, "cctv": t_cctv,
-             "nowplaying": t_nowplaying, "disc": t_disc, "flyer": t_flyer, "records": t_records, "live": t_live, "neon": t_neon, "colorblock": t_colorblock,
+             "nowplaying": t_nowplaying, "disc": t_disc, "flyer": t_flyer, "live": t_live, "neon": t_neon, "colorblock": t_colorblock,
              "gable": t_gable, "clipboard": t_clipboard, "desktop": t_desktop, "notch": t_notch,
              "motion": t_motion, "issue": t_issue, "torn": t_torn}
 
