@@ -16,7 +16,7 @@ options.json {"photos": {...}, "cards": {"album": [A, B, C], "1": [A, B, C], ...
               "wide": true|false(한 줄 평 6칸), "lines": ["Moon", "light"](제목 줄바꿈 직접 지정),
               "basis": 제목|소개|위치|평, "why": 의도 한 문장}
 design.json·options.json의 "credit": 사진 출처(소속사명). 사진을 쓴 카드가 있으면 캡션에 "사진: <credit>"을 넣는다.
-사양이 없는 카드는 표지로 만든다(앨범 nowplaying, 트랙은 타이포 cutout·사진 full을 번갈아).
+사양이 없는 카드가 있으면 렌더링을 멈춘다.
 
 출력: <out>/p1_01.jpg …, p2_…, premix_…, caption_<post>.txt, manifest.json (warnings 포함)
 """
@@ -87,11 +87,11 @@ def captions(album, review, posts, credit=None):
     return out
 
 
-def default_spec(kind, i):
-    """사양이 없을 때: 표지 사진으로 앨범은 nowplaying, 트랙은 타이포(cutout)·사진(full)을 번갈아."""
-    if kind == "album":
-        return {"template": "nowplaying"}
-    return {"template": "cutout"} if i % 2 == 1 else {"template": "full"}
+def need(spec, name):
+    """사양이 없으면 렌더링을 멈춘다(사용자 결정 2026-10-24: 대신 쓰는 기본 사양 없음)."""
+    if not spec:
+        sys.exit(f"사양 없음: {name} 카드 (design.json·options.json에 넣어야 함)")
+    return spec
 
 
 def photo_key(spec, photos):
@@ -244,9 +244,9 @@ def main():
 
         def specs(p, group):
             n = max(len(cards.get("album", [])), *(len(cards.get(str(t["n"]), [])) for t in group), 1)
-            pick = lambda lst, k, d: (lst[k] if k < len(lst) else lst[0]) if lst else d
-            return [("ABC"[k], pick(cards.get("album", []), k, default_spec("album", 0)),
-                     [pick(cards.get(str(t["n"]), []), k, default_spec("track", i)) for i, t in enumerate(group, 1)]) for k in range(n)]
+            pick = lambda lst, k, name: need(lst, name)[k] if k < len(lst) else lst[0]
+            return [("ABC"[k], pick(cards.get("album", []), k, "앨범"),
+                     [pick(cards.get(str(t["n"]), []), k, f"트랙 {t['n']}") for t in group]) for k in range(n)]
 
         manifest, warns, _ = build(args, album, review, specs, opt.get("photos", {}), out, preview=True)
         from PIL import ImageDraw
@@ -273,8 +273,7 @@ def main():
     dc = design.get("cards", {})
 
     def specs(p, group):
-        return [("", dc.get("album", default_spec("album", 0)),
-                 [dc.get(str(t["n"]), default_spec("track", i)) for i, t in enumerate(group, 1)])]
+        return [("", need(dc.get("album"), "앨범"), [need(dc.get(str(t["n"])), f"트랙 {t['n']}") for t in group])]
 
     manifest, warns, used = build(args, album, review, specs, design.get("photos", {}), out)
     credit = design.get("credit") if any(used.values()) else None
@@ -291,8 +290,7 @@ def main():
             names.append(jpg.name)
         (out / f"caption_{p}.txt").write_text(caps[p], encoding="utf-8")
         result.append({"post": p, "files": names, "caption": f"caption_{p}.txt",
-                       "design": {"album": dc.get("album", default_spec("album", 0)),
-                                  **{str(t["n"]): dc.get(str(t["n"]), default_spec("track", i)) for i, t in enumerate(group, 1)}}})
+                       "design": {"album": dc["album"], **{str(t["n"]): dc[str(t["n"])] for t in group}}})
     (out / "manifest.json").write_text(json.dumps({"posts": result, "warnings": warns}, ensure_ascii=False, indent=1), encoding="utf-8")
     print(json.dumps({"posts": [{k: r[k] for k in ("post", "files", "caption")} for r in result], "warnings": warns}, ensure_ascii=False))
 

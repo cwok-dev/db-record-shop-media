@@ -111,12 +111,12 @@ function zones(){const f=document.querySelector('.foot');const limit=f.getBoundi
    el.style.transformOrigin=el.dataset.origin||'top center';el.style.transform='scale('+s.toFixed(3)+')';warn.push(el.className+' 축소 '+s.toFixed(2));}});
  return warn}
 function stamp(){const s=document.querySelector('.recst'),a=document.querySelector('.anchor'),at=document.querySelector('.stampat');
- if(!s||(!a&&!at&&s.dataset.pos!=='foot'))return;
+ if(!s||(!a&&!at&&!/^foot/.test(s.dataset.pos||'')))return;
  const r=a?a.getBoundingClientRect():{left:0,top:0,width:0,height:0,bottom:0};let cx=r.left+.85*r.width,cy=r.top+.15*r.height;
  if(at&&!s.dataset.pos){const q=at.getBoundingClientRect();cx=q.left+q.width/2;cy=q.top+q.height/2;}  // 템플릿이 정한 도장 자리
  if(s.dataset.pos==='below')cy=r.bottom+16+150;  // 사양 stamp: below → 주 그림 아래 16에 붙임
- if(s.dataset.pos==='foot'){const f=document.querySelector('.foot .one')||document.querySelector('.foot');const q=f.getBoundingClientRect();
-  cx=q.right+16+150;cy=q.top+q.height/2;}  // 사양 stamp: foot → 한 줄 평 상자 오른쪽 16에 붙여 얼굴을 피함
+ if(s.dataset.pos==='foot'||s.dataset.pos==='footup'){const f=document.querySelector('.foot .one')||document.querySelector('.foot');const q=f.getBoundingClientRect();
+  cx=q.right+16+150;cy=q.top+q.height/2-(s.dataset.pos==='footup'?80:0);}  // 사양 stamp: foot → 한 줄 평 상자 오른쪽 16에 붙여 얼굴을 피함 / footup: 그보다 살짝 위
  cx=Math.min(Math.max(cx,158),1080-158);cy=Math.min(Math.max(cy,236),1350-158);
  s.style.left=(cx-150)+'px';s.style.top=(cy-150)+'px';}
 function band(){const b=document.querySelector('.band'),t=document.querySelector('.title');
@@ -184,7 +184,8 @@ def foot(c, wide=False, dark=False):
 def rec_stamp(c):
     if not c.rec:
         return ""
-    pos = f" data-pos='{c.spec['stamp']}'" if c.spec.get("stamp") else ""
+    stamp = c.spec.get("stamp") or {"cctv": "footup"}.get(c.spec["template"])  # cctv: 왼쪽 위 라벨을 가리지 않게(사용자 결정 2026-10-24)
+    pos = f" data-pos='{stamp}'" if stamp else ""
     return (f"<div class='recst'{pos} style='left:0;top:0'><div class='sh'></div><div class='ol'></div><div class='fg'></div>"
             "<div class='tx'><i>DB PICK</i><b>추천</b></div></div>")
 
@@ -462,6 +463,12 @@ def zooms(c, defaults):
     return [z[i] if i < len(z) and z[i] else d for i, d in enumerate(defaults)]
 
 
+def tighten(r, f):
+    """확대 영역 r을 가운데를 기준으로 f배로 좁힌다(더 줌인)."""
+    cx, cy, hw, hh = (r[0] + r[2]) / 2, (r[1] + r[3]) / 2, (r[2] - r[0]) * f / 2, (r[3] - r[1]) * f / 2
+    return [cx - hw, cy - hh, cx + hw, cy + hh]
+
+
 def first_sentence(text):
     """곡 소개의 첫 문장."""
     import re
@@ -613,6 +620,7 @@ def t_issue(c):
     인물 사진이 좋은 곡, 앨범을 대표하는 곡(근거: 위치). 레퍼런스: 생일 잡지 표지."""
     top = TOP_TITLE + 260
     z = zooms(c, [[.2, .12, .8, .3], [.25, .3, .75, .45], [.1, .4, .6, 1]])
+    z[:2] = [tighten(r, .7) for r in z[:2]]  # 확대 띠 둘: 띠 크기는 그대로 두고 더 줌인(사용자 결정 2026-10-24)
     code = hashlib.sha1((c.title + str(c.n)).encode()).hexdigest()
     bars = "".join(f"<rect x='{i * 6}' y='0' width='{1 + int(code[i % 40], 16) % 4}' height='60' fill='{INK}'/>" for i in range(44))
     css = f"""
@@ -653,8 +661,8 @@ def t_torn(c):
 .tear{{left:-30px;top:{sy}px;width:{W + 60}px;height:{sh}px;transform:rotate(-3deg);z-index:3;filter:drop-shadow(0 8px 0 rgba(0,0,0,.25))}}
 .tear .ed{{position:absolute;inset:-14px 0;background:#fbfbf8;clip-path:polygon({jag})}}
 .tear .im{{position:absolute;inset:0;clip-path:polygon({jag});background:{PAPER} url('{c.img(W + 60, sh, sub=z[0])}') 0 0/cover}}
-.tear em{{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font:400 54px/1 Chosun;font-style:italic;color:{PAPER};-webkit-text-stroke:6px {INK};paint-order:stroke fill;z-index:2}}
-.tw{{left:50%;transform:translateX(-50%);width:max-content;text-align:center;font:400 220px/.9 Chosun;color:{c.spot};-webkit-text-stroke:5px {INK};paint-order:stroke fill;z-index:4;white-space:nowrap}}
+.tear em{{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font:700 54px/1 Chosun;font-synthesis:weight;font-style:italic;color:{PAPER};-webkit-text-stroke:6px {INK};paint-order:stroke fill;z-index:2}}
+.tw{{left:50%;transform:translateX(-50%);width:max-content;text-align:center;font:700 220px/.9 Chosun;font-synthesis:weight;color:{c.spot};-webkit-text-stroke:5px {INK};paint-order:stroke fill;z-index:4;white-space:nowrap}}
 .side{{right:{M}px;top:{TOP_TITLE}px;border-left:4px solid {INK};border-right:4px solid {INK};padding:6px 14px;font:400 56px/1.05 Chosun;text-align:center;background:{PAPER};z-index:5}}
 """
     body = f"""<div class='abs photo'></div><div class='grain'></div>
