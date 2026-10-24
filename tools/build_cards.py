@@ -10,7 +10,7 @@ python3 -I tools/build_cards.py --album <albums JSON> --cover <표지> --out <�
 
 design.json  {"photos": {"p1": {"url": ..., "page": 기사 주소}}, "cards": {"album": 사양, "1": 사양, ...}}
 options.json {"photos": {...}, "cards": {"album": [A, B, C], "1": [A, B, C], ...}}
-사양         {"template": sleeve|glyph|polaroid|cutout|grid|player|full|serpent|cinema|cctv, "photo": "p1", "crop": [x0, y0, x1, y1](비율),
+사양         {"template": sleeve|glyph|jewelcase|nowplaying|colorblock|polaroid|cutout|grid|player|full|serpent|cinema|cctv, "photo": "p1", "crop": [x0, y0, x1, y1](비율),
               "bg": paper|ink|spot(타이포 카드), "shape": circle|arch|frame|wide(cutout, wide는 화면 폭 전체·"aspect" 높이/폭 비율, 기본 0.5), "props": ["sparkle"|"wave"|"motif:<이름>"],
               "wide": true|false(한 줄 평 6칸), "lines": ["Moon", "light"](제목 줄바꿈 직접 지정),
               "basis": 제목|소개|위치|평, "why": 의도 한 문장}
@@ -94,8 +94,8 @@ def default_spec(kind, i):
 
 
 def photo_key(spec, photos):
-    """카드가 실제로 보여 줄 사진 이름. sleeve·사진 미지정·없는 사진 이름은 표지("cover")다."""
-    if spec["template"] == "sleeve":
+    """카드가 실제로 보여 줄 사진 이름. sleeve·jewelcase·nowplaying·사진 미지정·없는 사진 이름은 표지("cover")다."""
+    if spec["template"] in ("sleeve", "jewelcase", "nowplaying"):  # 표지 원본만 쓰는 앨범 템플릿
         return "cover"
     return spec["photo"] if spec.get("photo") in photos else "cover"
 
@@ -181,7 +181,8 @@ def build(args, album, review, posts_specs, photos, out, preview=False):
             png = out / f"{key}_01{vname}.png"
             jobs.append((make_card(layout, photo, kind="album", spec=aspec, photos=photos, cover=cover, cache=cache,
                                    warns=warns, label=f"{key} 앨범", used=used.setdefault(p, set()), shown=shown, key=png,
-                                   ctx={**common, "page": f"01/{total:02d}", "review": a, "blurb": (album.get("description") or {}).get("text")}), png))
+                                   ctx={**common, "page": f"01/{total:02d}", "review": a,
+                                        "tracks": [(t["n"], t["title"], bool(t.get("isTitle"))) for t in tracks], "blurb": (album.get("description") or {}).get("text")}), png))
             files.setdefault(1, []).append(png)
             seq.append((f"{key} 앨범", png))
             typo_i = 0

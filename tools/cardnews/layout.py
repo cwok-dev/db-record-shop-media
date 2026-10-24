@@ -124,10 +124,11 @@ document.fonts.ready.then(()=>{fit();band();const w=zones();stamp();document.bod
 
 
 class Card:
-    """카드 한 장의 값. img(w, h, cell)은 이 카드 사진 칸의 파일 URI를 돌려준다."""
+    """카드 한 장의 값. img(w, h, cell)은 이 카드 사진 칸의 파일 URI를 돌려준다.
+    tracks: 앨범 카드에서 수록곡 [(번호, 제목, 타이틀곡 여부)]."""
 
     def __init__(self, *, kind, spec, spot, prop, artist, album, year, page, n=None, total=None, title="",
-                 is_title=False, review=None, bg=None, img=None, cover=None, blurb=None):
+                 is_title=False, review=None, bg=None, img=None, cover=None, blurb=None, tracks=None):
         self.__dict__.update(locals()); del self.__dict__["self"]
 
     @property
@@ -510,8 +511,136 @@ def t_cctv(c):
     return bg, css, body
 
 
+def album_name(c, left, top, maxw):
+    """앨범 카드 공통 이름판: 가수명 큰 라벨 + 앨범명·발매일 라벨 + 앨범 종류 소품색 라벨."""
+    return (f"<div class='abs name' style='left:{left}px;top:{top}px;z-index:4'><div data-fit data-maxw='{maxw}' data-maxh='140' class='lbl big' "
+            f"style='width:max-content;font:900 96px/1 Paperlogy;padding:10px 18px 4px'>{esc(c.artist)}</div><br>"
+            f"<div class='lbl' style='font:700 26px SCDream;padding:10px 14px 8px;margin-top:-3px'>{esc(c.album)} · {esc(c.spec.get('date', ''))}</div><br>"
+            f"<div style='display:inline-block;margin-top:24px;background:{c.prop};border:3px solid {INK};box-shadow:6px 6px 0 {INK};"
+            f"padding:10px 16px 8px;font:700 28px SCDream;transform:rotate(-4deg)'>{esc(c.spec.get('type', ''))}</div></div>")
+
+
+def t_jewelcase(c):
+    """앨범 카드: 투명 CD 케이스 둘을 비스듬히 겹친다. 앞은 실제 표지(원본), 뒤는 뒷면 속지의 수록곡 목록(타이틀곡은 포인트 컬러).
+    스티커는 우리 정보만(신보·발매일). 수록곡이 많거나 목록 자체가 볼거리일 때. 레퍼런스: 스티커 붙인 CD 케이스."""
+    main = c.bg != "ink"
+    bg = c.spot if main else INK
+    s1, s2 = 460, 490  # 뒤 케이스, 앞 케이스
+    tr = c.tracks or []
+    rows = tr if len(tr) <= 8 else tr[:7]  # 속지 높이에 8줄까지
+    lis = "".join(f"<li{' class=t' if t else ''}><b>{n:02d}</b>{esc(title)}</li>" for n, title, t in rows)
+    if len(tr) > len(rows):
+        lis += f"<li><b>··</b>외 {len(tr) - len(rows)}곡</li>"
+    css = f"""
+.zone{{left:{M}px;width:{s1 + 440}px;height:{s2 + 90}px}}
+.case{{position:absolute;border:3px solid {INK};box-shadow:10px 10px 0 {INK};background:rgba(255,255,255,.35)}}
+.case:after{{content:'';position:absolute;inset:0;border:10px solid rgba(255,255,255,.55);pointer-events:none}}
+.case .hinge{{position:absolute;left:0;top:0;bottom:0;width:30px;border-right:3px solid {INK};
+background:repeating-linear-gradient(0deg,rgba(255,255,255,.75) 0 10px,rgba(255,255,255,.35) 10px 14px);z-index:2}}
+.back{{left:0;top:0;width:{s1}px;height:{s1}px;transform:rotate(-6deg)}}
+.back .ins{{position:absolute;inset:14px 14px 14px 44px;overflow:hidden;background:{INK};color:{PAPER};padding:30px 28px}}
+.back .ins p{{font:700 24px 'SpaceMono';color:{c.spot};margin-bottom:18px}}
+.back ol{{list-style:none}} .back li{{font:500 26px/1.5 'SCDream';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:360px}}
+.back li b{{font:700 20px 'SpaceMono';margin-right:14px;opacity:.6}} .back li.t{{color:{c.spot}}} .back li.t b{{opacity:1}}
+.front{{left:450px;top:90px;width:{s2}px;height:{s2}px;transform:rotate(4deg)}}
+.front .cv{{position:absolute;inset:14px 14px 14px 44px;background:{PAPER} url('{c.cover}') 0 0/cover}}
+.stk{{position:absolute;z-index:5;border:3px solid {INK};display:flex;align-items:center;justify-content:center;text-align:center}}
+.stk.new{{right:-36px;top:70px;width:200px;height:110px;border-radius:50%;background:{c.prop};transform:rotate(14deg);font:900 44px/1 Paperlogy}}
+.stk.date{{left:480px;bottom:-34px;background:{PAPER};padding:10px 14px 8px;font:700 22px 'SpaceMono';transform:rotate(-5deg)}}
+"""
+    body = f"""<div class='grain'></div>{head(c, dark=not main)}{album_name(c, M, TOP_TITLE, 984)}
+<div class='abs zone' data-zone='center' data-after='.name' data-origin='top left'>
+<div class='case back'><div class='hinge'></div><div class='ins'><p>TRACKLIST · {len(tr):02d}</p><ol>{lis}</ol></div></div>
+<div class='case front anchor'><div class='hinge'></div><div class='cv'></div></div>
+<div class='stk new'>신보</div><div class='stk date'>RELEASED {esc(c.spec.get('date', ''))}</div></div>
+{foot(c, dark=not main)}"""
+    return bg, css, body
+
+
+def ctl_svg(kind, size, color):
+    """재생 단추 그림: prev / next / pause / shuffle / repeat."""
+    d = {"prev": "M22 20h10v60H22z M78 20v60L36 50z", "next": "M68 20h10v60H68z M22 20v60l42-30z",
+         "pause": "M34 28h10v44H34z M56 28h10v44H56z"}
+    if kind in d:
+        return f"<svg width='{size}' height='{size}' viewBox='0 0 100 100'><path d='{d[kind]}' fill='{color}'/></svg>"
+    path = {"shuffle": "M14 30h20l32 40h20 M14 70h20l32-40h20 M78 22l10 8-10 8 M78 62l10 8-10 8",
+            "repeat": "M20 56V36h56 M66 26l10 10-10 10 M80 44v20H24 M34 74L24 64l10-10"}[kind]
+    return (f"<svg width='{size}' height='{size}' viewBox='0 0 100 100'><path d='{path}' fill='none' stroke='{color}' "
+            f"stroke-width='8' stroke-linejoin='round' stroke-linecap='round'/></svg>")
+
+
+def t_nowplaying(c):
+    """앨범 카드: 검은 테두리·어긋난 그림자의 재생 화면 안에 실제 표지(원본), 앨범명·가수, 진행 막대(이 장 / 전체 장), 재생 단추.
+    왼쪽에 큰 모노 글자 NOW PLAYING과 앨범 정보. 첫 장의 무난한 기본형. 레퍼런스: 재생 화면 포스터·스티커."""
+    main = c.bg != "ink"
+    bg = c.spot if main else INK
+    fg = INK if main else PAPER
+    w, cv = 600, 512
+    cur, tot = (int(x) for x in c.page.split("/"))
+    pct = cur / tot * 100
+    n = len(c.tracks or [])
+    css = f"""
+.dev{{left:{W - M - w}px;width:{w}px;background:{PAPER};border:3px solid {INK};border-radius:28px;box-shadow:12px 12px 0 {INK};padding:32px 40px 26px}}
+.dev .cv{{width:{cv}px;height:{cv}px;background:{PAPER} url('{c.cover}') 0 0/cover;border:3px solid {INK}}}
+.dev h2{{font:900 48px/1.1 Paperlogy;letter-spacing:-.03em;margin-top:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.dev h3{{font:500 28px SCDream;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.rail{{position:relative;height:6px;background:{INK};margin:30px 0 8px}}
+.rail .h{{position:absolute;left:calc({pct}% - 12px);top:-9px;width:24px;height:24px;border-radius:50%;background:{INK}}}
+.rail:before{{content:'';position:absolute;left:{pct}%;right:0;top:0;bottom:0;background:#bdbdb8}}
+.tm{{display:flex;justify-content:space-between;font:700 20px 'SpaceMono'}}
+.ctl{{display:flex;justify-content:space-between;align-items:center;margin-top:14px}}
+.ctl .pp{{width:88px;height:88px;border-radius:50%;background:{INK};display:flex;align-items:center;justify-content:center}}
+.sticker{{position:absolute;left:-44px;top:-40px;width:150px;height:150px;border-radius:50%;background:{c.prop};border:3px solid {INK};
+transform:rotate(-14deg);display:flex;flex-direction:column;align-items:center;justify-content:center;font:900 46px/1 Paperlogy;z-index:3}}
+.sticker i{{font:700 18px 'SpaceMono';font-style:normal;margin-bottom:6px}}
+.np{{left:{M}px;top:{TOP_TITLE}px;font:700 96px/1.02 'SpaceMono';color:{fg};letter-spacing:-.02em}}
+.meta{{left:{M}px;width:{W - 2 * M - w - 40}px;z-index:4}}
+.meta .lbl{{font:700 30px SCDream;padding:10px 14px 8px;margin-bottom:-3px;display:table}}
+"""
+    body = f"""<div class='grain'></div>{head(c, dark=not main)}
+<div class='abs np'>NOW<br>PLAY<br>ING</div>
+<div class='abs meta' data-zone='after' data-after='.np'><span class='lbl' style='background:{c.prop}'>{esc(c.spec.get('type', ''))}</span>
+<span class='lbl'>{esc(c.spec.get('date', ''))}</span><span class='lbl'>{n:02d} TRACKS</span></div>
+<div class='abs dev anchor' data-zone='fixed' style='top:{TOP_TITLE}px'><div class='sticker'><i>NEW</i>신보</div><div class='cv'></div>
+<h2>{esc(c.album)}</h2><h3>{esc(c.artist)}</h3><div class='rail'><div class='h'></div></div>
+<div class='tm'><span>{cur:02d}</span><span>{tot:02d}</span></div>
+<div class='ctl'>{ctl_svg('shuffle', 48, INK)}{ctl_svg('prev', 56, INK)}<div class='pp'>{ctl_svg('pause', 64, PAPER)}</div>{ctl_svg('next', 56, INK)}{ctl_svg('repeat', 48, INK)}</div></div>
+{foot(c, dark=not main)}"""
+    return bg, css, body
+
+
+def t_colorblock(c):
+    """앨범 카드: 화면 전체를 포인트 컬러 판으로 쓰고 위쪽에 하프톤 사진(없으면 표지)을 곱하기로 얹는다.
+    아래쪽에 앨범명을 거대하게 한 줄로 두어 오른쪽 끝에서 잘려 나가게 하고, 가수·메타·진행 막대를 붙인다.
+    앨범명이 짧고 강할 때. 레퍼런스: 단색 앱 카드 + 잘린 큰 제목."""
+    main = c.bg != "ink"
+    bg = c.spot if main else INK
+    fg = INK if main else PAPER
+    n = len(c.tracks or [])
+    css = f"""
+.photo{{left:0;top:0;width:{W}px;height:720px;background:url('{c.img(W, 720)}') 0 0/cover;mix-blend-mode:{'multiply' if main else 'screen'};opacity:{1 if main else .55};
+-webkit-mask-image:linear-gradient(#000 45%,transparent 92%);mask-image:linear-gradient(#000 45%,transparent 92%)}}
+.blk{{left:{M}px;right:0;color:{fg};z-index:4}}
+.blk h1{{font:900 300px/.82 Paperlogy;letter-spacing:-.06em;white-space:nowrap;margin-left:-14px}}
+.blk h2{{font:700 64px/1.1 SCDream;margin-top:18px}}
+.blk .mt{{display:flex;align-items:center;gap:14px;font:700 24px 'SpaceMono';margin-top:14px}}
+.blk .mt i{{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle,{bg} 0 18%,{fg} 20%)}}
+.pr{{display:flex;align-items:center;gap:28px;margin:28px {M}px 0 0}}
+.pr .rl{{flex:1;height:8px;background:{fg};position:relative}}
+.pr .rl:after{{content:'';position:absolute;left:30%;top:-12px;width:32px;height:32px;border-radius:50%;background:{PAPER};border:4px solid {INK}}}
+.pr .pb{{width:110px;height:110px;border-radius:50%;background:{PAPER};border:3px solid {INK};box-shadow:6px 6px 0 {INK};display:flex;align-items:center;justify-content:center}}
+"""
+    body = f"""<div class='abs photo'></div><div class='grain'></div>{head(c, dark=not main)}
+<div class='abs blk anchor' data-zone='above-foot'><h1>{esc(c.album)}</h1><h2>{esc(c.artist)}</h2>
+<div class='mt'><i></i>{esc(c.spec.get('type', ''))} · {esc(c.spec.get('date', ''))} · {n:02d} TRACKS</div>
+<div class='pr'><div class='rl'></div><div class='pb'><svg width='54' height='54' viewBox='0 0 100 100'><path d='M30 18v64l56-32z' fill='{INK}'/></svg></div></div></div>
+{foot(c, dark=not main)}"""
+    return bg, css, body
+
+
 TEMPLATES = {"sleeve": t_sleeve, "glyph": t_glyph, "polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid,
-             "player": t_player, "full": t_full, "serpent": t_serpent, "cinema": t_cinema, "cctv": t_cctv}
+             "player": t_player, "full": t_full, "serpent": t_serpent, "cinema": t_cinema, "cctv": t_cctv,
+             "jewelcase": t_jewelcase, "nowplaying": t_nowplaying, "colorblock": t_colorblock}
 
 
 def page_html(c):
