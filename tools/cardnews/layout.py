@@ -111,12 +111,13 @@ function zones(){const f=document.querySelector('.foot');const limit=f.getBoundi
    el.style.transformOrigin=el.dataset.origin||'top center';el.style.transform='scale('+s.toFixed(3)+')';warn.push(el.className+' 축소 '+s.toFixed(2));}});
  return warn}
 function stamp(){const s=document.querySelector('.recst'),a=document.querySelector('.anchor'),at=document.querySelector('.stampat');
- if(!s||(!a&&!at&&!/^foot/.test(s.dataset.pos||'')))return;
+ if(!s||(!a&&!at&&!/^(foot|mid)/.test(s.dataset.pos||'')))return;
  const r=a?a.getBoundingClientRect():{left:0,top:0,width:0,height:0,bottom:0};let cx=r.left+.85*r.width,cy=r.top+.15*r.height;
  if(at&&!s.dataset.pos){const q=at.getBoundingClientRect();cx=q.left+q.width/2;cy=q.top+q.height/2;}  // 템플릿이 정한 도장 자리
  if(s.dataset.pos==='below')cy=r.bottom+16+150;  // 사양 stamp: below → 주 그림 아래 16에 붙임
  if(s.dataset.pos==='foot'||s.dataset.pos==='footup'){const f=document.querySelector('.foot .one')||document.querySelector('.foot');const q=f.getBoundingClientRect();
   cx=q.right+16+150;cy=q.top+q.height/2-(s.dataset.pos==='footup'?80:0);}  // 사양 stamp: foot → 한 줄 평 상자 오른쪽 16에 붙여 얼굴을 피함 / footup: 그보다 살짝 위
+ if(s.dataset.pos==='mid'){cx=1080-48-150;cy=1350/2;}  // 사양 stamp: mid → 오른쪽 가장자리, 카드 세로 가운데(제목·라벨을 가리지 않게)
  cx=Math.min(Math.max(cx,158),1080-158);cy=Math.min(Math.max(cy,236),1350-158);
  s.style.left=(cx-150)+'px';s.style.top=(cy-150)+'px';}
 function band(){const b=document.querySelector('.band'),t=document.querySelector('.title');
@@ -184,7 +185,7 @@ def foot(c, wide=False, dark=False):
 def rec_stamp(c):
     if not c.rec:
         return ""
-    stamp = c.spec.get("stamp") or {"cctv": "footup"}.get(c.spec["template"])  # cctv: 왼쪽 위 라벨을 가리지 않게(사용자 결정 2026-10-24)
+    stamp = c.spec.get("stamp") or {"cctv": "footup", "player": "mid"}.get(c.spec["template"])  # cctv: 왼쪽 위 라벨을 가리지 않게(사용자 결정 2026-10-24) / player: 제목을 가리지 않게 세로 가운데(사용자 결정 2026-10-25)
     pos = f" data-pos='{stamp}'" if stamp else ""
     return (f"<div class='recst'{pos} style='left:0;top:0'><div class='sh'></div><div class='ol'></div><div class='fg'></div>"
             "<div class='tx'><i>DB PICK</i><b>추천</b></div></div>")
