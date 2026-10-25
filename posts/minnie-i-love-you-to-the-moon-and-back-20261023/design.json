@@ -69,16 +69,18 @@
    "why": "잠 못 드는(insomnia) 눈을 찢어 낸 띠 안에 확대해 보여 줍니다."
   },
   "3": {
-   "template": "polaroid",
+   "template": "cutout",
+   "shape": "wide",
+   "aspect": 0.4,
    "photo": "p1",
    "crop": [
     0.0,
     0.0,
     1.0,
-    0.7
+    0.5
    ],
-   "basis": "위치",
-   "why": "앨범의 마지막 곡이라 침대 위에 앉은 장면을 폴라로이드로 남기며 끝맺습니다.",
+   "basis": "제목",
+   "why": "하얀 구름처럼 흘러가는 사람을 화면 폭의 가로 띠 사진으로 옮깁니다.",
    "lines": [
     "เมฆขาว",
     "(white clouds)"
