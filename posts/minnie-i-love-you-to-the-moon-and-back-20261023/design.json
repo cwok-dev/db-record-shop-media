@@ -1,0 +1,88 @@
+{
+ "credit": "큐브엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16251972_2060408_3455.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16251972",
+   "note": "콘셉트 포토: 침대 위에 앉은 민니(세로)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16251972_2060407_3448.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16251972",
+   "note": "콘셉트 포토: 팔을 베고 누운 얼굴 근접(세로)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16251972_2060406_3442.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16251972",
+   "note": "콘셉트 포토: 조명 아래 침대에 엎드린 민니(가로)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16251972_2060405_3436_crop.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16251972",
+   "note": "콘셉트 포토 3컷 콜라주(누운 모습·앉은 모습·누운 모습)"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "neon",
+   "photo": "p3",
+   "crop": [
+    0.4,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "basis": "소개",
+   "why": "잠들지 못하는 밤의 공허함이 담긴 앨범이라, 조명 아래 누운 사진을 어둡게 깔고 늘린 제목으로 밤의 포스터처럼 만듭니다."
+  },
+  "1": {
+   "template": "cutout",
+   "shape": "circle",
+   "photo": "p2",
+   "crop": [
+    0.15,
+    0.05,
+    0.85,
+    0.55
+   ],
+   "basis": "제목",
+   "why": "달을 소재로 한 곡이라 웃는 얼굴을 큰 원(달)으로 오리고, 둘레를 따라 곡 소개가 휩니다."
+  },
+  "2": {
+   "template": "torn",
+   "photo": "p4",
+   "crop": [
+    0.0,
+    0.0,
+    0.33,
+    1.0
+   ],
+   "zooms": [
+    [
+     0.25,
+     0.3,
+     0.85,
+     0.5
+    ]
+   ],
+   "basis": "제목",
+   "why": "잠 못 드는(insomnia) 눈을 찢어 낸 띠 안에 확대해 보여 줍니다."
+  },
+  "3": {
+   "template": "polaroid",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.7
+   ],
+   "basis": "위치",
+   "why": "앨범의 마지막 곡이라 침대 위에 앉은 장면을 폴라로이드로 남기며 끝맺습니다.",
+   "lines": [
+    "เมฆขาว",
+    "(white clouds)"
+   ]
+  }
+ }
+}
