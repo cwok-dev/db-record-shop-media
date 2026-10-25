@@ -1,0 +1,97 @@
+{
+ "credit": "YG엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://img.tenasia.co.kr/photo/202610/BF.46105696.1.jpg",
+   "page": "https://www.tenasia.co.kr/article/2026101997724",
+   "note": "DESERVE MV 스틸: 붐비는 어두운 복도 속 미소 짓는 멤버"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16252000_2060447_1613_crop.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16252000",
+   "note": "DESERVE MV 스틸: 금발 멤버 근접(로라)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16253144_2061762_1256.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16253144",
+   "note": "DESERVE MV 스틸: 불빛 속 멤버 근접"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16253144_2061764_139.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16253144",
+   "note": "DESERVE MV 스틸: 고개를 젖힌 멤버(절규)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "disc",
+    "photo": "p1",
+    "crop": [
+     0.3,
+     0.15,
+     0.7,
+     0.95
+    ],
+    "basis": "소개",
+    "why": "서정적인 신스와 레트로한 무드의 팝 발라드라, 밤의 복도 장면을 듀오톤 CD에 찍어 감성 앨범처럼 보여 줍니다."
+   },
+   {
+    "template": "nowplaying",
+    "basis": "위치",
+    "why": "한 곡짜리 싱글의 첫 장이라 실제 표지를 재생 화면에 띄워 어떤 앨범인지 바로 보이게 합니다."
+   },
+   {
+    "template": "neon",
+    "photo": "p4",
+    "crop": [
+     0.3,
+     0.12,
+     0.75,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "퍼포먼스 대신 감정선을 앞세운 곡이라, 고개를 젖힌 장면을 어둡게 깔고 거대 제목으로 밤의 포스터처럼 만듭니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "player",
+    "photo": "p2",
+    "crop": [
+     0.25,
+     0.12,
+     0.7,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "타이틀곡이자 유일한 곡이고 영화 같은 뮤직비디오가 있어, MV 장면을 재생 화면으로 띄우고 진행 막대로 위치를 보여 줍니다."
+   },
+   {
+    "template": "cutout",
+    "shape": "circle",
+    "photo": "p4",
+    "crop": [
+     0.3,
+     0.12,
+     0.75,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "후렴에서 터지는 감정선을 큰 원 안의 절규 장면으로 담고, 둘레를 따라 곡 소개 첫 문장이 휘게 합니다."
+   },
+   {
+    "template": "polaroid",
+    "photo": "p3",
+    "crop": [
+     0.2,
+     0.12,
+     0.7,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "지난 추억을 되짚는 노래라 불빛 속 한 장면을 폴라로이드로 남겨 둡니다."
+   }
+  ]
+ }
+}
