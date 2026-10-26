@@ -152,7 +152,7 @@ body{{position:relative;background:{bg};font-family:'SCDream';word-break:keep-al
 .foot{{left:{M}px;bottom:{M}px;z-index:6}}
 .rate{{display:inline-flex;background:{INK};padding:14px 18px}}
 .one{{background:{PAPER};border:3px solid {INK};padding:22px 26px;font:500 34px/1.5 'SCDream';color:{INK};margin-top:-3px}}
-.one.ph{{color:#8c8c8c;font-weight:400}}
+.one.empty{{color:#8c8c8c;font-weight:400}}
 .recst{{position:absolute;width:300px;height:300px;transform:rotate(-12deg);z-index:7}}
 .recst .sh,.recst .ol,.recst .fg{{position:absolute;clip-path:{BURST}}}
 .recst .sh{{inset:0;background:{INK};transform:translate(10px,10px)}}
@@ -178,7 +178,7 @@ def foot(c, wide=False, dark=False):
         one = f"<div class='one'>{esc(c.review.get('oneline'))}</div>"
     else:  # 아침 시안: 리뷰 작성 전
         rate = stars_svg(0, 54, c.spot, INK, c.spot)
-        one = "<div class='one ph'>한 줄 평은 리뷰를 쓰고 나면 이 자리에 들어갑니다.</div>"
+        one = "<div class='one empty'>한 줄 평은 리뷰를 쓰고 나면 이 자리에 들어갑니다.</div>"
     return f"<div class='abs foot' style='width:{w}px'><div class='rate' style='{b}'>{rate}</div>{one}</div>"
 
 
