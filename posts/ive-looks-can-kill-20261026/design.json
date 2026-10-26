@@ -1,0 +1,137 @@
+{
+ "credit": "스타쉽엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16249770_2058163_3549.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16249770",
+   "note": "Looks Can Kill MV 티저: 불타는 거리를 걷는 여섯 멤버"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16249770_2058162_3543.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16249770",
+   "note": "걸 히어로 콘셉트 포토 콜라주(멤버별 단색 배경 6칸)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16250443_2058689_520_crop.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16250443",
+   "note": "Looks Can Kill MV 스틸 콜라주(9칸)"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "live",
+   "photo": "p1",
+   "crop": [
+    0.2,
+    0.0,
+    0.8,
+    1.0
+   ],
+   "basis": "소개",
+   "why": "걸 히어로 스핀오프라는 콘셉트대로, 불타는 거리를 걸어오는 여섯 명을 큰 사진판에 깔고 가수명·앨범명을 거대 글자로 겁니다."
+  },
+  "1": {
+   "template": "polaroid",
+   "photo": "p2",
+   "crop": [
+    0.51,
+    0.01,
+    0.99,
+    0.19
+   ],
+   "basis": "위치",
+   "why": "앨범의 첫 곡이자 타이틀곡이라 등장 장면을 폴라로이드로 남깁니다."
+  },
+  "2": {
+   "template": "notch",
+   "photo": "p3",
+   "crop": [
+    0.01,
+    0.6766666666666666,
+    0.3233333333333333,
+    0.99
+   ],
+   "basis": "소개",
+   "why": "힘을 뺀 보컬의 어둡고 몽환적인 분위기를 번개 빛 속 근접 얼굴로 보여 줍니다."
+  },
+  "3": {
+   "template": "serpent",
+   "photo": "p2",
+   "crop": [
+    0.05,
+    0.21,
+    0.3,
+    0.39
+   ],
+   "basis": "제목",
+   "why": "'뱀 허물'이라는 제목대로 사진이 뱀처럼 비스듬히 감기게 합니다."
+  },
+  "4": {
+   "template": "desktop",
+   "photo": "p3",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "zooms": [
+    [
+     0.01,
+     0.01,
+     0.32,
+     0.32
+    ],
+    [
+     0.34,
+     0.01,
+     0.65,
+     0.32
+    ],
+    [
+     0.67,
+     0.67,
+     0.99,
+     0.99
+    ]
+   ],
+   "basis": "제목",
+   "why": "'부스러기'처럼 흩어진 장면들을 바탕화면 위 사진 창으로 띄웁니다."
+  },
+  "5": {
+   "template": "motion",
+   "photo": "p2",
+   "crop": [
+    0.51,
+    0.01,
+    0.99,
+    0.19
+   ],
+   "zooms": [
+    [
+     0.3,
+     0.2,
+     0.75,
+     0.6
+    ]
+   ],
+   "basis": "소개",
+   "why": "여유로운 리듬과 경쾌한 보컬을 가볍게 흔들리는 제목으로 옮깁니다."
+  },
+  "6": {
+   "template": "full",
+   "photo": "p1",
+   "crop": [
+    0.2,
+    0.0,
+    0.8,
+    1.0
+   ],
+   "props": [
+    "sparkle"
+   ],
+   "basis": "제목",
+   "why": "'Glow'라는 제목대로 빛나는 거리 장면에 반짝이 별 소품을 붙입니다."
+  }
+ }
+}
