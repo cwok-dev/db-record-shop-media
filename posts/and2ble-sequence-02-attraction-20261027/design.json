@@ -1,0 +1,129 @@
+{
+ "credit": "YH엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16257749_2066598_658.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16257749",
+   "note": "French Kissing MV 티저: 마이크 숲 속 멤버"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16257749_2066599_74.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16257749",
+   "note": "French Kissing MV 티저: 붉은 머리 멤버 근접"
+  },
+  "p3": {
+   "url": "https://img.tenasia.co.kr/photo/202610/BF.46204234.1.jpg",
+   "page": "https://www.tenasia.co.kr/article/2026102769854",
+   "note": "콘셉트 포토: 흰 배경 다섯 멤버"
+  },
+  "p4": {
+   "url": "https://img.tenasia.co.kr/photo/202610/BF.46204233.1.jpg",
+   "page": "https://www.tenasia.co.kr/article/2026102769854",
+   "note": "콘셉트 포토: 나무 벽 방에 앉은 다섯 멤버"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "nowplaying",
+   "basis": "위치",
+   "why": "연작의 두 번째 장이라 실제 표지를 재생 화면에 띄워 어떤 앨범인지 바로 보이게 합니다."
+  },
+  "1": {
+   "template": "motion",
+   "photo": "p4",
+   "crop": [
+    0.1,
+    0.1,
+    0.9,
+    1.0
+   ],
+   "zooms": [
+    [
+     0.4,
+     0.3,
+     0.6,
+     0.5
+    ]
+   ],
+   "basis": "소개",
+   "why": "새로운 감각에 눈뜨는 순간을 흔들리는 제목으로 보여 줍니다."
+  },
+  "2": {
+   "template": "cctv",
+   "photo": "p1",
+   "crop": [
+    0.25,
+    0.0,
+    0.75,
+    1.0
+   ],
+   "basis": "소개",
+   "why": "시선이 머물고 경계가 사라지는 순간이라, 감시 화면의 감지 박스로 시선이 꽂히는 장면을 짚습니다."
+  },
+  "3": {
+   "template": "motion",
+   "photo": "p2",
+   "crop": [
+    0.2,
+    0.0,
+    0.75,
+    1.0
+   ],
+   "zooms": [
+    [
+     0.3,
+     0.3,
+     0.7,
+     0.55
+    ]
+   ],
+   "basis": "소개",
+   "why": "점점 커지는 열기를 흔들리며 번지는 제목으로 보여 줍니다."
+  },
+  "4": {
+   "template": "desktop",
+   "photo": "p4",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "zooms": [
+    [
+     0.15,
+     0.38,
+     0.35,
+     0.55
+    ],
+    [
+     0.35,
+     0.36,
+     0.55,
+     0.53
+    ],
+    [
+     0.6,
+     0.38,
+     0.8,
+     0.55
+    ]
+   ],
+   "basis": "소개",
+   "why": "관심을 갖고 바라볼 때 비로소 보이는 아름다움이라, 단체 사진의 얼굴들을 사진 창으로 하나씩 확대합니다."
+  },
+  "5": {
+   "template": "cutout",
+   "shape": "frame",
+   "photo": "p2",
+   "crop": [
+    0.2,
+    0.0,
+    0.75,
+    1.0
+   ],
+   "basis": "소개",
+   "why": "멤버 리키가 가사를 쓴, 확신이 완성되는 순간을 스크린 프레임 안 한 장면으로 보여 줍니다."
+  }
+ }
+}
