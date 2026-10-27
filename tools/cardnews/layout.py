@@ -119,10 +119,18 @@ function stamp(){const s=document.querySelector('.recst'),a=document.querySelect
   cx=q.right+16+150;cy=q.top+q.height/2-(s.dataset.pos==='footup'?80:0);}  // 사양 stamp: foot → 한 줄 평 상자 오른쪽 16에 붙여 얼굴을 피함 / footup: 그보다 살짝 위
  if(s.dataset.pos==='mid'){cx=1080-48-150;cy=1350/2;}  // 사양 stamp: mid → 오른쪽 가장자리, 카드 세로 가운데(제목·라벨을 가리지 않게)
  cx=Math.min(Math.max(cx,158),1080-158);cy=Math.min(Math.max(cy,236),1350-158);
- s.style.left=(cx-150)+'px';s.style.top=(cy-150)+'px';}
+ s.style.left=(cx-150)+'px';s.style.top=(cy-150)+'px';
+ // 자리를 지정하지 않은 도장이 제목·라벨 글자에 겹치면 한 줄 평 상자 옆(foot)으로 옮긴다(사용자 결정 2026-10-27)
+ if(s.dataset.pos||!hitsText(s))return '';
+ const f=document.querySelector('.foot .one')||document.querySelector('.foot');const q=f&&f.getBoundingClientRect();
+ if(!q||q.right+16+300>1080-8)return '추천 도장이 제목에 겹침(한 줄 평 상자가 넓어 foot 불가)';
+ s.style.left=(q.right+16)+'px';s.style.top=(Math.min(q.top+q.height/2,1350-158)-150)+'px';return '추천 도장 자동 foot';}
+function hitsText(s){const b=s.getBoundingClientRect(),k=40;
+ return [...document.querySelectorAll('.title,[data-fit],.head .lbl')].some(e=>{const r=e.getBoundingClientRect();
+  return r.width&&b.left+k<r.right&&b.right-k>r.left&&b.top+k<r.bottom&&b.bottom-k>r.top;});}
 function band(){const b=document.querySelector('.band'),t=document.querySelector('.title');
  if(b&&t)b.style.height=Math.ceil((t.getBoundingClientRect().bottom+48)/8)*8+'px';}
-document.fonts.ready.then(()=>{fit();band();const w=zones();stamp();document.body.dataset.warn=w.join('; ');document.body.dataset.ready='1';});
+document.fonts.ready.then(()=>{fit();band();const w=zones();const sw=stamp();if(sw)w.push(sw);document.body.dataset.warn=w.join('; ');document.body.dataset.ready='1';});
 """
 
 
