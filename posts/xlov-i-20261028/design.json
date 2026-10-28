@@ -1,0 +1,156 @@
+{
+ "credit": "RBW",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16242971_2050527_1259.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16242971",
+   "note": "블랙·레드 콘셉트: 붉은 꽃잎 위 네 멤버"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16242971_2050528_135.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16242971",
+   "note": "블랙·레드 콘셉트: 붉은 꽃과 금발 멤버 근접"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16242971_2050526_1252.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16242971",
+   "note": "블랙·레드 콘셉트 4컷 콜라주"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16246921_2054758_91.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16246921",
+   "note": "파스텔 콘셉트: 문가의 검은 머리 멤버"
+  },
+  "p5": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16246921_2054759_97.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16246921",
+   "note": "파스텔 콘셉트: 꽃다발을 든 금발 멤버"
+  },
+  "p6": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16246921_2054760_913.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16246921",
+   "note": "파스텔 콘셉트: 소파 위 분홍 머리 멤버"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "neon",
+   "photo": "p1",
+   "crop": [
+    0.25,
+    0.0,
+    0.75,
+    1.0
+   ],
+   "basis": "소개",
+   "why": "선택 앞의 두려움과 혼란을 다룬 앨범이라, 붉은 꽃잎 위 단체 사진을 어둡게 깔고 늘린 제목으로 밤의 포스터처럼 만듭니다."
+  },
+  "1": {
+   "template": "motion",
+   "photo": "p4",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "zooms": [
+    [
+     0.35,
+     0.25,
+     0.65,
+     0.42
+    ]
+   ],
+   "basis": "소개",
+   "why": "일렉트로닉 댄스의 움직임을 고양이처럼 흔들리는 제목으로 보여 줍니다."
+  },
+  "2": {
+   "template": "notch",
+   "photo": "p3",
+   "crop": [
+    0.51,
+    0.51,
+    0.99,
+    0.99
+   ],
+   "basis": "위치",
+   "why": "앨범의 첫 번째 타이틀곡이라 블랙·레드 콘셉트의 근접 얼굴을 액자 가득 채웁니다."
+  },
+  "3": {
+   "template": "polaroid",
+   "photo": "p5",
+   "crop": [
+    0.05,
+    0.1,
+    0.95,
+    0.6
+   ],
+   "basis": "위치",
+   "why": "두 멤버의 첫 유닛곡이라 기념사진처럼 폴라로이드로 남깁니다."
+  },
+  "4": {
+   "template": "notch",
+   "photo": "p6",
+   "crop": [
+    0.1,
+    0.0,
+    0.9,
+    0.75
+   ],
+   "basis": "위치",
+   "why": "또 하나의 타이틀곡이라 드림코어 파스텔 컷의 분홍 머리 얼굴을 액자 가득 채웁니다."
+  },
+  "5": {
+   "template": "cutout",
+   "shape": "frame",
+   "photo": "p3",
+   "crop": [
+    0.01,
+    0.01,
+    0.49,
+    0.49
+   ],
+   "basis": "소개",
+   "why": "재즈 기반 R&B의 차분한 결을 프레임 안 한 장면으로 보여 줍니다."
+  },
+  "6": {
+   "template": "cctv",
+   "photo": "p6",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "basis": "제목",
+   "why": "속도를 높인 버전을 빨리 감기한 감시 화면처럼 보여 줍니다."
+  },
+  "7": {
+   "template": "cutout",
+   "shape": "wide",
+   "aspect": 0.4,
+   "photo": "p3",
+   "crop": [
+    0.01,
+    0.51,
+    0.49,
+    0.99
+   ],
+   "basis": "소개",
+   "why": "보컬 없이 깔리는 반주를 화면 폭의 가로 띠 사진으로 옮깁니다."
+  },
+  "8": {
+   "template": "clipboard",
+   "photo": "p6",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.8
+   ],
+   "basis": "위치",
+   "why": "앨범의 마지막 트랙이자 반주곡이라 파스텔 컷을 기록처럼 붙여 두며 끝맺습니다."
+  }
+ }
+}
