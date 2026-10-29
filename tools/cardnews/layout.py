@@ -875,7 +875,7 @@ display:flex;align-items:center;justify-content:center;font:900 44px/1 Paperlogy
 <div class='abs cnt'>{n:02d}</div><div class='abs pic anchor'></div><div class='abs cap'>ON THIS DAY WE LISTEN TOGETHER</div>
 <div class='abs sq' style='left:{M}px;top:{TOP_TITLE + 330}px'></div><div class='abs sq' style='right:{M}px;top:{TOP_TITLE + 760}px'></div>
 <svg class='abs' style='left:{W - M - 200}px;top:{TOP_TITLE + 470}px' width='40' height='40'><path d='M20 0V40M0 20H40' stroke='{INK}' stroke-width='2'/></svg>
-<div class='abs dt'><b>{esc(day)}</b><sup>th</sup><p>-{esc(mon)}</p></div>
+<div class='abs dt'><b>{esc(day)}</b><sup>th</sup><p>{esc(mon)}</p></div>
 {head(c)}{foot(c)}"""
     return PAPER, css, body
 
@@ -890,7 +890,7 @@ def t_layers(c):
     px, py, pw, ph = 96, TOP_TITLE + 250, W - 192, 640
     css = f"""
 .nm{{left:{M - 6}px;top:{TOP_TITLE - 14}px;font:900 150px/.88 Paperlogy;letter-spacing:-.04em;color:{INK};width:max-content;z-index:4}}
-.rl{{left:{M}px;top:{TOP_TITLE + 186}px;font:700 34px SCDream;color:{INK};z-index:4}}
+.rl{{left:{M}px;top:{TOP_TITLE + 128}px;font:700 34px SCDream;color:{INK};z-index:4}}
 .l1{{left:{px - 30}px;top:{py - 10}px;width:{pw + 40}px;height:{ph + 30}px;background:{c.prop};transform:rotate(-3deg)}}
 .l2{{left:{px + 10}px;top:{py - 20}px;width:{pw}px;height:{ph + 40}px;background:{PAPER};transform:rotate(2deg)}}
 .pic{{left:{px}px;top:{py}px;width:{pw}px;height:{ph}px;background:{PAPER} url('{c.img(pw, ph)}') 0 0/cover;z-index:2}}
@@ -910,19 +910,15 @@ display:flex;align-items:center;justify-content:center;font:900 40px/1 Paperlogy
 
 
 def t_stage(c):
-    """앨범 카드: 공연 포스터. 위쪽 절반에 하프톤 사진, 아래 포인트 컬러 판에 픽셀 계단 모양(소품색·잉크 네모)이 경계를 넘고,
-    그 옆에 세로로 늘린 거대 앨범명, 테두리 라벨(앨범 종류)과 가수·곡 수, 오른쪽 아래 발매일(일·월 이름).
+    """앨범 카드: 공연 포스터. 위쪽 절반에 하프톤 사진, 아래 포인트 컬러 판에 한 칸 들여 테두리 라벨(앨범 종류)·가수,
+    그 아래 세로로 늘린 거대 앨범명, 오른쪽 아래 발매일(일·월 이름).
     레퍼런스: Théâtre Sénart 공연 포스터 연작."""
     mon, day = ymd(c)
     cut = 660
-    fill = c.spec.get("fill", "count")
-    ox = 0 if fill == "wide" else 160  # wide: 왼쪽 칸을 비우지 않고 제목을 왼쪽 여백부터
-    pix = "" if fill == "wide" else (f"<div class='abs cnt'>{n_tracks(c)}<span>TRACKS</span></div>")
+    ox = 160  # 라벨·제목은 왼쪽 여백에서 한 칸 들여 시작(사용자 결정 2026-10-29)
     css = f"""
 .pic{{left:0;top:0;width:{W}px;height:{cut}px;background:{PAPER} url('{c.img(W, cut)}') 0 0/cover}}
 .blk{{left:0;top:{cut}px;width:{W}px;height:{H - cut}px;background:{c.spot}}}
-.cnt{{left:{M - 6}px;top:{cut - 96}px;font:900 150px/.9 Paperlogy;letter-spacing:-.04em;color:{c.prop};-webkit-text-stroke:4px {INK};paint-order:stroke fill;z-index:4}}
-.cnt span{{display:block;font:700 22px 'SpaceMono';-webkit-text-stroke:0;color:{INK};margin:6px 0 0 8px}}
 .tt{{left:{M + ox}px;top:{cut + 96}px;font:900 150px/.92 Paperlogy;letter-spacing:-.04em;color:{INK};text-transform:uppercase;transform:scaleY(1.25);
 transform-origin:top left;width:max-content;z-index:4}}
 .lb{{left:{M + ox}px;top:{cut + 30}px;border:2px solid {INK};font:700 22px SCDream;padding:6px 12px 4px;z-index:4}}
@@ -930,9 +926,9 @@ transform-origin:top left;width:max-content;z-index:4}}
 .dt{{right:{M}px;bottom:{M - 6}px;text-align:right;font:900 96px/.9 Paperlogy;letter-spacing:-.03em;color:{INK};z-index:5}}
 .dt span{{display:block;font:900 44px/1 Paperlogy}}
 """
-    body = f"""<div class='abs pic'></div><div class='abs blk'></div><div class='grain' style='opacity:.3'></div>{pix}
+    body = f"""<div class='abs pic'></div><div class='abs blk'></div><div class='grain' style='opacity:.3'></div>
 <div class='abs tt title anchor' data-fit data-maxw='{W - 2 * M - ox}' data-maxh='290'>{"<br>".join(esc(x) for x in split_lines(c.album))}</div>
-<div class='abs lb'>{esc(c.spec.get('type', ''))}</div><div class='abs who'>{esc(c.artist)}{' · ' + n_tracks(c) + ' TRACKS' if fill == 'wide' else ''}</div>
+<div class='abs lb'>{esc(c.spec.get('type', ''))}</div><div class='abs who'>{esc(c.artist)}</div>
 <div class='abs dt'>{esc(day)}<span>{esc(mon)}</span></div>
 {head(c, dark=True)}{foot(c)}"""
     return c.spot, css, body
