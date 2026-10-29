@@ -22,7 +22,7 @@ TOP_HEAD, TOP_TITLE = 48, 136
 INK, PAPER = "#111111", "#e6e6e2"
 PINK, LIME = "#ff4f9a", "#d7ff3d"
 SPOT_FALLBACK = "#ffd23f"  # 흑백 표지
-TYPO = {"polaroid", "cutout", "grid", "serpent", "cinema", "gable", "motion", "colorblock"}
+TYPO = {"polaroid", "cinema", "gable", "motion", "colorblock"}
 PHOTO = {"player", "full", "cctv", "clipboard", "desktop", "notch", "issue", "torn"}
 BURST = ("polygon(50% 0,58% 30%,85% 12%,70% 40%,100% 45%,72% 58%,92% 85%,60% 70%,52% 100%,42% 72%,"
          "12% 90%,28% 60%,0 50%,28% 40%,10% 14%,40% 30%)")
@@ -248,72 +248,6 @@ def t_polaroid(c):
     return bg, css, body
 
 
-def t_cutout(c):
-    """타이포 카드 + 모양으로 오린 사진: 제목·소개 속 사물(달, 해, 창, 무대)을 모양으로 옮긴다."""
-    bgname = c.bg or "ink"
-    bg = resolve(c, bgname)
-    color_name, blend = typo_colors(bgname)
-    ring = c.spot if bgname != "spot" else INK
-    shape = c.spec.get("shape", "circle")
-    d = span(4) if bgname == "ink" else span(3)  # 제목 아래에 놓일 때는 3칸(줄어들지 않게)
-    big = shape == "circle" and bgname != "ink"  # 제목 아래 원: 크게(지름 720) 두고 한 줄 평 상자 밑으로 깔려도 된다
-    if big:
-        d = 720
-    radius = {"circle": "50%", "arch": f"{d // 2}px {d // 2}px 0 0", "frame": "0", "wide": "0"}[shape]
-    # wide: 사진 한 칸을 자르지 않고 화면 폭 전체에 띄운다(크롭 비율 그대로).
-    w, h, x = (W, round(W * c.spec.get("aspect", .5)), 0) if shape == "wide" else (d, d, W - M - d)
-    css = f"""
-.shape{{left:{x}px;top:{TOP_TITLE + 160}px;width:{w}px;height:{h}px;border-radius:{radius};
-background:{PAPER} url('{c.img(w, h)}') 0 0/cover;box-shadow:0 0 0 16px {ring}}}
-"""
-    # 잉크 배경: 제목이 사진 위에서 반전되며 겹친다. 그 밖의 배경: 겹치면 읽기 어려워 제목 아래 남는 공간 가운데에 둔다.
-    zone = "data-zone='fixed'" if bgname == "ink" and shape != "wide" else "data-zone='center' data-after='.title'"
-    if big:
-        zone = "data-zone='after' data-after='.title' data-over='foot'"
-    arc = ""
-    if big:  # 원 둘레 왼쪽 위를 따라 휘는 문구: 곡 소개 첫 문장(없으면 가수·앨범·트랙). 레퍼런스: Unique 포스터
-        text = first_sentence(c.blurb) or f"{c.artist} — {c.album} · TRACK {c.n:02d}"
-        R, pad = d // 2 + 44, 80
-        col = INK if bgname != "ink" else c.spot
-        arc = (f"<svg style='position:absolute;left:-{pad}px;top:-{pad}px;overflow:visible' width='{d + 2 * pad}' height='{d + 2 * pad}'>"
-               f"<path id='arc' d='M{d // 2 + pad} {d // 2 + pad - R} A{R} {R} 0 1 1 {d // 2 + pad - .1} {d // 2 + pad - R}' fill='none'/>"
-               f"<text style='font:700 30px SCDream;fill:{col};letter-spacing:.02em'><textPath href='#arc' startOffset='74%'>{esc(text)}</textPath></text></svg>")
-    body = f"""<div class='abs shape anchor' {zone} data-origin='top right'>{arc}</div>
-{title_block(c, 236, 992, 410, resolve(c, color_name), blend)}<div class='grain' style='opacity:.25'></div>
-{head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', False), dark=bgname == 'ink')}"""
-    return bg, css, body
-
-
-def t_grid(c):
-    """타이포 카드 + 같은 사진 18칸 중 한 칸만 짚기: 반복·흔함·버전 차이(반주곡, 리믹스, 다른 언어)."""
-    bgname = c.bg or "spot"
-    bg = resolve(c, bgname)
-    color = resolve(c, typo_colors(bgname)[0])
-    main, _, rest = c.title.partition("(")
-    sub = f"({rest}" if rest else f"TRACK {c.n:02d}"
-    th = 108
-    h = int(hashlib.sha1(c.title.encode()).hexdigest(), 16)
-    pick = (1, 1 + h % 4)
-    tile = c.img(COL, th, 4)
-    tiles = "".join(
-        f"<div class='tile{' on anchor' if (r, k) == pick else ''}' style='left:{X[k] - M}px;top:{r * (th + GUT)}px'></div>"
-        for r in range(3) for k in range(6))
-    px = X[pick[1]] - M + COL + GUT
-    css = f"""
-.sub{{left:{M}px;z-index:4}} .sub .lbl{{font:900 64px/1 'Paperlogy';padding:10px 16px 2px}}
-.zone{{left:{M}px;width:{span(6)}px;height:{3 * th + 2 * GUT}px}}
-.tile{{position:absolute;width:{COL}px;height:{th}px;background:{PAPER} url('{tile}') 0 0/cover;border:3px solid {INK}}}
-.tile.on{{background-color:{c.prop};background-blend-mode:multiply;border-width:6px;box-shadow:8px 8px 0 {INK};transform:scale(1.18);z-index:2}}
-.pin{{position:absolute;left:{px}px;top:{pick[0] * (th + GUT) + 34}px;z-index:3;background:{c.prop};border:3px solid {INK};padding:8px 12px 6px;font:700 22px 'SpaceMono'}}
-"""
-    c2 = Card(**{**c.__dict__, "title": main.strip(), "spec": {k: v for k, v in c.spec.items() if k != "lines"}})
-    body = f"""<div class='grain'></div>{title_block(c2, 300, 992, 260, color)}
-<div class='abs sub' data-zone='after' data-after='.title'><span class='lbl'>{esc(sub)}</span></div>
-<div class='abs zone' data-zone='center' data-after='.sub'>{tiles}<div class='pin'>◀ THIS ONE</div></div>
-{head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', True), dark=bgname == 'ink')}"""
-    return bg, css, body
-
-
 def t_player(c):
     """사진 카드 + 뮤직비디오 플레이어: 사진이 MV 장면일 때. 진행 막대 = 앨범 안에서 이 곡의 위치."""
     pct = c.n / c.total * 100
@@ -383,28 +317,6 @@ def t_full(c):
     return PAPER, css, body
 
 
-def t_serpent(c):
-    """세리프 분할 + 뱀(레퍼런스 ②): 포인트 컬러 바탕에 거대한 제목을 두고, 가운데로 사진이 뱀처럼
-    비스듬히 감긴다. 곡선·뱀·휘감김이 제목에 있을 때(Cobra 등). 추천 도장은 사진 몸통 가운데 높이의 오른쪽
-    (예전 트랙 정보 띠 자리, 사용자 결정 2026-10-24). 배경은 포인트 컬러 고정(c.bg 무시)."""
-    bg = c.spot
-    w = span(3)
-    x = (W - w) // 2
-    uri = c.img(w, 760)
-    css = f"""
-.snake{{left:{x}px;top:{TOP_TITLE + 150}px;width:{w}px;height:760px;background:{PAPER} url('{uri}') 0 0/cover;
-mix-blend-mode:multiply;border:3px solid {INK};box-shadow:12px 12px 0 rgba(0,0,0,.28);transform:rotate(-5deg);z-index:1}}
-.ghost{{left:{M - 8}px;bottom:{M + 180}px;font:900 230px/.8 'Paperlogy';letter-spacing:-.05em;color:{INK};opacity:.12;z-index:0;width:max-content}}
-"""
-    body = f"""<div class='grain'></div>
-<div class='abs ghost'>{esc((c.spec.get('lines') or split_lines(c.title))[-1])}</div>
-{title_block(c, 234, 992, 300, INK)}
-<div class='abs snake'></div>
-<div class='abs stampat' style='left:{W - M - 300}px;top:{TOP_TITLE + 337}px;width:300px;height:300px'></div>
-{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
-    return bg, css, body
-
-
 def t_cinema(c):
     """시네마 선언문(레퍼런스 ③): 어두운 바탕에 거대한 포인트색 제목, 모노 카테고리 줄, 내용 폭 전체의
     2.39:1 시네마스코프 듀오톤 스틸과 이름판(곡 소개 본문은 빼고 영화 화면 비율로, 사용자 결정 2026-10-24).
@@ -431,7 +343,8 @@ def t_cinema(c):
 
 def t_cctv(c):
     """CCTV 감지(레퍼런스 ⑥): 감시 모니터 프레임. 전면 하프톤 사진 위에 소품색 감지 박스와 모노 라벨,
-    모서리 카메라 정보·타임스탬프·장면 번호. 거리·추적·포착 장면일 때(SaWaDiKa 등). 바탕 종이(사진 전면)."""
+    모서리 카메라 정보·타임스탬프·장면 번호, 왼쪽 위 포인트 컬러 라벨의 큰 곡 제목(사용자 결정 2026-10-29).
+    거리·추적·포착 장면일 때(SaWaDiKa 등). 바탕 종이(사진 전면)."""
     bg = PAPER
     uri = c.img(W, H)
     code = hashlib.sha1((c.title + str(c.n)).encode()).hexdigest()[:5].upper()
@@ -442,10 +355,11 @@ def t_cctv(c):
         return (f"<div class='abs det' style='left:{x}px;top:{y}px;width:{w}px;height:{h}px'>"
                 f"<span class='tab'>{esc(label)}</span>{corners}</div>")
 
-    boxes = (det(X[1], TOP_TITLE + 232, span(2) + 48, 336, "OBJECT ▸ " + c.title.upper())
+    boxes = (det(X[1], TOP_TITLE + 480, span(2) + 48, 260, "OBJECT ▸ " + c.title.upper())
              + det(X[4] - 16, TOP_TITLE + 712, span(2) + 16, 206, "ID ▸ #" + code))
     css = f"""
 .photo{{inset:0;background:url('{uri}') 0 0/cover;mix-blend-mode:multiply}}
+.title{{z-index:6!important}}
 .scan{{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,rgba(17,17,17,.10) 0 2px,transparent 2px 5px);z-index:3;pointer-events:none}}
 .frame{{position:absolute;left:20px;top:20px;right:20px;bottom:20px;border:3px solid {INK};z-index:4;pointer-events:none}}
 .frame::before,.frame::after{{content:'';position:absolute;width:26px;height:26px;border:4px solid {INK}}}
@@ -461,7 +375,8 @@ def t_cctv(c):
     body = f"""<div class='abs photo'></div><div class='scan'></div><div class='grain' style='opacity:.3'></div><div class='frame'></div>
 <div class='cv' style='left:44px;top:40px'><span class='rec'></span>CCTV {c.n:02d}<br>{esc(c.artist)} — {esc(c.album)}</div>
 <div class='cv' style='right:44px;top:40px;text-align:right'>CAMERA {c.n} · {esc(c.page)}<br>{ts}</div>
-<div class='cv' style='left:44px;top:138px'>{c.n:02d}/{c.total:02d} SCANNING…<br>▸ {esc(c.title)}</div>
+<div class='cv' style='left:44px;top:138px'>{c.n:02d}/{c.total:02d} SCANNING…</div>
+{label_title(c, 130, 984, 300, TOP_TITLE + 80)}
 {boxes}
 {foot(c, wide=c.spec.get('wide', False))}"""
     return bg, css, body
@@ -476,14 +391,6 @@ def tighten(r, f):
     """확대 영역 r을 가운데를 기준으로 f배로 좁힌다(더 줌인)."""
     cx, cy, hw, hh = (r[0] + r[2]) / 2, (r[1] + r[3]) / 2, (r[2] - r[0]) * f / 2, (r[3] - r[1]) * f / 2
     return [cx - hw, cy - hh, cx + hw, cy + hh]
-
-
-def first_sentence(text):
-    """곡 소개의 첫 문장."""
-    import re
-    t = " ".join((text or "").split())
-    m = re.match(r"(.+?[.!?。])(\s|$)", t)
-    return m.group(1) if m else t
 
 
 def t_gable(c):
@@ -934,8 +841,8 @@ transform-origin:top left;width:max-content;z-index:4}}
     return c.spot, css, body
 
 
-TEMPLATES = {"polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid,
-             "player": t_player, "full": t_full, "serpent": t_serpent, "cinema": t_cinema, "cctv": t_cctv,
+TEMPLATES = {"polaroid": t_polaroid,
+             "player": t_player, "full": t_full, "cinema": t_cinema, "cctv": t_cctv,
              "nowplaying": t_nowplaying, "flyer": t_flyer, "editorial": t_editorial, "layers": t_layers, "stage": t_stage, "live": t_live, "neon": t_neon, "colorblock": t_colorblock,
              "gable": t_gable, "clipboard": t_clipboard, "desktop": t_desktop, "notch": t_notch,
              "motion": t_motion, "issue": t_issue, "torn": t_torn}

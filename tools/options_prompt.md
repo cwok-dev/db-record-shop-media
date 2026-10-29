@@ -28,11 +28,11 @@
 - 카드마다(`"album"`, 그리고 게시할 트랙 번호마다) 사양 세 개 A·B·C. **A는 당신의 추천안**입니다.
 - 세 안은 서로 다른 근거(4.1의 ①제목 ②소개 ③위치)에서 나오게 합니다. 리뷰가 이미 있으면 ④한 줄 평도 씁니다. 같은 근거를 써야 하면 템플릿이나 사진이 확실히 달라야 합니다.
 - 앨범 카드(4.5 앨범 카드 규칙): 기본 템플릿이 없습니다. 앨범 소개(albums의 description)를 읽고 `nowplaying`·`flyer`·`live`·`neon`·`editorial`·`layers`·`stage` 중에서 고릅니다(사용자 결정 2026-10-24로 sleeve·glyph·jewelcase 폐기). `nowplaying` 말고는 기사 사진을 씁니다. `flyer`는 수록곡과 발매 정보를 한 장에 보여 주는 표지라 위치 칸에서도 `nowplaying`과 번갈아 고릅니다. 바로 전에 게시한 앨범(`posts/` 안에서 이 앨범보다 앞선 날짜의 마지막 `design.json`)의 `cards.album.template`은 세 안 모두에서 뺍니다.
-- 트랙 카드 계열은 게시물 안 순서로 정해집니다: 첫 트랙 타이포(polaroid·cutout·grid·serpent·cinema·gable·motion·colorblock), 다음 사진(player·full·cctv·clipboard·desktop·notch·issue·torn), 그다음 타이포… 세 안 모두 그 계열 안에서 고릅니다. 타이포 카드의 `bg`는 비워 두면 코드가 돌립니다.
+- 트랙 카드 계열은 게시물 안 순서로 정해집니다: 첫 트랙 타이포(polaroid·cinema·gable·motion·colorblock), 다음 사진(player·full·cctv·clipboard·desktop·notch·issue·torn), 그다음 타이포… 세 안 모두 그 계열 안에서 고릅니다. 타이포 카드의 `bg`는 비워 두면 코드가 돌립니다.
 - `player`는 사진이 실제 뮤직비디오 장면일 때만 씁니다. 37종 모티프 소품(`motif:<이름>`)은 한 게시물 안에서 겹치지 않게 합니다. 같은 사진(표지 포함)은 이웃한 카드에 연달아 쓰지 않습니다(앨범 카드와 트랙 1도 이웃). 세 안 모두 앞뒤 카드의 A안과 겹치지 않게 고릅니다.
 - `desktop`·`zoom` 소품·`motion`·`issue`·`torn`에는 `zooms`(크롭 영역 안에서 확대할 곳, 비율)를 씁니다. 얼굴·눈처럼 확대해 볼 만한 곳을 시트 격자로 잡습니다.
 - `crop`은 시트의 10% 격자를 보고 비율로 정합니다. 얼굴이 잘리지 않게, 콜라주 사진은 한 칸 안쪽만 잡습니다.
-- `full` 카드는 위쪽 약 35%(제목 아래 48까지)가 포인트 컬러 띠에 덮입니다. 얼굴이 카드 높이의 40% 아래에 오도록 크롭합니다(얼굴 위로 여백을 남김). 얼굴만 크게 잡힌 근접 사진은 `full`보다 `cutout`·`polaroid`에 씁니다.
+- `full` 카드는 위쪽 약 35%(제목 아래 48까지)가 포인트 컬러 띠에 덮입니다. 얼굴이 카드 높이의 40% 아래에 오도록 크롭합니다(얼굴 위로 여백을 남김). 얼굴만 크게 잡힌 근접 사진은 `full`보다 `notch`·`polaroid`에 씁니다.
 - 제목이 한 단어라도 두 말이 붙은 말(Moonlight, Sunflower 등)이면 `"lines": ["Moon", "light"]`처럼 직접 나눠 글자를 크게 둡니다(사용자 선호).
 - 사양마다 `basis`(제목|소개|위치|평)와 `why`(의도 한 문장, 한국어)를 반드시 씁니다.
 
