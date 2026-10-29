@@ -22,8 +22,8 @@ TOP_HEAD, TOP_TITLE = 48, 136
 INK, PAPER = "#111111", "#e6e6e2"
 PINK, LIME = "#ff4f9a", "#d7ff3d"
 SPOT_FALLBACK = "#ffd23f"  # 흑백 표지
-TYPO = {"polaroid", "cutout", "grid", "serpent", "cinema", "gable", "motion", "colorblock"}
-PHOTO = {"player", "full", "cctv", "clipboard", "desktop", "notch", "issue", "torn"}
+TYPO = {"polaroid", "cinema", "gable", "motion", "colorblock", "split", "stacked", "bloom", "manga"}
+PHOTO = {"player", "full", "cctv", "clipboard", "desktop", "notch", "issue", "torn", "poster", "oval"}
 BURST = ("polygon(50% 0,58% 30%,85% 12%,70% 40%,100% 45%,72% 58%,92% 85%,60% 70%,52% 100%,42% 72%,"
          "12% 90%,28% 60%,0 50%,28% 40%,10% 14%,40% 30%)")
 STAR = "M50 4 L62 37 L97 38 L69 59 L79 93 L50 73 L21 93 L31 59 L3 38 L38 37 Z"
@@ -248,72 +248,6 @@ def t_polaroid(c):
     return bg, css, body
 
 
-def t_cutout(c):
-    """타이포 카드 + 모양으로 오린 사진: 제목·소개 속 사물(달, 해, 창, 무대)을 모양으로 옮긴다."""
-    bgname = c.bg or "ink"
-    bg = resolve(c, bgname)
-    color_name, blend = typo_colors(bgname)
-    ring = c.spot if bgname != "spot" else INK
-    shape = c.spec.get("shape", "circle")
-    d = span(4) if bgname == "ink" else span(3)  # 제목 아래에 놓일 때는 3칸(줄어들지 않게)
-    big = shape == "circle" and bgname != "ink"  # 제목 아래 원: 크게(지름 720) 두고 한 줄 평 상자 밑으로 깔려도 된다
-    if big:
-        d = 720
-    radius = {"circle": "50%", "arch": f"{d // 2}px {d // 2}px 0 0", "frame": "0", "wide": "0"}[shape]
-    # wide: 사진 한 칸을 자르지 않고 화면 폭 전체에 띄운다(크롭 비율 그대로).
-    w, h, x = (W, round(W * c.spec.get("aspect", .5)), 0) if shape == "wide" else (d, d, W - M - d)
-    css = f"""
-.shape{{left:{x}px;top:{TOP_TITLE + 160}px;width:{w}px;height:{h}px;border-radius:{radius};
-background:{PAPER} url('{c.img(w, h)}') 0 0/cover;box-shadow:0 0 0 16px {ring}}}
-"""
-    # 잉크 배경: 제목이 사진 위에서 반전되며 겹친다. 그 밖의 배경: 겹치면 읽기 어려워 제목 아래 남는 공간 가운데에 둔다.
-    zone = "data-zone='fixed'" if bgname == "ink" and shape != "wide" else "data-zone='center' data-after='.title'"
-    if big:
-        zone = "data-zone='after' data-after='.title' data-over='foot'"
-    arc = ""
-    if big:  # 원 둘레 왼쪽 위를 따라 휘는 문구: 곡 소개 첫 문장(없으면 가수·앨범·트랙). 레퍼런스: Unique 포스터
-        text = first_sentence(c.blurb) or f"{c.artist} — {c.album} · TRACK {c.n:02d}"
-        R, pad = d // 2 + 44, 80
-        col = INK if bgname != "ink" else c.spot
-        arc = (f"<svg style='position:absolute;left:-{pad}px;top:-{pad}px;overflow:visible' width='{d + 2 * pad}' height='{d + 2 * pad}'>"
-               f"<path id='arc' d='M{d // 2 + pad} {d // 2 + pad - R} A{R} {R} 0 1 1 {d // 2 + pad - .1} {d // 2 + pad - R}' fill='none'/>"
-               f"<text style='font:700 30px SCDream;fill:{col};letter-spacing:.02em'><textPath href='#arc' startOffset='74%'>{esc(text)}</textPath></text></svg>")
-    body = f"""<div class='abs shape anchor' {zone} data-origin='top right'>{arc}</div>
-{title_block(c, 236, 992, 410, resolve(c, color_name), blend)}<div class='grain' style='opacity:.25'></div>
-{head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', False), dark=bgname == 'ink')}"""
-    return bg, css, body
-
-
-def t_grid(c):
-    """타이포 카드 + 같은 사진 18칸 중 한 칸만 짚기: 반복·흔함·버전 차이(반주곡, 리믹스, 다른 언어)."""
-    bgname = c.bg or "spot"
-    bg = resolve(c, bgname)
-    color = resolve(c, typo_colors(bgname)[0])
-    main, _, rest = c.title.partition("(")
-    sub = f"({rest}" if rest else f"TRACK {c.n:02d}"
-    th = 108
-    h = int(hashlib.sha1(c.title.encode()).hexdigest(), 16)
-    pick = (1, 1 + h % 4)
-    tile = c.img(COL, th, 4)
-    tiles = "".join(
-        f"<div class='tile{' on anchor' if (r, k) == pick else ''}' style='left:{X[k] - M}px;top:{r * (th + GUT)}px'></div>"
-        for r in range(3) for k in range(6))
-    px = X[pick[1]] - M + COL + GUT
-    css = f"""
-.sub{{left:{M}px;z-index:4}} .sub .lbl{{font:900 64px/1 'Paperlogy';padding:10px 16px 2px}}
-.zone{{left:{M}px;width:{span(6)}px;height:{3 * th + 2 * GUT}px}}
-.tile{{position:absolute;width:{COL}px;height:{th}px;background:{PAPER} url('{tile}') 0 0/cover;border:3px solid {INK}}}
-.tile.on{{background-color:{c.prop};background-blend-mode:multiply;border-width:6px;box-shadow:8px 8px 0 {INK};transform:scale(1.18);z-index:2}}
-.pin{{position:absolute;left:{px}px;top:{pick[0] * (th + GUT) + 34}px;z-index:3;background:{c.prop};border:3px solid {INK};padding:8px 12px 6px;font:700 22px 'SpaceMono'}}
-"""
-    c2 = Card(**{**c.__dict__, "title": main.strip(), "spec": {k: v for k, v in c.spec.items() if k != "lines"}})
-    body = f"""<div class='grain'></div>{title_block(c2, 300, 992, 260, color)}
-<div class='abs sub' data-zone='after' data-after='.title'><span class='lbl'>{esc(sub)}</span></div>
-<div class='abs zone' data-zone='center' data-after='.sub'>{tiles}<div class='pin'>◀ THIS ONE</div></div>
-{head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', True), dark=bgname == 'ink')}"""
-    return bg, css, body
-
-
 def t_player(c):
     """사진 카드 + 뮤직비디오 플레이어: 사진이 MV 장면일 때. 진행 막대 = 앨범 안에서 이 곡의 위치."""
     pct = c.n / c.total * 100
@@ -383,28 +317,6 @@ def t_full(c):
     return PAPER, css, body
 
 
-def t_serpent(c):
-    """세리프 분할 + 뱀(레퍼런스 ②): 포인트 컬러 바탕에 거대한 제목을 두고, 가운데로 사진이 뱀처럼
-    비스듬히 감긴다. 곡선·뱀·휘감김이 제목에 있을 때(Cobra 등). 추천 도장은 사진 몸통 가운데 높이의 오른쪽
-    (예전 트랙 정보 띠 자리, 사용자 결정 2026-10-24). 배경은 포인트 컬러 고정(c.bg 무시)."""
-    bg = c.spot
-    w = span(3)
-    x = (W - w) // 2
-    uri = c.img(w, 760)
-    css = f"""
-.snake{{left:{x}px;top:{TOP_TITLE + 150}px;width:{w}px;height:760px;background:{PAPER} url('{uri}') 0 0/cover;
-mix-blend-mode:multiply;border:3px solid {INK};box-shadow:12px 12px 0 rgba(0,0,0,.28);transform:rotate(-5deg);z-index:1}}
-.ghost{{left:{M - 8}px;bottom:{M + 180}px;font:900 230px/.8 'Paperlogy';letter-spacing:-.05em;color:{INK};opacity:.12;z-index:0;width:max-content}}
-"""
-    body = f"""<div class='grain'></div>
-<div class='abs ghost'>{esc((c.spec.get('lines') or split_lines(c.title))[-1])}</div>
-{title_block(c, 234, 992, 300, INK)}
-<div class='abs snake'></div>
-<div class='abs stampat' style='left:{W - M - 300}px;top:{TOP_TITLE + 337}px;width:300px;height:300px'></div>
-{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
-    return bg, css, body
-
-
 def t_cinema(c):
     """시네마 선언문(레퍼런스 ③): 어두운 바탕에 거대한 포인트색 제목, 모노 카테고리 줄, 내용 폭 전체의
     2.39:1 시네마스코프 듀오톤 스틸과 이름판(곡 소개 본문은 빼고 영화 화면 비율로, 사용자 결정 2026-10-24).
@@ -431,7 +343,8 @@ def t_cinema(c):
 
 def t_cctv(c):
     """CCTV 감지(레퍼런스 ⑥): 감시 모니터 프레임. 전면 하프톤 사진 위에 소품색 감지 박스와 모노 라벨,
-    모서리 카메라 정보·타임스탬프·장면 번호. 거리·추적·포착 장면일 때(SaWaDiKa 등). 바탕 종이(사진 전면)."""
+    모서리 카메라 정보·타임스탬프·장면 번호, 왼쪽 위 포인트 컬러 라벨의 큰 곡 제목(사용자 결정 2026-10-29).
+    거리·추적·포착 장면일 때(SaWaDiKa 등). 바탕 종이(사진 전면)."""
     bg = PAPER
     uri = c.img(W, H)
     code = hashlib.sha1((c.title + str(c.n)).encode()).hexdigest()[:5].upper()
@@ -442,10 +355,11 @@ def t_cctv(c):
         return (f"<div class='abs det' style='left:{x}px;top:{y}px;width:{w}px;height:{h}px'>"
                 f"<span class='tab'>{esc(label)}</span>{corners}</div>")
 
-    boxes = (det(X[1], TOP_TITLE + 232, span(2) + 48, 336, "OBJECT ▸ " + c.title.upper())
+    boxes = (det(X[1], TOP_TITLE + 480, span(2) + 48, 260, "OBJECT ▸ " + c.title.upper())
              + det(X[4] - 16, TOP_TITLE + 712, span(2) + 16, 206, "ID ▸ #" + code))
     css = f"""
 .photo{{inset:0;background:url('{uri}') 0 0/cover;mix-blend-mode:multiply}}
+.title{{z-index:6!important}}
 .scan{{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,rgba(17,17,17,.10) 0 2px,transparent 2px 5px);z-index:3;pointer-events:none}}
 .frame{{position:absolute;left:20px;top:20px;right:20px;bottom:20px;border:3px solid {INK};z-index:4;pointer-events:none}}
 .frame::before,.frame::after{{content:'';position:absolute;width:26px;height:26px;border:4px solid {INK}}}
@@ -461,7 +375,8 @@ def t_cctv(c):
     body = f"""<div class='abs photo'></div><div class='scan'></div><div class='grain' style='opacity:.3'></div><div class='frame'></div>
 <div class='cv' style='left:44px;top:40px'><span class='rec'></span>CCTV {c.n:02d}<br>{esc(c.artist)} — {esc(c.album)}</div>
 <div class='cv' style='right:44px;top:40px;text-align:right'>CAMERA {c.n} · {esc(c.page)}<br>{ts}</div>
-<div class='cv' style='left:44px;top:138px'>{c.n:02d}/{c.total:02d} SCANNING…<br>▸ {esc(c.title)}</div>
+<div class='cv' style='left:44px;top:138px'>{c.n:02d}/{c.total:02d} SCANNING…</div>
+{label_title(c, 130, 984, 300, TOP_TITLE + 80)}
 {boxes}
 {foot(c, wide=c.spec.get('wide', False))}"""
     return bg, css, body
@@ -476,14 +391,6 @@ def tighten(r, f):
     """확대 영역 r을 가운데를 기준으로 f배로 좁힌다(더 줌인)."""
     cx, cy, hw, hh = (r[0] + r[2]) / 2, (r[1] + r[3]) / 2, (r[2] - r[0]) * f / 2, (r[3] - r[1]) * f / 2
     return [cx - hw, cy - hh, cx + hw, cy + hh]
-
-
-def first_sentence(text):
-    """곡 소개의 첫 문장."""
-    import re
-    t = " ".join((text or "").split())
-    m = re.match(r"(.+?[.!?。])(\s|$)", t)
-    return m.group(1) if m else t
 
 
 def t_gable(c):
@@ -934,8 +841,176 @@ transform-origin:top left;width:max-content;z-index:4}}
     return c.spot, css, body
 
 
-TEMPLATES = {"polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid,
-             "player": t_player, "full": t_full, "serpent": t_serpent, "cinema": t_cinema, "cctv": t_cctv,
+def halves(title):
+    """제목 쪼개기: 여러 낱말이면 두 줄로 고르게, 한 낱말이면 가운데에서 둘로(lem / on.)."""
+    if len(title.split()) > 1:
+        return split_lines(title)
+    k = (len(title) + 1) // 2
+    return [title[:k], title[k:]] if len(title) >= 4 else [title]
+
+
+def chunks(title, n=4):
+    """제목 낱말을 많아야 n줄로 고르게 나눈다(한 낱말이면 halves)."""
+    words = title.split()
+    if len(words) < 2:
+        return halves(title)
+    n = min(n, len(words))
+    size = -(-len(words) // n)
+    return [" ".join(words[i:i + size]) for i in range(0, len(words), size)]
+
+
+def typo_fg(c, bgname):
+    """새 타이포 템플릿의 글자색: 잉크 바탕이면 포인트 컬러, 그 밖은 잉크."""
+    return c.spot if bgname == "ink" else INK
+
+
+def t_split(c):
+    """타이포 카드 + 반쪽 사진: 단색 바탕 오른쪽 가장자리에 큰 원으로 오린 하프톤 사진이 반쯤 걸치고, 왼쪽에 곡 제목을
+    둘로 쪼개(lem / on.) 크게, 끝에 소품색 마침표. 위에 이탤릭 세리프 앨범명. 레퍼런스: 과일 포스터 연작(lemon·orange)."""
+    bgname = c.bg or "spot"
+    bg, fg = resolve(c, bgname), typo_fg(c, bgname)
+    d, cy = 920, TOP_TITLE + 500
+    lines = c.spec.get("lines") or halves(c.title)
+    rows = "".join(f"<div>{esc(x)}{'<span class=dot>.</span>' if i == len(lines) - 1 else ''}</div>" for i, x in enumerate(lines))
+    css = f"""
+.orb{{left:{W + 60 - d // 2}px;top:{cy - d // 2}px;width:{d}px;height:{d}px;border-radius:50%;background:{PAPER} url('{c.img(d, d)}') 0 0/cover;border:3px solid {INK}}}
+.kk{{left:{M}px;top:{TOP_TITLE + 150}px;font:700 34px/1 Chosun;font-synthesis:weight;font-style:italic;color:{fg};z-index:4;max-width:560px}}
+.tt{{left:{M - 6}px;top:{TOP_TITLE + 210}px;font:900 190px/.9 Paperlogy;letter-spacing:-.05em;color:{fg};width:max-content;z-index:4}}
+.tt .dot{{color:{c.prop};-webkit-text-stroke:3px {INK};paint-order:stroke fill}}
+"""
+    body = f"""<div class='abs orb anchor'></div><div class='grain' style='opacity:.3'></div>
+<div class='abs kk'>{esc(c.album)} · {c.n:02d}</div>
+<div class='abs tt title' data-fit data-maxw='600' data-maxh='600'>{rows}</div>
+{head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', False), dark=bgname == 'ink')}"""
+    return bg, css, body
+
+
+def t_stacked(c):
+    """타이포 카드 + 겹쳐 쌓은 제목: 곡 제목을 위(꽉 찬 글자)·가운데(테두리만)·아래(꽉 찬 글자) 세 번 쌓고, 가운데에
+    하프톤 사진판을 세워 가운데 줄을 가리며, 아래 줄은 사진 앞으로 나온다. 사진판 모서리에 소품색 원 스티커(트랙 번호).
+    레퍼런스: JUGO·FUTURE BEGIN 일러스트 포스터."""
+    bgname = c.bg or "ink"
+    bg, fg = resolve(c, bgname), typo_fg(c, bgname)
+    pw, ph = 600, 740
+    t = esc(c.title)
+    css = f"""
+.st{{left:50%;transform:translateX(-50%);width:max-content;font:900 230px/1 Paperlogy;letter-spacing:-.05em;color:{fg};text-transform:uppercase;white-space:nowrap}}
+.st.o{{color:transparent;-webkit-text-stroke:3px {fg};z-index:1}}
+.pic{{left:{(W - pw) // 2}px;top:{TOP_TITLE + 200}px;width:{pw}px;height:{ph}px;background:{PAPER} url('{c.img(pw, ph)}') 0 0/cover;border:3px solid {INK};
+box-shadow:14px 14px 0 {INK if bgname != 'ink' else PAPER};z-index:3}}
+.stk{{left:{(W + pw) // 2 - 90}px;top:{TOP_TITLE + 150}px;width:160px;height:160px;border-radius:50%;background:{c.prop};border:3px solid {INK};z-index:6;
+display:flex;flex-direction:column;align-items:center;justify-content:center;font:900 64px/.9 Paperlogy;color:{INK};transform:rotate(12deg)}}
+.stk span{{font:700 18px 'SpaceMono'}}
+"""
+    body = f"""<div class='grain' style='opacity:.3'></div>
+<div class='abs st title' data-fit data-maxw='984' data-maxh='230' style='top:{TOP_TITLE - 20}px;z-index:4'>{t}</div>
+<div class='abs st o' data-fit data-maxw='984' data-maxh='230' style='top:{TOP_TITLE + 360}px'>{t}</div>
+<div class='abs pic anchor'></div>
+<div class='abs st' data-fit data-maxw='984' data-maxh='230' style='top:{TOP_TITLE + 700}px;z-index:5;-webkit-text-stroke:10px {bg};paint-order:stroke fill'>{t}</div>
+<div class='abs stk'>{c.n:02d}<span>TRACK</span></div>
+{head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', False), dark=bgname == 'ink')}"""
+    return bg, css, body
+
+
+def t_bloom(c):
+    """타이포 카드 + 섞어 짠 제목: 곡 제목 낱말을 줄마다 굵은 고딕(대문자)과 이탤릭 세리프로 번갈아 계단처럼 짜고, 아래 오른쪽에
+    하프톤 사진, 사진 왼쪽에 세로 문구(가수·앨범), 오른쪽 위 소품색 별표. 레퍼런스: Bloom under the brightest skies 등 감성 포스터."""
+    bgname = c.bg or "spot"
+    bg, fg = resolve(c, bgname), typo_fg(c, bgname)
+    lines = c.spec.get("lines") or chunks(c.title)
+    rows = "".join(f"<div class='{'s' if i % 2 else 'g'}' style='margin-left:{(i % 2) * 90}px'>{esc(x)}</div>" for i, x in enumerate(lines))
+    pw, ph = 620, 470
+    css = f"""
+.tt{{left:{M - 6}px;top:{TOP_TITLE - 10}px;color:{fg};width:max-content;z-index:4}}
+.tt .g{{font:900 150px/.92 Paperlogy;letter-spacing:-.04em;text-transform:uppercase}}
+.tt .s{{font:700 160px/.92 Chosun;font-synthesis:weight;font-style:italic;letter-spacing:-.03em}}
+.pic{{left:{W - M - pw}px;width:{pw}px;height:{ph}px;background:{PAPER} url('{c.img(pw, ph)}') 0 0/cover;border:3px solid {INK}}}
+.vt{{font:700 22px 'SpaceMono';color:{fg};white-space:nowrap;transform:rotate(-90deg);transform-origin:top left;z-index:4}}
+.ast{{right:{M}px;top:{TOP_TITLE - 4}px;font:900 120px/1 Paperlogy;color:{c.prop};-webkit-text-stroke:3px {INK};paint-order:stroke fill;z-index:5}}
+"""
+    body = f"""<div class='grain' style='opacity:.3'></div>
+<div class='abs tt title' data-fit data-maxw='{W - 2 * M - 110}' data-maxh='520'>{rows}</div><div class='abs ast'>✱</div>
+<div class='abs pic anchor' data-zone='center' data-after='.title' data-origin='top right'></div>
+<div class='abs vt' style='left:{W - M - pw - 56}px;top:1040px'>{esc(c.artist)} — {esc(c.album)} · {c.n:02d}</div>
+{head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', False), dark=bgname == 'ink')}"""
+    return bg, css, body
+
+
+def t_manga(c):
+    """타이포 카드 + 만화 표지: 종이 바탕(고정) 위 칸 네 개(같은 사진의 다른 부분, 사양 zooms), 포인트 컬러 띠에 거대한 잉크 제목,
+    그 아래 하프톤 사진(스크린톤처럼)과 소품색 말풍선(트랙 번호). 레퍼런스: GIVEN·SKOO 만화 포스터."""
+    z = zooms(c, [[0, 0, .5, .45], [.5, 0, 1, .45], [0, .45, .5, 1], [.5, .45, 1, 1]])
+    pw = (W - 2 * M - 3 * 16) // 4
+    by, bh = TOP_TITLE + 210, 300
+    py, ph = by + bh - 40, 1060 - (by + bh - 40)
+    panels = "".join(f"<div class='abs pn' style='left:{M + i * (pw + 16)}px;background:{PAPER} url(\"{c.img(pw - 6, 164, sub=z[i])}\") 0 0/cover'></div>" for i in range(4))
+    css = f"""
+.pn{{top:{TOP_TITLE + 16}px;width:{pw}px;height:170px;border:3px solid {INK}}}
+.mb{{left:0;top:{by}px;width:{W}px;height:{bh}px;background:{c.spot}}}
+.tt{{left:{M - 8}px;top:{by + 26}px;font:900 230px/.9 Paperlogy;letter-spacing:-.05em;color:{INK};text-transform:uppercase;width:max-content;z-index:3}}
+.pic{{left:{X[1] - 24}px;top:{py}px;width:{W - 2 * X[1] + 48}px;height:{ph}px;background:{PAPER} url('{c.img(W - 2 * X[1] + 48, ph)}') 0 0/cover;border:3px solid {INK};z-index:4}}
+.bub{{left:{X[4] - 10}px;top:{py - 70}px;padding:26px 34px;border-radius:50%;background:{c.prop};border:3px solid {INK};font:900 40px/1 Paperlogy;color:{INK};z-index:6;transform:rotate(-6deg)}}
+.bub:after{{content:'';position:absolute;left:50px;bottom:-26px;border:16px solid transparent;border-top:26px solid {INK}}}
+"""
+    body = f"""<div class='grain' style='opacity:.35'></div>{panels}<div class='abs mb'></div>
+<div class='abs tt title' data-fit data-maxw='{W - 2 * M + 16}' data-maxh='260'>{esc(c.title)}</div>
+<div class='abs pic anchor'></div><div class='abs bub'>TRACK {c.n:02d}!</div>
+{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
+    return PAPER, css, body
+
+
+def t_poster(c):
+    """사진 카드 + 세로 제목 공연 포스터: 왼쪽 잉크 기둥에 포인트 컬러 곡 제목을 세로로(아래에서 위로, 길면 두 줄) 크게, 오른쪽은
+    포인트 컬러 판에 하프톤 사진을 곱한 듀오톤, 사진 위 소품색 점 둘, 오른쪽 위 종이 라벨(트랙·앨범·가수).
+    레퍼런스: Sintra·Magnolia 공연 포스터."""
+    lw = 330
+    css = f"""
+.col{{left:0;top:0;width:{lw}px;height:{H}px;background:{INK}}}
+.duo{{left:{lw}px;top:0;width:{W - lw}px;height:{H}px;background:{c.spot}}}
+.duo .ph{{position:absolute;inset:0;background:url('{c.img(W - lw, H)}') 0 0/cover;mix-blend-mode:multiply}}
+.vt{{left:{M - 10}px;top:{TOP_TITLE}px;writing-mode:vertical-rl;transform:rotate(180deg);font:900 230px/.9 Paperlogy;letter-spacing:-.04em;color:{c.spot};white-space:nowrap;z-index:4}}
+.dot{{width:76px;height:76px;border-radius:50%;background:{c.prop};border:3px solid {INK};z-index:4}}
+.tags{{right:{M}px;top:{TOP_TITLE}px;text-align:right;z-index:5}} .tags .lbl{{display:table;margin:0 0 -3px auto;font:700 24px 'SpaceMono'}}
+"""
+    body = f"""<div class='abs col'></div><div class='abs duo anchor'><div class='ph'></div></div><div class='grain' style='opacity:.3'></div>
+<div class='abs vt title' data-fit data-maxw='{lw - 40}' data-maxh='{1071 - 48 - TOP_TITLE}'>{'<br>'.join(esc(x) for x in (c.spec.get('lines') or split_lines(c.title)))}</div>
+<div class='abs dot' style='left:{lw + 120}px;top:{TOP_TITLE + 520}px'></div><div class='abs dot' style='left:{W - M - 200}px;top:{TOP_TITLE + 760}px'></div>
+<div class='abs tags'><span class='lbl' style='background:{c.prop}'>TRACK {c.n:02d} / {c.total:02d}</span><span class='lbl'>{esc(c.album)}</span><span class='lbl'>{esc(c.artist)}</span></div>
+{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
+    return INK, css, body
+
+
+def t_oval(c):
+    """사진 카드 + 실험적 타이포 포스터: 종이 바탕 위 거대한 잉크 제목, 가는 선과 좌표·트랙 모노 문구, 가운데 세로 타원으로 오린
+    하프톤 사진, 테두리만 있는 원·+ 표, 타원 가장자리 소품색 반짝이 하나, 오른쪽 아래 쪽번호와 바코드.
+    레퍼런스: Nature is not on the Internet·The Fabric of Reality 등 실험 포스터."""
+    ow, oh = 560, 780
+    oy = TOP_TITLE + 300
+    code_svg, code = barcode(c.title + c.album, 200, 44)
+    css = f"""
+.tt{{left:{M - 6}px;top:{TOP_TITLE - 14}px;font:900 170px/.9 Paperlogy;letter-spacing:-.04em;color:{INK};text-transform:uppercase;width:max-content;z-index:4}}
+.hl{{left:{M}px;right:{M}px;height:2px;background:{INK}}}
+.meta{{left:{M}px;right:{M}px;display:flex;justify-content:space-between;font:700 18px 'SpaceMono';color:{INK}}}
+.ov{{left:{(W - ow) // 2}px;top:{oy}px;width:{ow}px;height:{oh}px;border-radius:50%;background:{PAPER} url('{c.img(ow, oh)}') 0 0/cover;border:2px solid {INK};z-index:2}}
+.ring{{left:{W - M - 330}px;top:{oy - 60}px;width:300px;height:300px;border-radius:50%;border:2px solid {INK};z-index:1}}
+.pg{{right:{M}px;bottom:{M + 60}px;font:700 22px 'SpaceMono';z-index:5}} .bc{{right:{M}px;bottom:{M}px;z-index:5}}
+"""
+    plus = lambda x, y: f"<svg class='abs' style='left:{x}px;top:{y}px' width='36' height='36'><path d='M18 0V36M0 18H36' stroke='{INK}' stroke-width='2'/></svg>"
+    body = f"""<div class='grain' style='opacity:.4'></div>
+<div class='abs tt title' data-fit data-maxw='{W - 2 * M + 12}' data-maxh='300'>{esc(c.title)}</div>
+<div class='abs hl' style='top:{oy - 40}px'></div>
+<div class='abs meta' style='top:{oy - 28}px'><span>37.5665° N · 126.9780° E</span><span>TRACK {c.n:02d}/{c.total:02d}</span><span>{esc(c.artist)} · {esc(c.year)}</span></div>
+<div class='abs ring'></div><div class='abs ov anchor'></div>
+{plus(M + 40, oy + 120)}{plus(W - M - 120, oy + 560)}
+<svg class='abs' style='left:{(W + ow) // 2 - 90}px;top:{oy + 30}px;z-index:4' width='150' height='150' viewBox='-4 -4 108 108'><path d='{SPARK}' fill='{c.prop}' stroke='{INK}' stroke-width='3'/></svg>
+<div class='abs pg'>{c.n:04d}</div><div class='abs bc'>{code_svg}</div>
+{head(c)}{foot(c, wide=c.spec.get('wide', False))}"""
+    return PAPER, css, body
+
+
+TEMPLATES = {"polaroid": t_polaroid, "split": t_split, "stacked": t_stacked, "bloom": t_bloom, "manga": t_manga,
+             "poster": t_poster, "oval": t_oval,
+             "player": t_player, "full": t_full, "cinema": t_cinema, "cctv": t_cctv,
              "nowplaying": t_nowplaying, "flyer": t_flyer, "editorial": t_editorial, "layers": t_layers, "stage": t_stage, "live": t_live, "neon": t_neon, "colorblock": t_colorblock,
              "gable": t_gable, "clipboard": t_clipboard, "desktop": t_desktop, "notch": t_notch,
              "motion": t_motion, "issue": t_issue, "torn": t_torn}
