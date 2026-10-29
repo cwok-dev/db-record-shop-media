@@ -145,7 +145,7 @@ def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, la
     if shown is not None:
         shown[key] = photo_key(spec, photos)
 
-    def img(w, h, cell=7, sub=None):
+    def img(w, h, cell=4, sub=None):
         """sub: 크롭 영역 안의 다시 자를 부분(비율). 한 카드 안에서 같은 사진의 다른 부분을 확대해 쓸 때."""
         nonlocal src, crop
         try:

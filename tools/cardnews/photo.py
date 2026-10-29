@@ -56,7 +56,7 @@ def fit_crop(im, crop, w, h):
     return im.crop((int(left), int(top), int(left + bw), int(top + bh))).resize((w, h), Image.LANCZOS)
 
 
-def halftone(im, cell=7, angle=45):
+def halftone(im, cell=4, angle=45):
     """흰 바탕에 검은 점. 점 크기가 어두움에 비례한다(45° 격자).
     흰 옷·밝은 배경 사진은 점이 거의 안 찍혀 흐려지므로, 평균 밝기가 0.45를 넘으면 중간톤을 눌러 0.45로 맞춘다."""
     g = ImageOps.autocontrast(ImageOps.grayscale(im), cutoff=1)
@@ -84,7 +84,7 @@ def halftone(im, cell=7, angle=45):
                         (cw - im.width) // 2 + im.width, (ch - im.height) // 2 + im.height))
 
 
-def slot(src, crop, w, h, cache, cell=7):
+def slot(src, crop, w, h, cache, cell=4):
     """템플릿의 사진 칸 하나: 크롭 → w×h → 하프톤 PNG. 같은 입력이면 같은 파일을 다시 쓴다."""
     key = hashlib.sha1(f"{src}|{crop}|{w}|{h}|{cell}".encode()).hexdigest()[:16]
     out = pathlib.Path(cache) / f"ht_{key}.png"
