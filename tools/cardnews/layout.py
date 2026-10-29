@@ -22,7 +22,7 @@ TOP_HEAD, TOP_TITLE = 48, 136
 INK, PAPER = "#111111", "#e6e6e2"
 PINK, LIME = "#ff4f9a", "#d7ff3d"
 SPOT_FALLBACK = "#ffd23f"  # 흑백 표지
-TYPO = {"polaroid", "cutout", "grid", "serpent", "cinema", "gable", "motion"}
+TYPO = {"polaroid", "cutout", "grid", "serpent", "cinema", "gable", "motion", "colorblock"}
 PHOTO = {"player", "full", "cctv", "clipboard", "desktop", "notch", "issue", "torn"}
 BURST = ("polygon(50% 0,58% 30%,85% 12%,70% 40%,100% 45%,72% 58%,92% 85%,60% 70%,52% 100%,42% 72%,"
          "12% 90%,28% 60%,0 50%,28% 40%,10% 14%,40% 30%)")
@@ -738,31 +738,33 @@ transform:rotate(-14deg);display:flex;flex-direction:column;align-items:center;j
 
 
 def t_colorblock(c):
-    """앨범 카드: 화면 전체를 포인트 컬러 판으로 쓰고 위쪽에 하프톤 사진(없으면 표지)을 곱하기로 얹는다.
-    아래쪽에 앨범명을 거대하게 한 줄로 두되 다 보이도록 폭에 맞춰 줄이고(사용자 결정 2026-10-24), 가수·메타·진행 막대를 붙인다.
-    앨범명이 짧고 강할 때. 레퍼런스: 단색 앱 카드 + 큰 제목."""
+    """타이포 카드(앨범 카드에서 옮김, 사용자 결정 2026-10-29): 화면 전체를 포인트 컬러 판으로 쓰고 위쪽에 하프톤 사진을
+    곱하기로 얹어 아래로 흐리게 한다. 아래쪽에 곡 제목을 거대하게(줄마다 다 보이도록 폭에 맞춰 줄임), 가수, 트랙 번호·앨범 메타,
+    진행 막대(앨범 안 이 곡의 위치)와 재생 단추. 제목이 짧고 강할 때. 레퍼런스: 단색 앱 카드 + 큰 제목.
+    잉크 배경이면 잉크 판, 그 밖(종이·포인트 컬러)은 포인트 컬러 판."""
     main = c.bg != "ink"
     bg = c.spot if main else INK
     fg = INK if main else PAPER
-    n = len(c.tracks or [])
+    pct = c.n / c.total * 100
+    lines = "<br>".join(esc(x) for x in (c.spec.get("lines") or split_lines(c.title)))
     css = f"""
 .photo{{left:0;top:0;width:{W}px;height:720px;background:url('{c.img(W, 720)}') 0 0/cover;mix-blend-mode:{'multiply' if main else 'screen'};opacity:{1 if main else .55};
 -webkit-mask-image:linear-gradient(#000 45%,transparent 92%);mask-image:linear-gradient(#000 45%,transparent 92%)}}
 .blk{{left:{M}px;right:0;color:{fg};z-index:4}}
-.blk h1{{font:900 300px/.82 Paperlogy;letter-spacing:-.06em;white-space:nowrap;margin-left:-14px;width:max-content}}
+.blk h1{{font:900 260px/.84 Paperlogy;letter-spacing:-.06em;white-space:nowrap;margin-left:-14px;width:max-content}}
 .blk h2{{font:700 64px/1.1 SCDream;margin-top:18px}}
 .blk .mt{{display:flex;align-items:center;gap:14px;font:700 24px 'SpaceMono';margin-top:14px}}
 .blk .mt i{{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle,{bg} 0 18%,{fg} 20%)}}
 .pr{{display:flex;align-items:center;gap:28px;margin:28px {M}px 0 0}}
 .pr .rl{{flex:1;height:8px;background:{fg};position:relative}}
-.pr .rl:after{{content:'';position:absolute;left:30%;top:-12px;width:32px;height:32px;border-radius:50%;background:{PAPER};border:4px solid {INK}}}
+.pr .rl:after{{content:'';position:absolute;left:calc({pct:.1f}% - 16px);top:-12px;width:32px;height:32px;border-radius:50%;background:{PAPER};border:4px solid {INK}}}
 .pr .pb{{width:110px;height:110px;border-radius:50%;background:{PAPER};border:3px solid {INK};box-shadow:6px 6px 0 {INK};display:flex;align-items:center;justify-content:center}}
 """
     body = f"""<div class='abs photo'></div><div class='grain'></div>{head(c, dark=not main)}
-<div class='abs blk anchor' data-zone='above-foot'><h1 data-fit data-maxw='{W - 2 * M + 14}' data-maxh='300'>{esc(c.album)}</h1><h2>{esc(c.artist)}</h2>
-<div class='mt'><i></i>{esc(c.spec.get('type', ''))} · {esc(c.spec.get('date', ''))} · {n:02d} TRACKS</div>
+<div class='abs blk anchor' data-zone='above-foot'><h1 class='title' data-fit data-maxw='{W - 2 * M + 14}' data-maxh='440'>{lines}</h1><h2>{esc(c.artist)}</h2>
+<div class='mt'><i></i>{"TITLE · " if c.is_title else ""}TRACK {c.n:02d} / {c.total:02d} · {esc(c.album)}</div>
 <div class='pr'><div class='rl'></div><div class='pb'><svg width='54' height='54' viewBox='0 0 100 100'><path d='M30 18v64l56-32z' fill='{INK}'/></svg></div></div></div>
-{foot(c, dark=not main)}"""
+{foot(c, wide=c.spec.get('wide', False), dark=not main)}"""
     return bg, css, body
 
 
@@ -770,37 +772,6 @@ def barcode(seed, w=264, h=60):
     code = hashlib.sha1(seed.encode()).hexdigest()
     bars = "".join(f"<rect x='{i * 6}' y='0' width='{1 + int(code[i % 40], 16) % 4}' height='{h}' fill='{INK}'/>" for i in range(w // 6))
     return f"<svg width='{w}' height='{h}'>{bars}</svg>", code[:12].upper()
-
-
-def t_disc(c):
-    """앨범 카드: CD 한 장. 잉크 바탕 위에 사진(없으면 표지)을 포인트 컬러 듀오톤으로 찍은 디스크, 가운데 구멍과 무지개 테두리,
-    위에 세리프 앨범명, 왼쪽 아래 세로 TRACKS와 따옴표 수록곡 목록, 맨 위 크레디트 줄. 레퍼런스: Never Enough CD 포스터."""
-    d = 780
-    tr = c.tracks or []
-    rows = tr if len(tr) <= 10 else tr[:9]
-    lis = "".join(f"<li{' class=t' if t else ''}>“{esc(title)}”</li>" for n, title, t in rows) + (f"<li>+{len(tr) - len(rows)}</li>" if len(tr) > len(rows) else "")
-    css = f"""
-.cr{{left:{M}px;right:{M}px;top:{TOP_TITLE - 30}px;display:flex;justify-content:space-between;font:700 16px 'SpaceMono';color:{PAPER};letter-spacing:.06em;z-index:4}}
-.cr span{{border-top:3px solid {PAPER};padding-top:8px}}
-.at{{left:50%;transform:translateX(-50%);top:{TOP_TITLE + 16}px;width:max-content;font:700 150px/1 Chosun;font-synthesis:weight;color:{c.spot};letter-spacing:-.02em;z-index:5;
-text-shadow:0 0 18px rgba(255,255,255,.25)}}
-.disc{{left:{(W - d) // 2}px;top:{TOP_TITLE + 210}px;width:{d}px;height:{d}px;border-radius:50%;overflow:hidden;background:{c.spot};border:3px solid {INK};box-shadow:0 0 0 2px #333,0 20px 60px rgba(0,0,0,.6)}}
-.disc .ph{{position:absolute;inset:0;background:url('{c.img(d, d)}') 0 0/cover;mix-blend-mode:multiply}}
-.disc .hub{{position:absolute;left:50%;top:50%;width:260px;height:260px;margin:-130px;border-radius:50%;
-background:radial-gradient(circle,{INK} 0 34%,#2a2a2a 35% 44%,#f3f3ef 45% 92%,transparent 93%),conic-gradient({c.prop},{c.spot},#fff,{c.prop});border:3px solid {INK}}}
-.disc .ring{{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,transparent 60%,rgba(255,255,255,.12) 61%,transparent 62%,transparent 80%,rgba(255,255,255,.1) 81%,transparent 82%)}}
-.tl{{left:{M}px;top:{TOP_TITLE + 560}px;display:flex;gap:16px;z-index:5}}
-.tl .v{{font:700 26px/1.12 Chosun;color:{PAPER};width:24px;text-align:center}}
-.tl ol{{list-style:none;font:700 22px/1.4 'SpaceMono';color:{PAPER};text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.8)}} .tl li.t{{color:{c.spot}}}
-.tl li{{max-width:420px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
-"""
-    body = f"""<div class='grain' style='opacity:.35'></div>
-<div class='abs cr'><span>© {esc(c.year)} {esc(c.artist)}</span><span>{esc(c.spec.get('type', ''))}</span><span>RELEASED {esc(c.spec.get('date', ''))}</span></div>
-<div class='abs at title' data-fit data-maxw='984' data-maxh='170'>{esc(c.album)}</div>
-<div class='abs disc anchor'><div class='ph'></div><div class='ring'></div><div class='hub'></div></div>
-<div class='abs tl'><div class='v'>{"<br>".join("TRACKS")}</div><ol>{lis}</ol></div>
-{head(c, dark=True)}{foot(c, dark=True)}"""
-    return INK, css, body
 
 
 def t_flyer(c):
@@ -871,7 +842,7 @@ def t_neon(c):
 
 TEMPLATES = {"polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid,
              "player": t_player, "full": t_full, "serpent": t_serpent, "cinema": t_cinema, "cctv": t_cctv,
-             "nowplaying": t_nowplaying, "disc": t_disc, "flyer": t_flyer, "live": t_live, "neon": t_neon, "colorblock": t_colorblock,
+             "nowplaying": t_nowplaying, "flyer": t_flyer, "live": t_live, "neon": t_neon, "colorblock": t_colorblock,
              "gable": t_gable, "clipboard": t_clipboard, "desktop": t_desktop, "notch": t_notch,
              "motion": t_motion, "issue": t_issue, "torn": t_torn}
 
