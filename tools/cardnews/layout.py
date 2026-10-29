@@ -22,7 +22,7 @@ TOP_HEAD, TOP_TITLE = 48, 136
 INK, PAPER = "#111111", "#e6e6e2"
 PINK, LIME = "#ff4f9a", "#d7ff3d"
 SPOT_FALLBACK = "#ffd23f"  # 흑백 표지
-TYPO = {"polaroid", "cinema", "gable", "motion", "colorblock", "split", "stacked", "bloom", "manga"}
+TYPO = {"polaroid", "cinema", "gable", "motion", "colorblock", "stacked", "bloom", "manga"}
 PHOTO = {"player", "full", "cctv", "clipboard", "desktop", "notch", "issue", "torn", "poster", "oval"}
 BURST = ("polygon(50% 0,58% 30%,85% 12%,70% 40%,100% 45%,72% 58%,92% 85%,60% 70%,52% 100%,42% 72%,"
          "12% 90%,28% 60%,0 50%,28% 40%,10% 14%,40% 30%)")
@@ -864,27 +864,6 @@ def typo_fg(c, bgname):
     return c.spot if bgname == "ink" else INK
 
 
-def t_split(c):
-    """타이포 카드 + 반쪽 사진: 단색 바탕 오른쪽 가장자리에 큰 원으로 오린 하프톤 사진이 반쯤 걸치고, 왼쪽에 곡 제목을
-    둘로 쪼개(lem / on.) 크게, 끝에 소품색 마침표. 위에 이탤릭 세리프 앨범명. 레퍼런스: 과일 포스터 연작(lemon·orange)."""
-    bgname = c.bg or "spot"
-    bg, fg = resolve(c, bgname), typo_fg(c, bgname)
-    d, cy = 920, TOP_TITLE + 500
-    lines = c.spec.get("lines") or halves(c.title)
-    rows = "".join(f"<div>{esc(x)}{'<span class=dot>.</span>' if i == len(lines) - 1 else ''}</div>" for i, x in enumerate(lines))
-    css = f"""
-.orb{{left:{W + 60 - d // 2}px;top:{cy - d // 2}px;width:{d}px;height:{d}px;border-radius:50%;background:{PAPER} url('{c.img(d, d)}') 0 0/cover;border:3px solid {INK}}}
-.kk{{left:{M}px;top:{TOP_TITLE + 150}px;font:700 34px/1 Chosun;font-synthesis:weight;font-style:italic;color:{fg};z-index:4;max-width:560px}}
-.tt{{left:{M - 6}px;top:{TOP_TITLE + 210}px;font:900 190px/.9 Paperlogy;letter-spacing:-.05em;color:{fg};width:max-content;z-index:4}}
-.tt .dot{{color:{c.prop};-webkit-text-stroke:3px {INK};paint-order:stroke fill}}
-"""
-    body = f"""<div class='abs orb anchor'></div><div class='grain' style='opacity:.3'></div>
-<div class='abs kk'>{esc(c.album)} · {c.n:02d}</div>
-<div class='abs tt title' data-fit data-maxw='600' data-maxh='600'>{rows}</div>
-{head(c, dark=bgname == 'ink')}{foot(c, wide=c.spec.get('wide', False), dark=bgname == 'ink')}"""
-    return bg, css, body
-
-
 def t_stacked(c):
     """타이포 카드 + 겹쳐 쌓은 제목: 곡 제목을 위(꽉 찬 글자)·가운데(테두리만)·아래(꽉 찬 글자) 세 번 쌓고, 가운데에
     하프톤 사진판을 세워 가운데 줄을 가리며, 아래 줄은 사진 앞으로 나온다. 사진판 모서리에 소품색 원 스티커(트랙 번호).
@@ -1008,7 +987,7 @@ def t_oval(c):
     return PAPER, css, body
 
 
-TEMPLATES = {"polaroid": t_polaroid, "split": t_split, "stacked": t_stacked, "bloom": t_bloom, "manga": t_manga,
+TEMPLATES = {"polaroid": t_polaroid, "stacked": t_stacked, "bloom": t_bloom, "manga": t_manga,
              "poster": t_poster, "oval": t_oval,
              "player": t_player, "full": t_full, "cinema": t_cinema, "cctv": t_cctv,
              "nowplaying": t_nowplaying, "flyer": t_flyer, "editorial": t_editorial, "layers": t_layers, "stage": t_stage, "live": t_live, "neon": t_neon, "colorblock": t_colorblock,
