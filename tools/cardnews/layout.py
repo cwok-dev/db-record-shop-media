@@ -840,9 +840,129 @@ def t_neon(c):
     return INK, css, body
 
 
+MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"]
+
+
+def ymd(c):
+    """앨범 카드 사양 date "YYYY.MM.DD" → (월 이름, 일)."""
+    parts = (c.spec.get("date") or "").split(".")
+    return (MONTHS[int(parts[1]) - 1], parts[2]) if len(parts) == 3 else ("", "")
+
+
+def t_editorial(c):
+    """앨범 카드: 잡지 지면. 종이 바탕 위 잉크 거대 앨범명, 가는 선과 세 칸 모노 문구, 가운데 작은 사진과 원 안의 곡 수,
+    검은 작은 네모와 + 표, 오른쪽 아래 거대한 발매일(일 + 월 이름). 레퍼런스: 할로윈 편집 디자인 포스터 연작."""
+    mon, day = ymd(c)
+    n = len(c.tracks or [])
+    pw, ph = 440, 500
+    css = f"""
+.tt{{left:{M - 8}px;top:{TOP_TITLE - 10}px;font:900 220px/.9 Paperlogy;letter-spacing:-.05em;color:{INK};width:max-content;z-index:3}}
+.ln{{left:{M}px;right:{M}px;height:2px;background:{INK};top:{TOP_TITLE + 250}px}}
+.cols{{left:{M}px;right:{M}px;top:{TOP_TITLE + 262}px;display:flex;justify-content:space-between;font:700 18px/1.35 'SpaceMono';color:{INK}}}
+.pic{{left:{(W - pw) // 2}px;top:{TOP_TITLE + 360}px;width:{pw}px;height:{ph}px;background:{PAPER} url('{c.img(pw, ph)}') 0 0/cover}}
+.cnt{{left:{(W - pw) // 2 - 110}px;top:{TOP_TITLE + 350}px;width:84px;height:84px;border:3px solid {INK};border-radius:50%;
+display:flex;align-items:center;justify-content:center;font:900 44px/1 Paperlogy;background:{PAPER}}}
+.sq{{width:22px;height:22px;background:{INK}}}
+.cap{{left:{(W - pw) // 2}px;top:{TOP_TITLE + 370 + ph}px;width:{pw}px;text-align:center;font:700 16px 'SpaceMono'}}
+.dt{{right:{M}px;bottom:{M - 16}px;text-align:right;color:{INK};z-index:5}}
+.dt b{{font:900 230px/.82 Paperlogy;letter-spacing:-.05em}} .dt sup{{font:900 54px/1 Paperlogy;vertical-align:top;margin-left:6px}}
+.dt p{{font:900 58px/1 Paperlogy;letter-spacing:-.02em;margin-top:6px}}
+"""
+    body = f"""<div class='grain' style='opacity:.35'></div>
+<div class='abs tt title' data-fit data-maxw='{W - 2 * M + 16}' data-maxh='230'>{esc(c.album)}</div>
+<div class='abs ln'></div>
+<div class='abs cols'><span>NEW RELEASE<br>{esc(c.spec.get('type', ''))}</span><span style='text-align:center'>{esc(c.artist)}<br>{n:02d} TRACKS</span><span style='text-align:right'>( {esc(c.spec.get('date', ''))} )<br>DB RECORD SHOP</span></div>
+<div class='abs cnt'>{n:02d}</div><div class='abs pic anchor'></div><div class='abs cap'>ON THIS DAY WE LISTEN TOGETHER</div>
+<div class='abs sq' style='left:{M}px;top:{TOP_TITLE + 330}px'></div><div class='abs sq' style='right:{M}px;top:{TOP_TITLE + 760}px'></div>
+<svg class='abs' style='left:{W - M - 200}px;top:{TOP_TITLE + 470}px' width='40' height='40'><path d='M20 0V40M0 20H40' stroke='{INK}' stroke-width='2'/></svg>
+<div class='abs dt'><b>{esc(day)}</b><sup>th</sup><p>-{esc(mon)}</p></div>
+{head(c)}{foot(c)}"""
+    return PAPER, css, body
+
+
+def t_frame(c):
+    """앨범 카드: 포인트 컬러 판 안에 사진을 액자처럼 넣고, 양옆 세로 문구(가수·발매일), 사진 위 소품색 라벨 둘,
+    사진 아래쪽에 바탕색과 같은 색의 거대 앨범명이 사진을 파고들고, 그 아래 이탤릭 세리프 가수명과 굵은 앨범 종류.
+    레퍼런스: Stanley Square 포스터 연작."""
+    px, py, pw, ph = 140, TOP_TITLE + 30, W - 280, 640
+    css = f"""
+.pic{{left:{px}px;top:{py}px;width:{pw}px;height:{ph}px;background:{PAPER} url('{c.img(pw, ph)}') 0 0/cover}}
+.vt{{font:900 30px/1 Paperlogy;color:{INK};letter-spacing:.04em;white-space:nowrap;z-index:4}}
+.tg{{right:{W - px - pw + 20}px;font:700 20px 'SpaceMono';background:{c.prop};color:{INK};border:2px solid {INK};padding:6px 10px 4px;z-index:4}}
+.big{{left:50%;transform:translateX(-50%);bottom:{H - py - ph - 30}px;width:max-content;font:900 170px/.86 Paperlogy;letter-spacing:-.04em;color:{c.spot};
+text-transform:uppercase;text-align:center;z-index:4}}
+.scr{{left:50%;transform:translateX(-50%) rotate(-4deg);top:{py + ph + 40}px;width:max-content;font:700 120px/1 Chosun;font-synthesis:weight;font-style:italic;color:{INK};z-index:5}}
+.bd{{left:50%;transform:translateX(-50%);top:{py + ph + 150}px;width:max-content;font:900 64px/1 Paperlogy;color:{INK};z-index:5}}
+"""
+    body = f"""<div class='grain' style='opacity:.3'></div><div class='abs pic anchor'></div>
+<div class='abs vt' style='left:{M + 34}px;top:{py + ph // 2}px;transform:translate(-50%,-50%) rotate(-90deg)'>{esc(c.artist)}</div>
+<div class='abs vt' style='right:{M + 34}px;top:{py + ph // 2}px;transform:translate(50%,-50%) rotate(90deg)'>{esc(c.spec.get('date', ''))}</div>
+<div class='abs tg' style='top:{py + 20}px'>NEW ALBUM</div><div class='abs tg' style='top:{py + 62}px'>{n_tracks(c)} TRACKS</div>
+<div class='abs big title' data-fit data-maxw='{pw + 40}' data-maxh='300'>{"<br>".join(esc(x) for x in split_lines(c.album))}</div>
+<div class='abs scr' data-fit data-maxw='{pw}' data-maxh='130'>{esc(c.artist)}</div>
+<div class='abs bd' data-fit data-maxw='{pw}' data-maxh='70'>{esc(c.spec.get('type', ''))}</div>
+{head(c)}{foot(c)}"""
+    return c.spot, css, body
+
+
+def n_tracks(c):
+    return f"{len(c.tracks or []):02d}"
+
+
+def t_layers(c):
+    """앨범 카드: 포인트 컬러 바탕 왼쪽 위에 가수명을 거대하게, 그 아래 앨범명·종류 한 줄, 오른쪽 위 소품색 별 스티커,
+    가운데 사진 뒤로 비스듬히 겹친 색종이 두 장(소품색·종이), 오른쪽 아래 NEW ALBUM 종이 상자. 레퍼런스: What Matters 인물 카드."""
+    px, py, pw, ph = 96, TOP_TITLE + 250, W - 192, 640
+    css = f"""
+.nm{{left:{M - 6}px;top:{TOP_TITLE - 14}px;font:900 150px/.88 Paperlogy;letter-spacing:-.04em;color:{INK};width:max-content;text-transform:uppercase;z-index:4}}
+.rl{{left:{M}px;top:{TOP_TITLE + 186}px;font:700 26px SCDream;color:{INK};z-index:4}}
+.l1{{left:{px - 30}px;top:{py - 10}px;width:{pw + 40}px;height:{ph + 30}px;background:{c.prop};transform:rotate(-3deg)}}
+.l2{{left:{px + 10}px;top:{py - 20}px;width:{pw}px;height:{ph + 40}px;background:{PAPER};transform:rotate(2deg)}}
+.pic{{left:{px}px;top:{py}px;width:{pw}px;height:{ph}px;background:{PAPER} url('{c.img(pw, ph)}') 0 0/cover;z-index:2}}
+.st{{right:{M + 10}px;top:{TOP_TITLE - 10}px;width:170px;height:170px;clip-path:{BURST};background:{c.prop};z-index:5;
+display:flex;align-items:center;justify-content:center;font:900 40px/1 Paperlogy;color:{INK};transform:rotate(10deg)}}
+.bx{{right:{M}px;top:{py + ph - 150}px;background:{PAPER};padding:20px 26px 16px 34px;text-align:right;z-index:5}}
+.bx b{{display:block;font:900 84px/.9 Paperlogy;letter-spacing:-.03em;color:{INK}}} .bx span{{font:700 20px 'SpaceMono'}}
+"""
+    body = f"""<div class='grain' style='opacity:.3'></div>
+<div class='abs nm title' data-fit data-maxw='780' data-maxh='190'>{esc(c.artist)}</div>
+<div class='abs rl'>{esc(c.album)} · {esc(c.spec.get('type', ''))}</div>
+<div class='abs st'>신보</div>
+<div class='abs l1'></div><div class='abs l2'></div><div class='abs pic anchor'></div>
+<div class='abs bx'><b>NEW<br>ALBUM</b><span>{esc(c.spec.get('date', ''))} · {n_tracks(c)} TRACKS</span></div>
+{head(c)}{foot(c)}"""
+    return c.spot, css, body
+
+
+def t_stage(c):
+    """앨범 카드: 공연 포스터. 위쪽 절반에 하프톤 사진, 아래 포인트 컬러 판에 픽셀 계단 모양(소품색·잉크 네모)이 경계를 넘고,
+    그 옆에 세로로 늘린 거대 앨범명, 테두리 라벨(앨범 종류)과 가수·곡 수, 오른쪽 아래 발매일(일·월 이름).
+    레퍼런스: Théâtre Sénart 공연 포스터 연작."""
+    mon, day = ymd(c)
+    cut = 660
+    cells = [(0, 0, c.prop), (1, 0, c.prop), (1, 1, INK), (2, 1, c.prop), (0, 2, INK), (2, 2, c.prop), (1, 3, c.prop)]
+    pix = "".join(f"<div class='abs' style='left:{M + 44 * x}px;top:{cut - 90 + 44 * y}px;width:44px;height:44px;background:{col};z-index:4'></div>" for x, y, col in cells)
+    css = f"""
+.pic{{left:0;top:0;width:{W}px;height:{cut}px;background:{PAPER} url('{c.img(W, cut)}') 0 0/cover}}
+.blk{{left:0;top:{cut}px;width:{W}px;height:{H - cut}px;background:{c.spot}}}
+.tt{{left:{M + 160}px;top:{cut + 96}px;font:900 150px/.92 Paperlogy;letter-spacing:-.04em;color:{INK};text-transform:uppercase;transform:scaleY(1.25);
+transform-origin:top left;width:max-content;z-index:4}}
+.lb{{left:{M + 160}px;top:{cut + 30}px;border:2px solid {INK};font:700 22px SCDream;padding:6px 12px 4px;z-index:4}}
+.who{{left:{M + 300}px;top:{cut + 32}px;font:700 26px/1.3 SCDream;color:{INK};z-index:4}}
+.dt{{right:{M}px;bottom:{M - 6}px;text-align:right;font:900 96px/.9 Paperlogy;letter-spacing:-.03em;color:{INK};z-index:5}}
+.dt span{{display:block;font:900 44px/1 Paperlogy}}
+"""
+    body = f"""<div class='abs pic'></div><div class='abs blk'></div><div class='grain' style='opacity:.3'></div>{pix}
+<div class='abs tt title anchor' data-fit data-maxw='{W - M - 160 - M}' data-maxh='290'>{"<br>".join(esc(x) for x in split_lines(c.album))}</div>
+<div class='abs lb'>{esc(c.spec.get('type', ''))}</div><div class='abs who'>{esc(c.artist)} · {n_tracks(c)} TRACKS</div>
+<div class='abs dt'>{esc(day)}<span>{esc(mon)}</span></div>
+{head(c, dark=True)}{foot(c)}"""
+    return c.spot, css, body
+
+
 TEMPLATES = {"polaroid": t_polaroid, "cutout": t_cutout, "grid": t_grid,
              "player": t_player, "full": t_full, "serpent": t_serpent, "cinema": t_cinema, "cctv": t_cctv,
-             "nowplaying": t_nowplaying, "flyer": t_flyer, "live": t_live, "neon": t_neon, "colorblock": t_colorblock,
+             "nowplaying": t_nowplaying, "flyer": t_flyer, "editorial": t_editorial, "frame": t_frame, "layers": t_layers, "stage": t_stage, "live": t_live, "neon": t_neon, "colorblock": t_colorblock,
              "gable": t_gable, "clipboard": t_clipboard, "desktop": t_desktop, "notch": t_notch,
              "motion": t_motion, "issue": t_issue, "torn": t_torn}
 
