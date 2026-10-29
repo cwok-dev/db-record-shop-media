@@ -1,0 +1,123 @@
+{
+ "credit": "뉴데일리·톱스타뉴스",
+ "photos": {
+  "p1": {
+   "url": "https://image.newdaily.co.kr/site/data/img/2026/10/29/2026102900425_0.jpg",
+   "page": "https://www.newdaily.co.kr/site/data/html/2026/10/29/2026102900425.html",
+   "note": "쇼케이스 Silhouette 단체 군무(가로)"
+  },
+  "p2": {
+   "url": "https://image.newdaily.co.kr/site/data/img/2026/10/29/2026102900425_2.jpg",
+   "page": "https://www.newdaily.co.kr/site/data/html/2026/10/29/2026102900425.html",
+   "note": "쇼케이스 무대: 팔을 뻗은 멤버(세로)"
+  },
+  "p3": {
+   "url": "https://image.newdaily.co.kr/site/data/img/2026/10/29/2026102900425_4.jpg",
+   "page": "https://www.newdaily.co.kr/site/data/html/2026/10/29/2026102900425.html",
+   "note": "쇼케이스 무대: 다른 멤버 독무(세로)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16262070_2071484_4949.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16262070",
+   "note": "쇼케이스 포토타임: 금발 창림 근접"
+  },
+  "p5": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16262051_2071465_4145.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16262051",
+   "note": "쇼케이스 포토타임: 타쿠토 근접"
+  },
+  "p6": {
+   "url": "https://image.newdaily.co.kr/site/data/img/2026/10/29/2026102900425_13.jpg",
+   "page": "https://www.newdaily.co.kr/site/data/html/2026/10/29/2026102900425.html",
+   "note": "쇼케이스 무대: 다른 멤버(세로)"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "stage",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.82
+   ],
+   "basis": "소개",
+   "why": "7인 체제로 다시 서는 3부작 완결편이라, 쇼케이스 단체 무대를 공연 포스터처럼 깔고 앨범명을 세로로 크게 늘립니다."
+  },
+  "1": {
+   "template": "manga",
+   "photo": "p3",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.82
+   ],
+   "zooms": [
+    [
+     0.3,
+     0.05,
+     0.7,
+     0.35
+    ],
+    [
+     0.2,
+     0.3,
+     0.8,
+     0.6
+    ],
+    [
+     0.1,
+     0.55,
+     0.9,
+     0.85
+    ],
+    [
+     0.3,
+     0.7,
+     0.8,
+     1.0
+    ]
+   ],
+   "basis": "위치",
+   "why": "타이틀곡의 무대를 만화 칸처럼 나눠 한 동작씩 보여 줍니다."
+  },
+  "2": {
+   "template": "poster",
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.82
+   ],
+   "basis": "소개",
+   "why": "엔버스를 향해 달려가는 청춘의 에너지를 세로 제목과 전신 무대 컷으로 보여 줍니다."
+  },
+  "3": {
+   "template": "polaroid",
+   "photo": "p6",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.75
+   ],
+   "basis": "위치",
+   "why": "일본 싱글 타이틀곡을 한국어로 다시 담은 곡이라, 그 무대를 폴라로이드로 다시 남깁니다."
+  },
+  "4": {
+   "template": "poster",
+   "photo": "p3",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.82
+   ],
+   "basis": "소개",
+   "why": "두려움이 걷힌 순간의 안도를 세로 제목과 무대 위 한 사람으로 보여 줍니다."
+  }
+ }
+}
