@@ -1,0 +1,260 @@
+{
+ "credit": "뉴데일리·톱스타뉴스",
+ "photos": {
+  "p1": {
+   "url": "https://image.newdaily.co.kr/site/data/img/2026/10/29/2026102900425_0.jpg",
+   "page": "https://www.newdaily.co.kr/site/data/html/2026/10/29/2026102900425.html",
+   "note": "쇼케이스 Silhouette 단체 군무(가로)"
+  },
+  "p2": {
+   "url": "https://image.newdaily.co.kr/site/data/img/2026/10/29/2026102900425_2.jpg",
+   "page": "https://www.newdaily.co.kr/site/data/html/2026/10/29/2026102900425.html",
+   "note": "쇼케이스 무대: 팔을 뻗은 멤버(세로)"
+  },
+  "p3": {
+   "url": "https://image.newdaily.co.kr/site/data/img/2026/10/29/2026102900425_4.jpg",
+   "page": "https://www.newdaily.co.kr/site/data/html/2026/10/29/2026102900425.html",
+   "note": "쇼케이스 무대: 다른 멤버 독무(세로)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16262070_2071484_4949.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16262070",
+   "note": "쇼케이스 포토타임: 금발 창림 근접"
+  },
+  "p5": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16262051_2071465_4145.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16262051",
+   "note": "쇼케이스 포토타임: 타쿠토 근접"
+  },
+  "p6": {
+   "url": "https://image.newdaily.co.kr/site/data/img/2026/10/29/2026102900425_13.jpg",
+   "page": "https://www.newdaily.co.kr/site/data/html/2026/10/29/2026102900425.html",
+   "note": "쇼케이스 무대: 다른 멤버(세로)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "stage",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.82
+    ],
+    "basis": "소개",
+    "why": "7인 체제로 다시 서는 3부작 완결편이라, 쇼케이스 단체 무대를 공연 포스터처럼 깔고 앨범명을 세로로 크게 늘립니다."
+   },
+   {
+    "template": "layers",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.82
+    ],
+    "basis": "소개",
+    "why": "자기 안의 빛을 발견하고 피어나는 앨범이라, 밝은 무대 컷을 색종이 위에 겹쳐 경쾌하게 보여 줍니다."
+   },
+   {
+    "template": "flyer",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     0.82
+    ],
+    "basis": "위치",
+    "why": "WE: 시리즈를 마무리하는 장이라, 수록곡 네 곡과 발매 정보를 한 장의 전단에 모아 보여 줍니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "bloom",
+    "photo": "p4",
+    "crop": [
+     0.1,
+     0.05,
+     0.9,
+     0.7
+    ],
+    "basis": "소개",
+    "why": "나르키소스처럼 자기 모습에 매혹되는 곡이라, 제목을 고딕과 이탤릭으로 번갈아 계단처럼 쌓고 근접 얼굴을 놓습니다."
+   },
+   {
+    "template": "colorblock",
+    "photo": "p5",
+    "crop": [
+     0.1,
+     0.05,
+     0.9,
+     0.7
+    ],
+    "basis": "제목",
+    "why": "'실루엣'이라는 짧고 강한 제목을 크게 세우고, 얼굴 윤곽이 흐려지는 사진을 포인트 컬러 판에 얹습니다."
+   },
+   {
+    "template": "manga",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.82
+    ],
+    "zooms": [
+     [
+      0.3,
+      0.05,
+      0.7,
+      0.35
+     ],
+     [
+      0.2,
+      0.3,
+      0.8,
+      0.6
+     ],
+     [
+      0.1,
+      0.55,
+      0.9,
+      0.85
+     ],
+     [
+      0.3,
+      0.7,
+      0.8,
+      1.0
+     ]
+    ],
+    "basis": "위치",
+    "why": "타이틀곡의 무대를 만화 칸처럼 나눠 한 동작씩 보여 줍니다."
+   }
+  ],
+  "2": [
+   {
+    "template": "full",
+    "photo": "p1",
+    "crop": [
+     0.15,
+     0.0,
+     0.85,
+     0.82
+    ],
+    "props": [
+     "wave"
+    ],
+    "basis": "제목",
+    "why": "'HEARTBEAT'라는 제목대로 단체 무대 위에 심장 박동 같은 파형을 얹습니다."
+   },
+   {
+    "template": "poster",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.82
+    ],
+    "basis": "소개",
+    "why": "엔버스를 향해 달려가는 청춘의 에너지를 세로 제목과 전신 무대 컷으로 보여 줍니다."
+   },
+   {
+    "template": "oval",
+    "photo": "p5",
+    "crop": [
+     0.1,
+     0.0,
+     0.9,
+     0.75
+    ],
+    "basis": "소개",
+    "why": "빨라지는 설렘을 타원으로 오린 얼굴과 반짝이로 담습니다."
+   }
+  ],
+  "3": [
+   {
+    "template": "polaroid",
+    "photo": "p6",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.75
+    ],
+    "basis": "위치",
+    "why": "일본 싱글 타이틀곡을 한국어로 다시 담은 곡이라, 그 무대를 폴라로이드로 다시 남깁니다."
+   },
+   {
+    "template": "bloom",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.8
+    ],
+    "basis": "소개",
+    "why": "어둠 속에서 서로를 비추는 별이 되겠다는 청량한 다짐을 계단처럼 쌓은 제목으로 보여 줍니다."
+   },
+   {
+    "template": "colorblock",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.7
+    ],
+    "basis": "제목",
+    "why": "'Shining Star'라는 제목을 크게 세우고 빛을 향해 뻗은 무대 컷을 얹습니다.",
+    "lines": [
+     "Shining Star",
+     "KOR ver."
+    ]
+   }
+  ],
+  "4": [
+   {
+    "template": "notch",
+    "photo": "p5",
+    "crop": [
+     0.05,
+     0.0,
+     0.95,
+     0.75
+    ],
+    "basis": "위치",
+    "why": "앨범의 마지막 곡이라 한 사람의 얼굴을 액자 가득 채우며 끝맺습니다."
+   },
+   {
+    "template": "oval",
+    "photo": "p4",
+    "crop": [
+     0.1,
+     0.0,
+     0.9,
+     0.75
+    ],
+    "basis": "제목",
+    "why": "수많은 별 중 단 하나를 고른다는 'Only One'을 타원 하나에 오린 얼굴로 보여 줍니다."
+   },
+   {
+    "template": "poster",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.82
+    ],
+    "basis": "소개",
+    "why": "두려움이 걷힌 순간의 안도를 세로 제목과 무대 위 한 사람으로 보여 줍니다."
+   }
+  ]
+ }
+}
