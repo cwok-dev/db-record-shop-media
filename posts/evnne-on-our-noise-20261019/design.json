@@ -1,0 +1,95 @@
+{
+ "credit": "젤리피쉬엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16245288_2053239_2445.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16245288",
+   "note": "콘셉트 포토 6컷 콜라주(멤버 근접·옥상 단체)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16245288_2053241_2451.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16245288",
+   "note": "콘셉트 포토: 옥상 음향 장비 앞 다섯 멤버"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16249509_2057904_1155.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16249509",
+   "note": "하이라이트 메들리 콜라주(파란 무대·옥상·흑백 단체)"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "nowplaying",
+   "basis": "제목",
+   "why": "'on: our noise'라는 제목대로 우리의 소음을 재생 화면에 띄워 표지를 그대로 보여 줍니다."
+  },
+  "1": {
+   "template": "stacked",
+   "photo": "p1",
+   "crop": [
+    0.3413333333333333,
+    0.008,
+    0.6586666666666666,
+    0.492
+   ],
+   "basis": "위치",
+   "why": "앨범의 포문을 여는 곡이라 제목을 세 번 쌓아 독기를 정면으로 드러냅니다."
+  },
+  "2": {
+   "template": "notch",
+   "photo": "p2",
+   "crop": [
+    0.45,
+    0.15,
+    0.85,
+    0.95
+   ],
+   "basis": "위치",
+   "why": "앨범의 타이틀곡이라 빨간 재킷을 입은 멤버의 얼굴을 액자 가득 채웁니다."
+  },
+  "3": {
+   "template": "motion",
+   "photo": "p3",
+   "crop": [
+    0.008,
+    0.3413333333333333,
+    0.492,
+    0.6586666666666666
+   ],
+   "zooms": [
+    [
+     0.3,
+     0.3,
+     0.7,
+     0.8
+    ]
+   ],
+   "basis": "소개",
+   "why": "날카로운 신스와 날것의 바이브를 흔들리는 제목과 옥상 장면으로 보여 줍니다."
+  },
+  "4": {
+   "template": "oval",
+   "photo": "p1",
+   "crop": [
+    0.3413333333333333,
+    0.508,
+    0.6586666666666666,
+    0.992
+   ],
+   "basis": "소개",
+   "why": "글리치와 비트크러쉬의 실험적인 사운드를 타원으로 오린 안경 쓴 얼굴과 반짝이로 담습니다."
+  },
+  "5": {
+   "template": "stacked",
+   "photo": "p3",
+   "crop": [
+    0.508,
+    0.6746666666666666,
+    0.992,
+    0.86
+   ],
+   "basis": "소개",
+   "why": "BPM이 확 바뀌는 바운스 곡이라 제목을 세 번 쌓고 흑백 단체 사진을 가운데 둡니다."
+  }
+ }
+}
