@@ -25,11 +25,11 @@
 
 ### 4. 시안 사양 쓰기 (W/options.json)
 형식은 `tools/build_cards.py` 머리말을 따릅니다. 맨 위에 `"credit": "<소속사명>"`을 넣습니다(사진을 하나도 안 쓰면 생략). `photos`에는 쓰는 사진만 `{"url": index.json의 url, "page": 기사 주소, "note": 무슨 사진인지}`로 넣습니다. 로컬 파일 경로는 쓰지 않습니다.
-- 카드마다(`"album"`, 그리고 게시할 트랙 번호마다) 사양 세 개 A·B·C. **A는 당신의 추천안**입니다.
-- 세 안은 서로 다른 근거(4.1의 ①제목 ②소개 ③위치)에서 나오게 합니다. 리뷰가 이미 있으면 ④한 줄 평도 씁니다. 같은 근거를 써야 하면 템플릿이나 사진이 확실히 달라야 합니다.
-- 앨범 카드(4.5 앨범 카드 규칙): 기본 템플릿이 없습니다. 앨범 소개(albums의 description)를 읽고 `nowplaying`·`flyer`·`live`·`neon`·`editorial`·`layers`·`stage` 중에서 고릅니다(사용자 결정 2026-10-24로 sleeve·glyph·jewelcase 폐기). `nowplaying` 말고는 기사 사진을 씁니다. `flyer`는 수록곡과 발매 정보를 한 장에 보여 주는 표지라 위치 칸에서도 `nowplaying`과 번갈아 고릅니다. 바로 전에 게시한 앨범(`posts/` 안에서 이 앨범보다 앞선 날짜의 마지막 `design.json`)의 `cards.album.template`은 세 안 모두에서 뺍니다.
-- 트랙 카드 계열은 게시물 안 순서로 정해집니다: 첫 트랙 타이포(polaroid·cinema·gable·motion·colorblock·stacked·bloom·manga), 다음 사진(player·full·cctv·clipboard·desktop·notch·issue·torn·poster·oval), 그다음 타이포… 세 안 모두 그 계열 안에서 고릅니다. 타이포 카드의 `bg`는 비워 두면 코드가 돌립니다.
-- `player`는 사진이 실제 뮤직비디오 장면일 때만 씁니다. 37종 모티프 소품(`motif:<이름>`)은 한 게시물 안에서 겹치지 않게 합니다. 같은 사진(표지 포함)은 이웃한 카드에 연달아 쓰지 않습니다(앨범 카드와 트랙 1도 이웃). 세 안 모두 앞뒤 카드의 A안과 겹치지 않게 고릅니다.
+- 카드마다(`"album"`, 그리고 게시할 트랙 번호마다) 사양 두 개 A·B. **A는 당신의 추천안**입니다(사용자 결정 2026-11-03: 선택 기록이 10개 앨범을 넘어 세 안에서 두 안으로 좁힘). 두 안을 정할 때 `posts/design_log.jsonl`에서 사용자가 실제로 고른 근거·템플릿·사진 종류의 경향을 읽고, 그 경향에 가장 맞는 안을 A로, 결이 다른 안을 B로 둡니다.
+- 두 안은 서로 다른 근거(4.1의 ①제목 ②소개 ③위치)에서 나오게 합니다. 리뷰가 이미 있으면 ④한 줄 평도 씁니다. 같은 근거를 써야 하면 템플릿이나 사진이 확실히 달라야 합니다.
+- 앨범 카드(4.5 앨범 카드 규칙): 기본 템플릿이 없습니다. 앨범 소개(albums의 description)를 읽고 `nowplaying`·`flyer`·`live`·`neon`·`editorial`·`layers`·`stage` 중에서 고릅니다(사용자 결정 2026-10-24로 sleeve·glyph·jewelcase 폐기). `nowplaying` 말고는 기사 사진을 씁니다. `flyer`는 수록곡과 발매 정보를 한 장에 보여 주는 표지라 위치 칸에서도 `nowplaying`과 번갈아 고릅니다. 바로 전에 게시한 앨범(`posts/` 안에서 이 앨범보다 앞선 날짜의 마지막 `design.json`)의 `cards.album.template`은 두 안 모두에서 뺍니다.
+- 트랙 카드 계열은 게시물 안 순서로 정해집니다: 첫 트랙 타이포(polaroid·cinema·gable·motion·colorblock·stacked·bloom·manga), 다음 사진(player·full·cctv·clipboard·desktop·notch·issue·torn·poster·oval), 그다음 타이포… 두 안 모두 그 계열 안에서 고릅니다. 타이포 카드의 `bg`는 비워 두면 코드가 돌립니다.
+- `player`는 사진이 실제 뮤직비디오 장면일 때만 씁니다. 37종 모티프 소품(`motif:<이름>`)은 한 게시물 안에서 겹치지 않게 합니다. 같은 사진(표지 포함)은 이웃한 카드에 연달아 쓰지 않습니다(앨범 카드와 트랙 1도 이웃). 두 안 모두 앞뒤 카드의 A안과 겹치지 않게 고릅니다.
 - `desktop`·`zoom` 소품·`motion`·`issue`·`torn`·`manga`에는 `zooms`(크롭 영역 안에서 확대할 곳, 비율)를 씁니다. 얼굴·눈처럼 확대해 볼 만한 곳을 시트 격자로 잡습니다.
 - `crop`은 시트의 10% 격자를 보고 비율로 정합니다. 얼굴이 잘리지 않게, 콜라주 사진은 한 칸 안쪽만 잡습니다.
 - `full` 카드는 위쪽 약 35%(제목 아래 48까지)가 포인트 컬러 띠에 덮입니다. 얼굴이 카드 높이의 40% 아래에 오도록 크롭합니다(얼굴 위로 여백을 남김). 얼굴만 크게 잡힌 근접 사진은 `full`보다 `notch`·`polaroid`에 씁니다.
@@ -38,19 +38,19 @@
 
 ### 5. 시안 렌더링
 `python3 -I tools/build_cards.py --album W/db/albums/<id>.json [--review W/db/reviews/<id>.json] --cover <표지> --out W/preview --options W/options.json`
-→ W/preview/sheet_p<post>_<nn>.jpg (카드마다 A·B·C 나란히), sheets.json. 시트를 모두 Read로 확인하고, 글자 겹침·얼굴 잘림·warnings가 있으면 사양을 고쳐 다시 렌더링합니다.
+→ W/preview/sheet_p<post>_<nn>.jpg (카드마다 A·B 나란히), sheets.json. 시트를 모두 Read로 확인하고, 글자 겹침·얼굴 잘림·warnings가 있으면 사양을 고쳐 다시 렌더링합니다.
 
 ### 6. 저장
 W/options.json을 `posts/<id>/options.json`으로 복사하고 커밋한 뒤 정확히 `git push origin main`(사용자 허락). 네트워크 실패 시 2·4·8·16초 간격 최대 4번.
 
 ### 7. 사용자에게 보내기
 - SendUserFile로 시트 전부(status "proactive", display "render").
-- 메시지: 카드마다 한 줄씩 "A: why / B: why / C: why"와 근거. 답하는 법: "앨범 A, 1 B, 2 A, 3 C …"(빠진 카드는 A). 17:30까지 답이 없으면 18시 게시는 A로 합니다.
+- 메시지: 카드마다 한 줄씩 "A: why / B: why"와 근거. 답하는 법: "앨범 A, 1 B, 2 A …"(빠진 카드는 A). 17:30까지 답이 없으면 18시 게시는 A로 합니다.
 - index.json의 `blocked`나 렌더링 경고에 사진 서버 도메인이 있으면 **막힌 도메인 이름을 그대로** 적고, 환경 설정의 Network access → Allowed domains에 추가하면 다음부터 쓸 수 있다고 알립니다(사용자 결정: 막힐 때마다 알림).
 - PushNotification(ToolSearch "select:PushNotification"): "『<앨범명>』 카드 시안이 도착했습니다. 골라 주세요." 막힌 도메인이 있으면 끝에 "(막힌 도메인 N개)".
 
 ### 8. 규칙 제안 (4.10)
-`posts/design_log.jsonl`에 오늘 이전 앨범이 10개 이상이고 `posts/design_rules.md`가 없으면, 기록에서 찾은 경향(어떤 근거·템플릿·소품·배경을 고르는지, A를 얼마나 바꾸는지)을 근거 수치와 함께 정리해 7의 메시지 끝에 "자동 선택 규칙 제안"으로 붙이고 승인 여부를 묻습니다. 승인 전에는 아무것도 바꾸지 않습니다.
+2026-11-30까지는 사용자가 매일 직접 고릅니다(사용자 결정 2026-11-03). 자동 선택 규칙은 제안하지 않습니다. 2026-12-01 이후 첫 실행에서 `posts/design_rules.md`가 없으면, 기록에서 찾은 경향(어떤 근거·템플릿·소품·배경을 고르는지, A를 얼마나 바꾸는지)을 근거 수치와 함께 정리해 7의 메시지 끝에 "자동 선택 규칙 제안"으로 붙이고 승인 여부를 묻습니다. 승인 전에는 아무것도 바꾸지 않습니다.
 
 ## B. 사용자가 답했을 때
 - 고른 결과면: `python3 -I tools/pick_design.py posts/<id>/options.json "album=A,1=B,..."` → design.json과 기록 생성. 커밋("디자인 선택: <가수> <앨범>")하고 `git push origin main`. 고른 결과를 한 줄로 확인합니다.
