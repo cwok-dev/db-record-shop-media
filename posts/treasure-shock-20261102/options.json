@@ -1,0 +1,108 @@
+{
+ "credit": "YG엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16261570_2070938_2649.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16261570",
+   "note": "SHOCK 비주얼 포토: 비니 쓴 멤버(세로)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16261570_2070939_2655.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16261570",
+   "note": "SHOCK 비주얼 포토: 트랙 재킷 멤버(세로)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16261570_2070940_271.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16261570",
+   "note": "SHOCK 비주얼 포토: 금발 멤버(세로)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16264394_2073203_642.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16264394",
+   "note": "SHOCK MV 티저: 연기 속 군무"
+  },
+  "p5": {
+   "url": "https://7lgigmttrjuyfehsudec15072.edge.naverncp.com/news/photo/202610/1016003_2034354_7502.jpg",
+   "page": "https://www.spotvnews.co.kr/news/articleView.html?idxno=1016003",
+   "note": "SHOCK 비주얼 포토 1차 3인 콜라주"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "neon",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.75
+    ],
+    "basis": "소개",
+    "why": "전기 충격처럼 감각을 깨우는 힙합 싱글이라, 비주얼 포토를 어둡게 깔고 늘린 제목으로 밤의 포스터처럼 만듭니다."
+   },
+   {
+    "template": "live",
+    "photo": "p5",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.78
+    ],
+    "basis": "소개",
+    "why": "'NEW WAV' 이후 이어지는 힙합 에너지라, 세 멤버 비주얼을 큰 사진판에 깔고 가수명·앨범명을 거대 글자로 겁니다."
+   },
+   {
+    "template": "editorial",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.72
+    ],
+    "basis": "제목",
+    "why": "'SHOCK'라는 짧은 제목을 잡지 지면처럼 크게 세우고 금발 멤버 한 사람을 가운데 둡니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "player",
+    "photo": "p4",
+    "crop": [
+     0.15,
+     0.25,
+     0.85,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "타이틀곡이자 유일한 곡이라 연기 속 군무 장면을 뮤직비디오 재생 화면으로 띄웁니다."
+   },
+   {
+    "template": "cctv",
+    "photo": "p4",
+    "crop": [
+     0.15,
+     0.2,
+     0.85,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "'Who that animal'이라는 외침처럼, 연기 속 무리를 감시 화면의 감지 박스로 짚습니다."
+   },
+   {
+    "template": "notch",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.75
+    ],
+    "basis": "제목",
+    "why": "충격을 받은 듯 정면을 응시하는 얼굴을 액자 가득 채웁니다."
+   }
+  ]
+ }
+}
