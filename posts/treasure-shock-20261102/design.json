@@ -1,0 +1,56 @@
+{
+ "credit": "YG엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16261570_2070938_2649.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16261570",
+   "note": "SHOCK 비주얼 포토: 비니 쓴 멤버(세로)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16261570_2070939_2655.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16261570",
+   "note": "SHOCK 비주얼 포토: 트랙 재킷 멤버(세로)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16261570_2070940_271.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16261570",
+   "note": "SHOCK 비주얼 포토: 금발 멤버(세로)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16264394_2073203_642.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16264394",
+   "note": "SHOCK MV 티저: 연기 속 군무"
+  },
+  "p5": {
+   "url": "https://7lgigmttrjuyfehsudec15072.edge.naverncp.com/news/photo/202610/1016003_2034354_7502.jpg",
+   "page": "https://www.spotvnews.co.kr/news/articleView.html?idxno=1016003",
+   "note": "SHOCK 비주얼 포토 1차 3인 콜라주"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "live",
+   "photo": "p5",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.78
+   ],
+   "basis": "소개",
+   "why": "'NEW WAV' 이후 이어지는 힙합 에너지라, 세 멤버 비주얼을 큰 사진판에 깔고 가수명·앨범명을 거대 글자로 겁니다."
+  },
+  "1": {
+   "template": "player",
+   "photo": "p4",
+   "crop": [
+    0.15,
+    0.25,
+    0.85,
+    1.0
+   ],
+   "basis": "위치",
+   "why": "타이틀곡이자 유일한 곡이라 연기 속 군무 장면을 뮤직비디오 재생 화면으로 띄웁니다."
+  }
+ }
+}
