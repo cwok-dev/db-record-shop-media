@@ -1,0 +1,258 @@
+{
+ "credit": "더뮤즈엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdnweb01.wikitree.co.kr/webdata/editor/202610/21/img_20261021082035_5086027b.jpg",
+   "page": "https://www.wikitree.co.kr/articles/1167865",
+   "note": "PULSE 콘셉트 단체(흰 원피스, 가로)"
+  },
+  "p2": {
+   "url": "https://cdnweb01.wikitree.co.kr/webdata/editor/202610/21/img_20261021082054_2e6c81af.webp",
+   "page": "https://www.wikitree.co.kr/articles/1167865",
+   "note": "PULSE 콘셉트 단체(흰 원피스, 세로)"
+  },
+  "p3": {
+   "url": "https://isp.edailystatic.com/data/isp/image/2026/10/20/isp20261020000014.1000x.0.jpg",
+   "page": "https://isplus.com/article/view/isp202610200014",
+   "note": "PULSE 콘셉트 단체(날개 덮인 차 앞)"
+  },
+  "p4": {
+   "url": "https://images.khan.co.kr/article/2026/10/20/news-p.v1.20261020.cbf5960b803143ac8aab2517cfa7ff14_P1.jpg",
+   "page": "https://sports.khan.co.kr/en/article/202610200723007/",
+   "note": "PULSE 콘셉트 단체(창고 공간 전신)"
+  },
+  "p5": {
+   "url": "https://images.khan.co.kr/article/2026/10/20/news-p.v1.20261020.cfb57f9de049495da89bd17bbfb9f092_P1.jpg",
+   "page": "https://sports.khan.co.kr/en/article/202610200723007/",
+   "note": "PULSE 개인 콘셉트(선 자세, 깃털)"
+  },
+  "p6": {
+   "url": "https://images.khan.co.kr/article/2026/10/20/news-p.v1.20261020.1f4058457d7c44dc9942879f5680276f_P1.jpg",
+   "page": "https://sports.khan.co.kr/en/article/202610200723007/",
+   "note": "PULSE 개인 콘셉트(얼굴 근접)"
+  },
+  "p7": {
+   "url": "https://images.khan.co.kr/article/2026/10/21/news-p.v1.20261021.a144255fe1ba448bb088d476f7405c0e_P1.jpg",
+   "page": "https://sports.khan.co.kr/en/article/202610210748007",
+   "note": "PULSE 콘셉트 단체(푸른 배경 상반신)"
+  },
+  "p8": {
+   "url": "https://images.khan.co.kr/article/2026/10/20/news-p.v1.20261020.895202031e17496e8d826b7d253653f5_P1.jpg",
+   "page": "https://sports.khan.co.kr/en/article/202610200723007/",
+   "note": "PULSE 개인 콘셉트(앉은 자세)"
+  },
+  "p9": {
+   "url": "https://isp.edailystatic.com/data/isp/image/2026/10/20/isp20261020000015.1000x.0.jpg",
+   "page": "https://isplus.com/article/view/isp202610200014",
+   "note": "PULSE 개인 콘셉트(앉은 자세)"
+  },
+  "p10": {
+   "url": "https://images.khan.co.kr/article/2026/10/20/news-p.v1.20261020.87d9732670ff4b2ab95c062ea4f7f5c8_P1.jpg",
+   "page": "https://sports.khan.co.kr/en/article/202610200723007/",
+   "note": "PULSE 개인 콘셉트(선 자세, 긴 머리)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "nowplaying",
+    "basis": "소개",
+    "why": "제목이 '심장 박동'이라, 표지를 지금 재생 중인 화면에 올려 앨범이 뛰기 시작하는 순간처럼 보여 줍니다."
+   },
+   {
+    "template": "stage",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.5
+    ],
+    "basis": "소개",
+    "why": "향을 무대와 객석이 나누는 체온에 빗댄 앨범이라, 흰 원피스 단체 사진을 무대 위에 세웁니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "polaroid",
+    "photo": "p5",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.78
+    ],
+    "basis": "위치",
+    "why": "앨범의 첫 곡이라 깃털 원피스 개인 컷 한 장을 폴라로이드로 꺼내 문을 엽니다."
+   },
+   {
+    "template": "gable",
+    "photo": "p1",
+    "lines": [
+     "Finest",
+     "Thing"
+    ],
+    "basis": "제목",
+    "why": "'가장 멋진 것'이라는 제목을 두 줄로 크게 세우고 흰 원피스 다섯 명을 함께 둡니다.",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.75
+    ]
+   }
+  ],
+  "2": [
+   {
+    "template": "full",
+    "photo": "p3",
+    "crop": [
+     0.25,
+     0.2,
+     0.7,
+     0.95
+    ],
+    "props": [
+     "motif:scope"
+    ],
+    "basis": "소개",
+    "why": "빨라지는 심박 같은 훅이 있는 타이틀곡이라, 오실로스코프 소품을 날개 덮인 차 앞 단체 컷 위에 얹습니다."
+   },
+   {
+    "template": "notch",
+    "photo": "p6",
+    "crop": [
+     0.0,
+     0.0,
+     0.6,
+     1.0
+    ],
+    "basis": "제목",
+    "why": "'With'는 마주하는 이야기라, 정면을 보는 얼굴 근접 컷 하나로 둘이 마주 선 느낌을 줍니다."
+   }
+  ],
+  "3": [
+   {
+    "template": "bloom",
+    "photo": "p7",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.9
+    ],
+    "lines": [
+     "백화요란",
+     "Inside",
+     "Out"
+    ],
+    "basis": "제목",
+    "why": "'백 가지 꽃이 어지럽게 핀다'는 제목이라, 한글·영문 제목을 계단처럼 피워 올리고 단체 사진을 작게 둡니다."
+   },
+   {
+    "template": "motion",
+    "photo": "p8",
+    "crop": [
+     0.0,
+     0.05,
+     1.0,
+     0.88
+    ],
+    "zooms": [
+     [
+      0.2,
+      0.15,
+      0.8,
+      0.45
+     ],
+     [
+      0.1,
+      0.4,
+      0.9,
+      0.75
+     ]
+    ],
+    "basis": "위치",
+    "why": "타이틀 다음 앨범 한가운데 곡이라, 앉은 개인 컷을 움직이는 액자로 잘라 흐름을 잇습니다."
+   }
+  ],
+  "4": [
+   {
+    "template": "cctv",
+    "photo": "p4",
+    "crop": [
+     0.1,
+     0.0,
+     0.9,
+     1.0
+    ],
+    "basis": "제목",
+    "why": "'MEME'처럼 퍼져 나가는 장면을, 창고에 선 다섯 명을 감시 화면이 포착한 캡처로 보여 줍니다."
+   },
+   {
+    "template": "clipboard",
+    "photo": "p9",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.8
+    ],
+    "basis": "위치",
+    "why": "앨범 네 번째 곡을 촬영 기록지에 붙인 개인 컷처럼, 마무리 직전의 기록으로 남깁니다."
+   }
+  ],
+  "5": [
+   {
+    "template": "stacked",
+    "photo": "p10",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.7
+    ],
+    "basis": "위치",
+    "why": "앨범의 마지막 곡이라 제목을 쌓아 끝을 단단히 닫고 긴 머리 개인 컷을 가운데 둡니다."
+   },
+   {
+    "template": "manga",
+    "photo": "p6",
+    "crop": [
+     0.0,
+     0.0,
+     0.7,
+     1.0
+    ],
+    "zooms": [
+     [
+      0.2,
+      0.2,
+      0.6,
+      0.45
+     ],
+     [
+      0.25,
+      0.1,
+      0.65,
+      0.6
+     ],
+     [
+      0.25,
+      0.45,
+      0.6,
+      0.7
+     ],
+     [
+      0.0,
+      0.0,
+      0.7,
+      1.0
+     ]
+    ],
+    "basis": "제목",
+    "why": "'Dragon'이라는 강한 제목을 만화 칸 넷에 눈빛 근접 컷으로 나눠 긴장감을 쌓습니다."
+   }
+  ]
+ }
+}
