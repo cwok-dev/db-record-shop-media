@@ -29,6 +29,7 @@
 - `python3 -I tools/build_cards.py --album <albums JSON> --review <reviews JSON> --cover <표지 파일> --out W/cards --design posts/<album id>/design.json`
   → W/cards에 p1_01.jpg…, p2_…, premix_…, caption_<post>.txt, manifest.json({"posts": [...], "warnings": [...]})이 생깁니다. 사진은 design.json의 주소에서 다시 받습니다. 캡션은 스킬 7.5대로 이미 만들어집니다.
 - 만든 카드를 모두 확인합니다(여러 장을 한 장으로 모은 축소 이미지를 Read로 봐도 됩니다). 글자 넘침·폰트 대체·그림과 글자 겹침이 없어야 합니다.
+  - 템플릿 배치에서 생긴 겹침(라벨·제목이 사진에 걸치는 것, 얼굴에 겹치는 것 등)은 게시를 멈추지 말고 그대로 게시한 뒤, 알림과 마지막 보고에 어느 카드의 무엇이 겹쳤는지 적습니다(사용자 결정 2026-11-03).
 - warnings에 "사진을 못 받아 표지로 대신함"이 있으면 그 도메인을 7의 알림과 보고에 적습니다(사용자 결정: 막힐 때마다 알림). 그대로 게시는 진행합니다.
 
 ## 4. 이미지 호스팅

@@ -715,7 +715,7 @@ def t_live(c):
     css = f"""
 .pic{{left:{M}px;top:{y}px;width:{pw}px;height:{ph}px;background:{PAPER} url('{c.img(pw, ph)}') 0 0/cover;border:3px solid {INK}}}
 .w{{font:900 170px/.86 Paperlogy;letter-spacing:-.05em;color:{c.prop};-webkit-text-stroke:4px {INK};paint-order:stroke fill;width:max-content;z-index:4}}
-.dt{{right:{M}px;top:{TOP_TITLE + 10}px;text-align:right;font:700 38px/1.15 SCDream;color:{INK};z-index:4}}
+.dt{{right:{M}px;top:{TOP_TITLE + 10}px;text-align:right;font:700 30px/1.1 SCDream;color:{INK};z-index:4}}
 .ar{{left:{M + pw - 110}px;top:{y + 30}px;z-index:4}}
 """
     body = f"""<div class='grain' style='opacity:.35'></div><div class='abs pic anchor'></div>
