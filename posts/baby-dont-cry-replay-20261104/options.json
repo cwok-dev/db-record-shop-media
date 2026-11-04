@@ -1,0 +1,93 @@
+{
+ "credit": "피네이션",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16260846_2070281_5723_crop.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16260846",
+   "note": "Replay 콘셉트 단체(르네상스 실내, 검은 의상)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16257862_2066794_4038_crop.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16257862",
+   "note": "Replay 컴백 일정 이미지(성·유령 콜라주)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16264855_2073775_627.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16264855",
+   "note": "Replay 숏폼 장면 콜라주(그림자·멤버)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16264855_2073776_634.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16264855",
+   "note": "Replay 안무 스포 실루엣 콜라주"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "live",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.2,
+     1.0,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "르네상스 실내와 스트릿 의상의 대비를 콘셉트 단체 사진 한 판으로 크게 보여 줍니다."
+   },
+   {
+    "template": "editorial",
+    "photo": "p2",
+    "crop": [
+     0.5,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "헤어진 뒤에도 유령처럼 맴도는 감정이라, 흰 천을 쓴 유령 장면을 잡지 표지처럼 세웁니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "motion",
+    "photo": "p3",
+    "crop": [
+     0.5,
+     0.5,
+     1.0,
+     1.0
+    ],
+    "zooms": [
+     [
+      0.15,
+      0.05,
+      0.85,
+      0.55
+     ],
+     [
+      0.1,
+      0.4,
+      0.9,
+      1.0
+     ]
+    ],
+    "basis": "제목",
+    "why": "'Replay'처럼 되풀이되는 기억이라, 멤버 장면을 여러 액자로 반복해 돌려 보여 줍니다."
+   },
+   {
+    "template": "polaroid",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.0,
+     0.5,
+     0.5
+    ],
+    "basis": "소개",
+    "why": "답답한 현실에서 벗어나려는 아트적 퍼포먼스라, 무대 위 실루엣 한 장면을 폴라로이드로 꺼내 둡니다."
+   }
+  ]
+ }
+}
