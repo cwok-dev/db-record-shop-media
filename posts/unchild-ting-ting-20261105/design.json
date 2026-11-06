@@ -1,0 +1,70 @@
+{
+ "credit": "하이업엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://photo.newsen.com/news_photo/2026/10/27/202610270741302410_1.jpg",
+   "page": "https://www.newsen.com/news_view.php?uid=202610270741302410",
+   "note": "TiNG TiNG 콘셉트 단체(별종 히어로, 장비)"
+  },
+  "p2": {
+   "url": "https://photo.newsen.com/news_photo/2026/10/27/202610270741302410_5.jpg",
+   "page": "https://www.newsen.com/news_view.php?uid=202610270741302410",
+   "note": "TiNG TiNG 개인 콘셉트(장비 든 멤버)"
+  },
+  "p3": {
+   "url": "https://photo.newsen.com/news_photo/2026/10/27/202610270741302410_2.jpg",
+   "page": "https://www.newsen.com/news_view.php?uid=202610270741302410",
+   "note": "TiNG TiNG 개인 콘셉트(CONFIDENTIAL, 가로)"
+  },
+  "p4": {
+   "url": "https://cdn.ksw-news.com/news/photo/202610/3052779_3042800_2947.jpg",
+   "page": "https://www.ksw-news.com/news/articleView.html?idxno=3052779",
+   "note": "TiNG TiNG 콘셉트 단체(별종 히어로)"
+  },
+  "p5": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16258940_2067989_4522.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16258940",
+   "note": "TiNG TiNG 개인 콘셉트(증거 태그)"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "nowplaying",
+   "basis": "위치",
+   "why": "두 곡짜리 디지털 싱글이라 표지를 재생 화면에 올리고 곡 수와 발매일을 한눈에 보여 줍니다."
+  },
+  "1": {
+   "template": "colorblock",
+   "photo": "p3",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "lines": [
+    "빛",
+    "TRICKY",
+    "GRLS"
+   ],
+   "basis": "제목",
+   "why": "'TRICKY GRLS'라는 제목을 색 블록에 크게 세우고 CONFIDENTIAL 개인 사진을 얹습니다."
+  },
+  "2": {
+   "template": "cctv",
+   "photo": "p4",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.72
+   ],
+   "basis": "소개",
+   "why": "새로운 신호와 퀘스트를 게임처럼 즐기는 타이틀곡이라, 임무 중인 히어로 단체를 감시 화면이 포착한 장면으로 보여 줍니다.",
+   "lines": [
+    "TiNG",
+    "TiNG"
+   ]
+  }
+ }
+}
