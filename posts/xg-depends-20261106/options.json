@@ -1,0 +1,114 @@
+{
+ "credit": "XGALX",
+ "photos": {
+  "p1": {
+   "url": "https://lp.p.pia.jp/shared/materials/4fa96c15-2b89-45d7-b7f1-77366fbe6915/origin.jpg",
+   "page": "https://lp.p.pia.jp/article/news/514868/index.html",
+   "note": "DEPENDS 단체(스트릿 스타일, 세로)"
+  },
+  "p2": {
+   "url": "https://selective-hearing.com/wp-content/uploads/2026/11/XG-DEPENDS-Artist-Photo-Landscape.jpg",
+   "page": "https://selective-hearing.com/xg-releases-new-single-depends-and-surreal-music-video/",
+   "note": "DEPENDS 아티스트 포토(레트로 의상 단체)"
+  },
+  "p3": {
+   "url": "https://inkistyle.com/wp-content/uploads/2026/11/maxresdefault-3.jpg",
+   "page": "https://inkistyle.com/xg-depends-mv/",
+   "note": "DEPENDS 뮤직비디오 대표 장면(단체)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "neon",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.75
+    ],
+    "basis": "소개",
+    "why": "월드투어 도중 내놓은 팝·R&B 싱글이라, 스트릿 차림 일곱 명을 어둡게 깔고 투어 밤의 포스터처럼 만듭니다."
+   },
+   {
+    "template": "flyer",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.55
+    ],
+    "basis": "위치",
+    "why": "두 곡과 미국 한정 CD를 함께 낸 싱글이라, 수록곡 띠와 발매 정보를 레트로 단체 사진과 한 장에 담습니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "polaroid",
+    "photo": "p3",
+    "crop": [
+     0.1,
+     0.0,
+     0.9,
+     0.78
+    ],
+    "basis": "위치",
+    "why": "싱글의 첫 곡이자 타이틀곡이라, 뮤직비디오 대표 장면을 폴라로이드로 꺼내 문을 엽니다."
+   },
+   {
+    "template": "stacked",
+    "photo": "p3",
+    "crop": [
+     0.25,
+     0.0,
+     0.75,
+     0.78
+    ],
+    "basis": "제목",
+    "why": "'그때그때 다르다'는 제목을 세 번 쌓아 답을 미루는 마음을 되풀이하고, 뮤직비디오 장면을 가운데 둡니다."
+   }
+  ],
+  "2": [
+   {
+    "template": "notch",
+    "photo": "p2",
+    "crop": [
+     0.47,
+     0.5,
+     0.75,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "슬픔과 마주하는 일이 약함인지 강함인지 묻는 곡이라, 정면을 보는 한 멤버의 얼굴 하나로 조용히 묻습니다."
+   },
+   {
+    "template": "torn",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.8
+    ],
+    "zooms": [
+     [
+      0.2,
+      0.15,
+      0.6,
+      0.4
+     ],
+     [
+      0.45,
+      0.25,
+      0.9,
+      0.55
+     ]
+    ],
+    "basis": "위치",
+    "why": "싱글을 닫는 두 번째 곡이라, 단체 사진을 찢어 낸 띠로 나눠 모순과 아픔을 있는 그대로 드러냅니다."
+   }
+  ]
+ }
+}
