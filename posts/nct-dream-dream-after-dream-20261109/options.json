@@ -1,0 +1,436 @@
+{
+ "credit": "SM엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16271705_2082149_2411.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16271705",
+   "note": "DREAM AFTER DREAM 콘셉트 단체(거대 토마토 들판)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16271705_2082150_2418.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16271705",
+   "note": "Boogie Woogie 마트 장면 단체"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16263274_2072302_532_crop.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16263274",
+   "note": "콘셉트 포토 3인 근접(주황 배경)"
+  },
+  "p4": {
+   "url": "https://img.tenasia.co.kr/photo/202610/BF.46245286.1.jpg",
+   "page": "https://www.tenasia.co.kr/article/2026103055424",
+   "note": "콘셉트 단체(채소 케이크, 세로)"
+  },
+  "p5": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16263274_2072303_538.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16263274",
+   "note": "콘셉트 단체(만찬 식탁, 가로)"
+  },
+  "p6": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16272364_2082995_577.jpg",
+   "page": "https://global.topstarnews.net/en/articleView.html?idxno=16272364",
+   "note": "천러 개인 콘셉트(분홍 니트, 농구장)"
+  },
+  "p7": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16272364_2082996_5713.jpg",
+   "page": "https://global.topstarnews.net/en/articleView.html?idxno=16272364",
+   "note": "천러 개인 콘셉트(마트, 세로)"
+  },
+  "p8": {
+   "url": "https://newsimg.koreatimes.co.kr/2026/10/29/9e347148-7fc8-44ae-90e8-807aa1857b13.jpg",
+   "page": "https://www.koreatimes.co.kr/entertainment/k-pop/20261029/nct-dream-to-mark-10th-anniversary-with-disco-track-boogie-woogie",
+   "note": "콘셉트 단체(온실 앞 들판, 전신)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "live",
+    "photo": "p8",
+    "crop": [
+     0.1,
+     0.05,
+     0.9,
+     0.9
+    ],
+    "basis": "소개",
+    "why": "데뷔 10주년에 새 꿈으로 나아가는 정규 앨범이라, 들판에 선 여섯 명을 큰 사진판에 세우고 거대 글자로 겁니다."
+   },
+   {
+    "template": "flyer",
+    "photo": "p5",
+    "crop": [
+     0.0,
+     0.05,
+     1.0,
+     0.75
+    ],
+    "basis": "위치",
+    "why": "열 곡을 담은 정규 6집이라, 만찬 식탁 단체 사진에 수록곡 띠와 발매 정보를 한 장에 담습니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "polaroid",
+    "photo": "p6",
+    "crop": [
+     0.15,
+     0.0,
+     0.7,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "함께 걸어온 시간을 돌아보는 시네마틱 발라드라, 개인 사진 한 장을 오래된 폴라로이드처럼 꺼냅니다."
+   },
+   {
+    "template": "colorblock",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     0.9
+    ],
+    "lines": [
+     "The",
+     "Sun"
+    ],
+    "basis": "제목",
+    "why": "밤 끝에 떠오르는 태양이라는 제목을, 붉은 토마토가 해처럼 떠오른 들판 사진과 겹쳐 크게 세웁니다."
+   }
+  ],
+  "2": [
+   {
+    "template": "notch",
+    "photo": "p2",
+    "crop": [
+     0.12,
+     0.0,
+     0.82,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "타이틀곡이자 뮤직비디오가 마트 속 축제라, 마트에 모인 단체 장면을 정면으로 크게 세웁니다."
+   },
+   {
+    "template": "clipboard",
+    "photo": "p7",
+    "crop": [
+     0.0,
+     0.05,
+     1.0,
+     0.75
+    ],
+    "basis": "소개",
+    "why": "10년을 함께한 서로를 축하하며 지금을 즐기자는 곡이라, 마트에서 손을 내민 개인 사진을 축제 기록지에 붙입니다."
+   }
+  ],
+  "3": [
+   {
+    "template": "motion",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.8
+    ],
+    "zooms": [
+     [
+      0.1,
+      0.05,
+      0.9,
+      0.4
+     ],
+     [
+      0.15,
+      0.4,
+      0.85,
+      0.95
+     ]
+    ],
+    "basis": "소개",
+    "why": "페스티벌 앤섬처럼 벅차오르는 곡이라, 채소 케이크를 둘러싼 단체 사진을 움직이는 액자로 잘라 설렘을 잇습니다."
+   },
+   {
+    "template": "stacked",
+    "photo": "p8",
+    "crop": [
+     0.25,
+     0.05,
+     0.75,
+     0.9
+    ],
+    "basis": "제목",
+    "why": "앨범과 같은 이름의 곡이라 'Dream'을 쌓아 끝없이 이어지는 꿈을 되풀이합니다."
+   }
+  ],
+  "4": [
+   {
+    "template": "full",
+    "photo": "p1",
+    "crop": [
+     0.1,
+     0.12,
+     0.9,
+     1.0
+    ],
+    "props": [
+     "motif:streaks"
+    ],
+    "basis": "제목",
+    "why": "'스카이다이브'라는 제목처럼, 들판 위로 내리꽂히는 빛줄기 소품을 단체 사진에 얹습니다."
+   },
+   {
+    "template": "issue",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "zooms": [
+     [
+      0.05,
+      0.1,
+      0.38,
+      0.8
+     ],
+     [
+      0.62,
+      0.1,
+      0.95,
+      0.8
+     ]
+    ],
+    "basis": "위치",
+    "why": "앨범 한가운데로 들어서는 곡이라, 세 멤버 근접 사진을 잡지 기사처럼 띠와 작은 사진으로 나눕니다."
+   }
+  ],
+  "5": [
+   {
+    "template": "cinema",
+    "photo": "p5",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     0.6
+    ],
+    "basis": "소개",
+    "why": "묵직한 딥 하우스와 트라이벌 사운드라, 긴 만찬 식탁 앞에 선 여섯 명을 와이드 영화 장면처럼 띄웁니다."
+   },
+   {
+    "template": "manga",
+    "photo": "p7",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.8
+    ],
+    "zooms": [
+     [
+      0.3,
+      0.15,
+      0.7,
+      0.4
+     ],
+     [
+      0.35,
+      0.2,
+      0.65,
+      0.35
+     ],
+     [
+      0.0,
+      0.3,
+      0.6,
+      0.8
+     ],
+     [
+      0.4,
+      0.4,
+      1.0,
+      0.9
+     ]
+    ],
+    "basis": "제목",
+    "why": "'Pressure'라는 제목처럼, 한 장면을 만화 칸 넷으로 조여 압박감을 쌓습니다."
+   }
+  ],
+  "6": [
+   {
+    "template": "cctv",
+    "photo": "p8",
+    "crop": [
+     0.1,
+     0.0,
+     0.9,
+     1.0
+    ],
+    "basis": "제목",
+    "why": "'Watch U Watch Me'처럼 시선을 즐기는 곡이라, 들판의 여섯 명을 감시 화면의 감지 박스로 짚습니다."
+   },
+   {
+    "template": "clipboard",
+    "photo": "p6",
+    "crop": [
+     0.1,
+     0.0,
+     0.75,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "후반부로 넘어가는 여섯 번째 곡이라, 개인 사진을 촬영 기록지에 붙인 것처럼 남깁니다."
+   }
+  ],
+  "7": [
+   {
+    "template": "gable",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "위태롭고 맹목적인 사랑을 그린 R&B라, 세 멤버의 근접 사진을 지붕 모양 제목 아래 무겁게 둡니다."
+   },
+   {
+    "template": "colorblock",
+    "photo": "p7",
+    "crop": [
+     0.0,
+     0.05,
+     1.0,
+     0.7
+    ],
+    "lines": [
+     "Cool",
+     "for Me"
+    ],
+    "basis": "제목",
+    "why": "'Cool for Me'를 두 줄로 크게 세우고 개인 사진을 얹어 당당한 태도를 보여 줍니다."
+   }
+  ],
+  "8": [
+   {
+    "template": "desktop",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.9
+    ],
+    "zooms": [
+     [
+      0.05,
+      0.05,
+      0.5,
+      0.3
+     ],
+     [
+      0.45,
+      0.05,
+      0.95,
+      0.3
+     ],
+     [
+      0.2,
+      0.25,
+      0.8,
+      0.5
+     ]
+    ],
+    "basis": "소개",
+    "why": "함께한 순간과 온기를 오래 간직하고 싶은 곡이라, 단체 사진을 추억 사진 창 여러 개로 띄웁니다."
+   },
+   {
+    "template": "poster",
+    "photo": "p1",
+    "crop": [
+     0.2,
+     0.1,
+     0.8,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "끝을 향해 가는 여덟 번째 곡이라, 토마토 들판 사진을 한 장의 포스터로 겁니다."
+   }
+  ],
+  "9": [
+   {
+    "template": "bloom",
+    "photo": "p7",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     0.6
+    ],
+    "basis": "소개",
+    "why": "지친 하루 끝에 곁을 지키는 다정한 위로라, 제목을 계단처럼 부드럽게 짜고 웃는 개인 사진을 작게 둡니다.",
+    "lines": [
+     "Smile",
+     "for U"
+    ]
+   },
+   {
+    "template": "polaroid",
+    "photo": "p2",
+    "crop": [
+     0.15,
+     0.0,
+     0.85,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "마지막 곡 직전이라, 마트 단체 장면을 폴라로이드로 꺼내 지난 장면을 돌아봅니다."
+   }
+  ],
+  "10": [
+   {
+    "template": "oval",
+    "photo": "p8",
+    "crop": [
+     0.15,
+     0.0,
+     0.85,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "앨범을 닫는 마지막 곡이라, 새 꿈을 함께 꾸겠다는 약속처럼 여섯 명을 둥근 창 안에 함께 담습니다."
+   },
+   {
+    "template": "torn",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.85
+    ],
+    "zooms": [
+     [
+      0.05,
+      0.05,
+      0.95,
+      0.3
+     ],
+     [
+      0.1,
+      0.3,
+      0.9,
+      0.55
+     ]
+    ],
+    "basis": "소개",
+    "why": "꿈과 현실의 경계를 넘는 밴드 곡이라, 단체 사진을 찢어 낸 띠로 나눠 경계를 넘는 느낌을 줍니다."
+   }
+  ]
+ }
+}
