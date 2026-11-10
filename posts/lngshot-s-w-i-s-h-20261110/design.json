@@ -1,0 +1,136 @@
+{
+ "credit": "모어비전",
+ "photos": {
+  "p1": {
+   "url": "https://img.tenasia.co.kr/photo/202611/BF.46322516.1.jpg",
+   "page": "https://www.tenasia.co.kr/article/2026110588944",
+   "note": "S.W.I.S.H. 콘셉트 단체(흰 의상)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16268378_2077653_225.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16268378",
+   "note": "Bananas 뮤직비디오 티저 장면 콜라주"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16272518_2083243_2416.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16272518",
+   "note": "S.W.I.S.H. 개인 콘셉트 콜라주(빌딩·하늘)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16272518_2083244_2423.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16272518",
+   "note": "S.W.I.S.H. 콘셉트 단체(노을, 흰 의상)"
+  },
+  "p5": {
+   "url": "https://img.tenasia.co.kr/photo/202611/BF.46322514.1.jpg",
+   "page": "https://www.tenasia.co.kr/article/2026110588944",
+   "note": "SWISH 콘셉트 단체(검은 가죽) + 바나나 트럭"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "neon",
+   "photo": "p5",
+   "crop": [
+    0.0,
+    0.0,
+    0.5,
+    1.0
+   ],
+   "basis": "제목",
+   "why": "'Swag With Integrity Shapes History'라는 제목의 스웨그를, 검은 가죽 차림 단체 사진을 어둡게 깔고 네온 포스터처럼 보여 줍니다."
+  },
+  "1": {
+   "template": "gable",
+   "photo": "p3",
+   "crop": [
+    0.0,
+    0.5,
+    0.5,
+    1.0
+   ],
+   "basis": "위치",
+   "why": "앨범에 앞서 공개된 첫 곡이라, 개인 사진을 지붕 모양 제목 아래 두고 문을 엽니다."
+  },
+  "2": {
+   "template": "player",
+   "photo": "p2",
+   "crop": [
+    0.5,
+    0.33,
+    1.0,
+    0.67
+   ],
+   "basis": "위치",
+   "why": "타이틀곡이자 뮤직비디오가 있는 곡이라, 티저의 복도 군무 장면을 재생 화면으로 띄우고 진행 막대로 위치를 보여 줍니다."
+  },
+  "3": {
+   "template": "motion",
+   "photo": "p4",
+   "crop": [
+    0.0,
+    0.1,
+    1.0,
+    1.0
+   ],
+   "zooms": [
+    [
+     0.3,
+     0.15,
+     0.7,
+     0.6
+    ],
+    [
+     0.0,
+     0.3,
+     0.35,
+     0.8
+    ]
+   ],
+   "basis": "소개",
+   "why": "좋아하는 사람과 함께하고 싶은 그루브라, 노을 단체 사진을 움직이는 액자로 잘라 느긋한 흐름을 보여 줍니다."
+  },
+  "4": {
+   "template": "issue",
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.66
+   ],
+   "zooms": [
+    [
+     0.5,
+     0.0,
+     1.0,
+     0.5
+    ],
+    [
+     0.0,
+     0.5,
+     0.5,
+     0.85
+    ]
+   ],
+   "basis": "위치",
+   "why": "앨범 후반으로 넘어가는 곡이라, 티저 장면들을 잡지 기사처럼 띠와 작은 사진으로 나눕니다."
+  },
+  "5": {
+   "template": "bloom",
+   "photo": "p4",
+   "crop": [
+    0.0,
+    0.2,
+    1.0,
+    0.9
+   ],
+   "lines": [
+    "Beep",
+    "Beep"
+   ],
+   "basis": "소개",
+   "why": "그리운 상대를 향한 따뜻한 R&B라, 제목을 계단처럼 부드럽게 짜고 노을 단체 사진을 작게 둡니다."
+  }
+ }
+}
