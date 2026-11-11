@@ -1,0 +1,92 @@
+{
+ "credit": "블리츠웨이뮤직",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16273510_2084679_1219.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16273510",
+   "note": "Darling 콘셉트 포토 1(풀숲·햇살, 6컷 콜라주)"
+  },
+  "p2": {
+   "url": "https://cdn.slist.kr/news/photo/202611/780710_1192582_952.jpg",
+   "page": "https://www.slist.kr/news/articleView.html?idxno=780710",
+   "note": "Darling 콘셉트 포토 2(실내·유리병, 콜라주)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "live",
+    "photo": "p1",
+    "crop": [
+     0.5,
+     0.33,
+     1.0,
+     0.67
+    ],
+    "basis": "소개",
+    "why": "곁에서 바라보는 것만으로 충분하다는 사랑이라, 풀숲에 앉은 도경수를 큰 사진판에 조용히 담습니다."
+   },
+   {
+    "template": "nowplaying",
+    "basis": "위치",
+    "why": "타이틀곡과 영어 버전 두 곡짜리 싱글이라, 표지를 재생 화면에 올리고 곡 수와 발매일을 한눈에 보여 줍니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "polaroid",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.55,
+     0.5,
+     0.76
+    ],
+    "basis": "소개",
+    "why": "일상 곳곳에서 사랑하는 사람의 흔적을 발견하는 곡이라, 유리병을 바라보는 장면을 사진첩의 폴라로이드처럼 꺼냅니다."
+   },
+   {
+    "template": "bloom",
+    "photo": "p2",
+    "crop": [
+     0.5,
+     0.33,
+     1.0,
+     0.55
+    ],
+    "basis": "제목",
+    "why": "'Darling'이라는 부름을 계단처럼 짠 제목으로 크게 세우고, 침대에 누운 장면을 작게 둡니다.",
+    "lines": [
+     "Dar",
+     "ling"
+    ]
+   }
+  ],
+  "2": [
+   {
+    "template": "notch",
+    "photo": "p1",
+    "crop": [
+     0.05,
+     0.0,
+     0.45,
+     0.33
+    ],
+    "basis": "소개",
+    "why": "원곡의 순수한 정서를 해외 팬에게 전하는 영어 버전이라, 풀숲에서 정면을 바라보는 사진 한 장으로 담담하게 건넵니다."
+   },
+   {
+    "template": "clipboard",
+    "photo": "p1",
+    "crop": [
+     0.5,
+     0.67,
+     1.0,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "싱글을 닫는 두 번째 트랙이라, 햇살 속 옆모습을 촬영 기록지에 붙여 마무리합니다."
+   }
+  ]
+ }
+}
