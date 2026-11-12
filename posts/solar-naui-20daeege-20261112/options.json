@@ -1,0 +1,71 @@
+{
+ "credit": "RBW",
+ "photos": {
+  "p1": {
+   "url": "https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/hs/2026/11/11/image-1a1c77a04ba85d5c-1.jpeg",
+   "page": "https://m.news.nate.com/view/20261111n03383",
+   "note": "나의 20대에게 티저(공원 잔디밭 전경)"
+  },
+  "p2": {
+   "url": "https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/hs/2026/11/11/image-1a1c77a04ba85d5c-2.jpeg",
+   "page": "https://m.news.nate.com/view/20261111n03383",
+   "note": "나의 20대에게 티저(20대 시절 셀카 폴라로이드 콜라주)"
+  },
+  "p3": {
+   "url": "https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/hs/2026/11/11/image-1a1c77a04ba85d5c-3.jpeg",
+   "page": "https://m.news.nate.com/view/20261111n03383",
+   "note": "나의 20대에게 티저(헤드폰 끼고 잔디밭에 앉은 솔라)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "nowplaying",
+    "basis": "위치",
+    "why": "한 곡짜리 싱글이라, 잔디밭 사진이 담긴 표지를 재생 화면에 그대로 올려 발매 정보와 함께 보여 줍니다."
+   },
+   {
+    "template": "live",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.37,
+     1.0,
+     0.78
+    ],
+    "basis": "소개",
+    "why": "20대의 자신에게 띄우는 편지 같은 발라드라, 헤드폰을 끼고 잔디밭에 앉은 사진을 큰 사진판에 조용히 담습니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "polaroid",
+    "photo": "p2",
+    "crop": [
+     0.02,
+     0.0,
+     0.48,
+     0.27
+    ],
+    "basis": "소개",
+    "why": "지난 20대의 자신에게 말을 건네는 곡이라, 그 시절 셀카 한 장을 폴라로이드로 꺼내 둡니다."
+   },
+   {
+    "template": "bloom",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.42,
+     1.0,
+     0.95
+    ],
+    "lines": [
+     "나의",
+     "20대에게"
+    ],
+    "basis": "제목",
+    "why": "'나의 20대에게'라는 편지 첫머리 같은 제목을 계단처럼 짜고, 잔디밭 전경을 작게 둡니다."
+   }
+  ]
+ }
+}
