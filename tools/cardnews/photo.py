@@ -7,6 +7,8 @@ import hashlib, io, json, pathlib, re, sys, urllib.parse, urllib.request
 import numpy as np
 from PIL import Image, ImageDraw, ImageOps
 
+YUNET = "https://huggingface.co/opencv/face_detection_yunet/resolve/main/face_detection_yunet_2023mar.onnx"  # OpenCV 공식 사본(해시가 opencv_zoo LFS와 같음)
+YUNET_SHA256 = "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4"
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
 
 
@@ -40,20 +42,153 @@ def load(src, cache):
         raise PhotoError(f"{src}: 이미지가 아님 ({e})")
 
 
-def fit_crop(im, crop, w, h):
-    """crop(비율 x0,y0,x1,y1) 영역 안에서 가운데를 기준으로 w:h 비율의 가장 큰 사각형을 잘라 w×h로 줄인다.
-    영역 밖은 쓰지 않으므로 콜라주 사진의 옆 칸이 섞이지 않는다."""
+def region(im, crop):
+    """crop(비율 x0,y0,x1,y1)을 픽셀 영역으로."""
     W, H = im.size
     x0, y0, x1, y1 = crop or (0, 0, 1, 1)
-    cx, cy = (x0 + x1) / 2 * W, (y0 + y1) / 2 * H
-    bw, bh = (x1 - x0) * W, (y1 - y0) * H
+    return x0 * W, y0 * H, x1 * W, y1 * H
+
+
+def default_rect(im, crop, w, h):
+    """crop 영역 안에서 가운데를 기준으로 w:h 비율의 가장 큰 사각형(픽셀)."""
+    x0, y0, x1, y1 = region(im, crop)
+    cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+    bw, bh = x1 - x0, y1 - y0
     r = w / h
     if bw / bh > r:
         bw = bh * r
     else:
         bh = bw / r
-    left, top = cx - bw / 2, cy - bh / 2
-    return im.crop((int(left), int(top), int(left + bw), int(top + bh))).resize((w, h), Image.LANCZOS)
+    return cx - bw / 2, cy - bh / 2, cx + bw / 2, cy + bh / 2
+
+
+def fit_crop(im, crop, w, h, rect=None):
+    """crop(비율 x0,y0,x1,y1) 영역 안에서 가운데를 기준으로 w:h 비율의 가장 큰 사각형을 잘라 w×h로 줄인다.
+    영역 밖은 쓰지 않으므로 콜라주 사진의 옆 칸이 섞이지 않는다. rect(픽셀)를 주면 그 사각형을 쓴다(place 결과)."""
+    left, top, right, bottom = rect or default_rect(im, crop, w, h)
+    return im.crop((int(left), int(top), int(right), int(bottom))).resize((w, h), Image.LANCZOS)
+
+
+# ---------- 얼굴 피하기 (사용자 결정 2026-11-12) ----------
+# 타이포 상자(제목·라벨·띠·한 줄 평·도장)가 사진 칸의 얼굴을 덮으면, crop 영역 안에서 사진을 옮기거나
+# 최대 1.3배까지 확대해 얼굴을 빈 자리로 보낸다. 피하지 못하면 경고만 남긴다.
+ZOOM_MAX = 1.3
+FACE_SCORE = 0.6
+
+
+def _detector():
+    """YuNet 얼굴 검출기. 모델은 처음 쓸 때 받는다. OpenCV가 없으면 None."""
+    try:
+        import cv2
+    except ImportError:
+        return None
+    d = pathlib.Path(__file__).resolve().parent / "models"
+    d.mkdir(exist_ok=True)
+    f = d / "face_detection_yunet_2023mar.onnx"
+    if not f.exists() or hashlib.sha256(f.read_bytes()).hexdigest() != YUNET_SHA256:
+        req = urllib.request.Request(YUNET, headers={"User-Agent": UA})
+        data = urllib.request.urlopen(req, timeout=25).read()
+        if hashlib.sha256(data).hexdigest() != YUNET_SHA256:
+            raise PhotoError("얼굴 검출 모델 파일이 예상과 다름")
+        f.write_bytes(data)
+    return cv2.FaceDetectorYN.create(str(f), "", (320, 320), FACE_SCORE, 0.3, 50)
+
+
+def faces(src, im, cache):
+    """사진 속 얼굴 상자(비율 x0,y0,x1,y1). 이마·머리카락까지 덮도록 위로 넓힌다. 결과는 cache에 저장한다.
+    검출기를 못 쓰면 None."""
+    out = pathlib.Path(cache) / f"faces_{hashlib.sha1(str(src).encode()).hexdigest()[:16]}.json"
+    if out.exists():
+        return json.loads(out.read_text())
+    det = _detector()
+    if det is None:
+        return None
+    import cv2
+    W, H = im.size
+    k = min(1.0, 1280 / max(W, H))
+    a = cv2.cvtColor(np.asarray(im.resize((max(1, int(W * k)), max(1, int(H * k))))), cv2.COLOR_RGB2BGR)
+    det.setInputSize((a.shape[1], a.shape[0]))
+    _, rows = det.detect(a)
+    res = []
+    for r in (rows if rows is not None else []):
+        x, y, w, h = (float(v) / k for v in r[:4])
+        if min(w, h) < 16:
+            continue
+        x0, x1 = x - 0.15 * w, x + 1.15 * w
+        y0, y1 = y - 0.35 * h, y + 1.1 * h
+        res.append([max(0, x0 / W), max(0, y0 / H), min(1, x1 / W), min(1, y1 / H)])
+    out.write_text(json.dumps(res))
+    return res
+
+
+def _mask(occl, n=96):
+    """덮개 상자(사진 칸 비율)들을 n×n 격자 마스크로. 적분 영상으로 돌려준다."""
+    m = np.zeros((n, n))
+    for x0, y0, x1, y1 in occl:
+        m[max(0, int(y0 * n)):max(0, int(np.ceil(y1 * n))), max(0, int(x0 * n)):max(0, int(np.ceil(x1 * n)))] = 1
+    return np.pad(m.cumsum(0).cumsum(1), ((1, 0), (1, 0))), n
+
+
+def _covered(ii, n, x0, y0, x1, y1):
+    """칸 비율 상자 안에서 덮인 비율."""
+    a, b = int(np.clip(round(x0 * n), 0, n)), int(np.clip(round(x1 * n), 0, n))
+    c, d = int(np.clip(round(y0 * n), 0, n)), int(np.clip(round(y1 * n), 0, n))
+    if b <= a or d <= c:
+        return 0.0
+    return (ii[d, b] - ii[c, b] - ii[d, a] + ii[c, a]) / ((b - a) * (d - c))
+
+
+def _cost(rect, fs, ii, n):
+    """사각형 rect(픽셀)로 잘랐을 때 얼굴이 덮이거나 잘린 정도. 얼굴마다 (덮인 비율, 잘린 비율)."""
+    L, T, R, B = rect
+    rw, rh = R - L, B - T
+    out = []
+    for fx0, fy0, fx1, fy1 in fs:
+        area = (fx1 - fx0) * (fy1 - fy0)
+        ix0, iy0, ix1, iy1 = max(fx0, L), max(fy0, T), min(fx1, R), min(fy1, B)
+        vis = max(0, ix1 - ix0) * max(0, iy1 - iy0) / area
+        cov = _covered(ii, n, (ix0 - L) / rw, (iy0 - T) / rh, (ix1 - L) / rw, (iy1 - T) / rh) * vis if vis > 0 else 0
+        out.append((cov, 1 - vis))
+    return out
+
+
+def place(im, crop, w, h, fs, occl):
+    """얼굴(비율 상자 fs)이 덮개(사진 칸 비율 상자 occl)에 가리거나 잘리지 않도록, crop 영역 안에서 w:h 사각형을
+    옮기거나 최대 ZOOM_MAX배 확대한다. 기본 자리(가운데·확대 없음)에서 가까울수록 낫다.
+    돌려줌: (사각형 픽셀, 남은 문제 얼굴 수, 대상 얼굴 수)."""
+    W, H = im.size
+    X0, Y0, X1, Y1 = region(im, crop)
+    base = default_rect(im, crop, w, h)
+    # crop 영역 안에 반 넘게 들어온 얼굴만 본다(사용자가 crop으로 고른 사람)
+    fs = [(a * W, b * H, c * W, d * H) for a, b, c, d in fs]
+    fs = [f for f in fs if max(0, min(f[2], X1) - max(f[0], X0)) * max(0, min(f[3], Y1) - max(f[1], Y0))
+          >= 0.5 * (f[2] - f[0]) * (f[3] - f[1])]
+    if not fs or not occl:
+        return base, 0, len(fs)
+    ii, n = _mask(occl)
+    biggest = max((f[2] - f[0]) * (f[3] - f[1]) for f in fs)
+    wt = [max(0.3, (f[2] - f[0]) * (f[3] - f[1]) / biggest) for f in fs]
+
+    def bad(rect):
+        s = 0
+        for k, (cov, cut) in zip(wt, _cost(rect, fs, ii, n)):
+            s += k * (cov + (0.3 if cut > 0.95 else cut))  # 통째로 빠진 얼굴은 덜 나쁘고, 반쯤 잘린 얼굴이 가장 나쁘다
+        return s
+
+    bw0, bh0 = base[2] - base[0], base[3] - base[1]
+    bcx, bcy = (base[0] + base[2]) / 2, (base[1] + base[3]) / 2
+    best, best_s = base, bad(base)
+    for z in np.linspace(1, ZOOM_MAX, 7):
+        bw, bh = bw0 / z, bh0 / z
+        for x in np.linspace(X0, X1 - bw, 25) if X1 - bw > X0 + 1 else [bcx - bw / 2]:
+            for y in np.linspace(Y0, Y1 - bh, 25) if Y1 - bh > Y0 + 1 else [bcy - bh / 2]:
+                r = (x, y, x + bw, y + bh)
+                move = abs(x + bw / 2 - bcx) / (X1 - X0) + abs(y + bh / 2 - bcy) / (Y1 - Y0)
+                s = bad(r) + 0.05 * move + 0.15 * (z - 1) / (ZOOM_MAX - 1)
+                if s < best_s - 1e-6:
+                    best, best_s = r, s
+    left = sum(1 for cov, cut in _cost(best, fs, ii, n) if cov > 0.2 or 0.2 < cut < 0.95)
+    return best, left, len(fs)
 
 
 def halftone(im, cell=4, angle=45):
@@ -84,13 +219,36 @@ def halftone(im, cell=4, angle=45):
                         (cw - im.width) // 2 + im.width, (ch - im.height) // 2 + im.height))
 
 
-def slot(src, crop, w, h, cache, cell=4):
-    """템플릿의 사진 칸 하나: 크롭 → w×h → 하프톤 PNG. 같은 입력이면 같은 파일을 다시 쓴다."""
-    key = hashlib.sha1(f"{src}|{crop}|{w}|{h}|{cell}".encode()).hexdigest()[:16]
+def slot_name(src, crop, w, h, cell=4):
+    """기본 자리 사진 칸 파일 이름. 렌더링 1차에서 칸을 알아볼 때 쓴다."""
+    return "ht_" + hashlib.sha1(f"{src}|{crop}|{w}|{h}|{cell}".encode()).hexdigest()[:16] + ".png"
+
+
+def slot(src, crop, w, h, cache, cell=4, occl=None):
+    """템플릿의 사진 칸 하나: 크롭 → w×h → 하프톤 PNG. 같은 입력이면 같은 파일을 다시 쓴다.
+    occl: 이 칸을 덮는 상자들(칸 비율). 주면 얼굴이 덮이지 않게 자리를 옮긴다(place).
+    돌려줌: (파일 경로, 경고 문자열 또는 None)."""
+    if not occl:
+        out = pathlib.Path(cache) / slot_name(src, crop, w, h, cell)
+        if not out.exists():
+            halftone(fit_crop(load(src, cache), crop, w, h), cell).save(out)
+        return out, None
+    key = hashlib.sha1(f"{src}|{crop}|{w}|{h}|{cell}|{occl}".encode()).hexdigest()[:16]
     out = pathlib.Path(cache) / f"ht_{key}.png"
-    if not out.exists():
-        halftone(fit_crop(load(src, cache), crop, w, h), cell).save(out)
-    return out
+    meta = out.with_suffix(".json")
+    if not out.exists() or not meta.exists():
+        im = load(src, cache)
+        fs = faces(src, im, cache)
+        if fs is None:
+            info = {"warn": "얼굴 피하기 못 함(OpenCV 없음)"}
+            rect = None
+        else:
+            rect, left, total = place(im, crop, w, h, fs, occl)
+            info = {"rect": rect, "moved": rect != default_rect(im, crop, w, h),
+                    "warn": f"얼굴 가림 {left}/{total}" if left else None}
+        halftone(fit_crop(im, crop, w, h, rect), cell).save(out)
+        meta.write_text(json.dumps(info))
+    return out, json.loads(meta.read_text()).get("warn")
 
 
 def scrape(folder, pages, min_w=600):

@@ -128,6 +128,26 @@ function stamp(){const s=document.querySelector('.recst'),a=document.querySelect
 function hitsText(s){const b=s.getBoundingClientRect(),k=40;
  return [...document.querySelectorAll('.title,[data-fit],.head .lbl')].some(e=>{const r=e.getBoundingClientRect();
   return r.width&&b.left+k<r.right&&b.right-k>r.left&&b.top+k<r.bottom&&b.bottom-k>r.top;});}
+// 얼굴 피하기(사용자 결정 2026-11-12): 사진 칸(ht_*.png)마다 그 위에 그려진 글자·상자·띠·도장의 자리를 칸 비율로 모은다.
+// 칸을 거의 다 덮는 장식(스캔라인 등, 90% 이상)과 흐린 것(불투명도 0.3 미만)은 뺀다.
+function occluders(){const res={},all=[...document.body.querySelectorAll('*')],RX=/ht_[0-9a-f]{16}\\.png/;
+ for(const s of all){const m=getComputedStyle(s).backgroundImage.match(RX);if(!m)continue;
+  const R=s.getBoundingClientRect();if(R.width<8||R.height<8)continue;const out=res[m[0]]=res[m[0]]||[];
+  const boxes=[];
+  for(const e of all){if(e===s||s.contains(e)||e.contains(s))continue;const cs=getComputedStyle(e);
+   if(cs.visibility==='hidden'||cs.display==='none'||+cs.opacity<.3)continue;
+   if(!/rgba\\(0, 0, 0, 0\\)|transparent/.test(cs.backgroundColor)||cs.backgroundImage!=='none'||parseFloat(cs.borderTopWidth)>0||e.tagName==='svg')
+    boxes.push([e,e.getBoundingClientRect()]);
+   for(const n of e.childNodes)if(n.nodeType===3&&n.textContent.trim()){const rg=document.createRange();rg.selectNodeContents(n);
+    for(const r of rg.getClientRects())boxes.push([e,r]);}}
+  for(const [e,r] of boxes){const x0=Math.max(r.left,R.left),y0=Math.max(r.top,R.top),x1=Math.min(r.right,R.right),y1=Math.min(r.bottom,R.bottom);
+   if(x1-x0<4||y1-y0<4||(x1-x0)*(y1-y0)>.9*R.width*R.height)continue;
+   const st=document.elementsFromPoint((x0+x1)/2,(y0+y1)/2),i=st.indexOf(s);if(i<0)continue;
+   const j=st.findIndex(q=>q===e||e.contains(q));if(j<0||j>i)continue;
+   const b=[(x0-R.left)/R.width,(y0-R.top)/R.height,(x1-R.left)/R.width,(y1-R.top)/R.height].map(v=>Math.round(v*50)/50);
+   if(!out.some(o=>o.join()===b.join()))out.push(b);}
+  out.sort();}
+ return res}
 function band(){const b=document.querySelector('.band'),t=document.querySelector('.title');
  if(b&&t)b.style.height=Math.ceil((t.getBoundingClientRect().bottom+48)/8)*8+'px';}
 document.fonts.ready.then(()=>{fit();band();const w=zones();const sw=stamp();if(sw)w.push(sw);document.body.dataset.warn=w.join('; ');document.body.dataset.ready='1';});
@@ -141,6 +161,7 @@ class Card:
     def __init__(self, *, kind, spec, spot, prop, artist, album, year, page, n=None, total=None, title="",
                  is_title=False, review=None, bg=None, img=None, cover=None, blurb=None, tracks=None):
         self.__dict__.update(locals()); del self.__dict__["self"]
+        self.occl = {}  # 사진 칸 파일 이름 → 그 칸을 덮는 상자들(칸 비율). render 1차에서 채운다.
 
     @property
     def rec(self):
@@ -1011,10 +1032,17 @@ def render(cards, out_dir):
         pg = b.new_page(viewport={"width": W, "height": H})
         for c, png in cards:
             f = out_dir / (pathlib.Path(png).stem + ".html")
-            f.write_text(page_html(c), encoding="utf-8")
-            pg.goto(f.as_uri())
-            pg.wait_for_function("document.body.dataset.ready === '1'", timeout=30000)
-            pg.wait_for_timeout(150)
+            c.occl = {}
+            for rnd in range(2):  # 1차: 사진 칸을 덮는 상자를 잰다 → 2차: 얼굴을 피해 옮긴 사진으로 다시 그린다
+                f.write_text(page_html(c), encoding="utf-8")
+                pg.goto(f.as_uri())
+                pg.wait_for_function("document.body.dataset.ready === '1'", timeout=30000)
+                pg.wait_for_timeout(150)
+                if rnd:
+                    break
+                c.occl = {k: v for k, v in pg.evaluate("occluders()").items() if v}
+                if not c.occl:
+                    break
             w = pg.evaluate("document.body.dataset.warn")
             if w:
                 warns[pathlib.Path(png).name] = w

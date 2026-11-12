@@ -14,7 +14,7 @@
 ### 2. 준비
 - 스크래치패드에 새 작업 폴더 W. ArtifactData get `albums/<id>`를 out_dir=W/db로 저장합니다. `reviews/<id>`가 있으면 함께 저장합니다(리뷰 작성 전이면 없어도 됩니다).
 - 표지: 앨범 cover `/_blob/<id>`의 id로 Artifact 도구 action "read", url=리뷰 페이지, path=<id>, out_dir=W/cover.
-- `pip install -q playwright==1.56.0` (`playwright install`은 실행하지 않음).
+- `pip install -q playwright==1.56.0 opencv-python-headless==4.10.0.84` (`playwright install`은 실행하지 않음).
 
 ### 3. 사진 수집 (4.7)
 1. WebSearch로 이 앨범 컴백 기사를 찾습니다. 예: "<가수> <앨범명> 콘셉트 포토", "<가수> <타이틀곡> 뮤직비디오 티저", "<가수> 컴백 단체". 최근 3주 안의 국내 연예 기사 4~8개를 고릅니다.

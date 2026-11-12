@@ -146,10 +146,20 @@ def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, la
         shown[key] = photo_key(spec, photos)
 
     def img(w, h, cell=4, sub=None):
-        """sub: 크롭 영역 안의 다시 자를 부분(비율). 한 카드 안에서 같은 사진의 다른 부분을 확대해 쓸 때."""
+        """sub: 크롭 영역 안의 다시 자를 부분(비율). 한 카드 안에서 같은 사진의 다른 부분을 확대해 쓸 때.
+        확대 칸(sub)은 일부러 얼굴 일부를 잡으므로 얼굴 피하기를 하지 않는다."""
         nonlocal src, crop
+
+        def get(s, cr):
+            occ = None if sub else card.occl.get(photo.slot_name(s, cr, w, h, cell))
+            path, fw = photo.slot(s, cr, w, h, cache, cell, occ)
+            msg = f"{label}{f' ({pathlib.Path(key).name})' if key else ''}: {fw}"
+            if fw and msg not in warns:
+                warns.append(msg)
+            return path.as_uri()
+
         try:
-            uri = photo.slot(src, sub_crop(crop, sub), w, h, cache, cell).as_uri()
+            uri = get(src, sub_crop(crop, sub))
             if src != cover and used is not None:
                 used.add(label)
             return uri
@@ -158,9 +168,10 @@ def make_card(layout, photo, *, kind, spec, photos, cover, cache, ctx, warns, la
             src, crop = cover, None
             if shown is not None:
                 shown[key] = "cover"
-            return photo.slot(src, sub_crop(None, sub), w, h, cache, cell).as_uri()
+            return get(src, sub_crop(None, sub))
 
-    return layout.Card(kind=kind, spec=spec, img=img, bg=spec.get("bg"), **ctx)
+    card = layout.Card(kind=kind, spec=spec, img=img, bg=spec.get("bg"), **ctx)
+    return card
 
 
 def build(args, album, review, posts_specs, photos, out, preview=False):

@@ -17,7 +17,7 @@
 ## 2. 준비
 - 모든 명령은 저장소 루트(cwok-dev/db-record-shop-media)에서 실행합니다.
 - `git fetch origin main && git checkout -B main origin/main`
-- `pip install -q playwright==1.56.0` (미리 설치된 /opt/pw-browsers 브라우저와 맞는 버전. `playwright install`은 실행하지 않음).
+- `pip install -q playwright==1.56.0 opencv-python-headless==4.10.0.84` (미리 설치된 /opt/pw-browsers 브라우저와 맞는 버전. `playwright install`은 실행하지 않음).
 - 스크래치패드에 새 작업 폴더 W를 만들고, ArtifactData get에 out_dir=W/db를 주어 albums/<id>와 reviews/<id> 문서를 JSON 파일로 저장합니다.
 - 표지: 앨범의 cover `/_blob/<id>`에서 id를 꺼내 Artifact 도구 action "read", url=리뷰 페이지, path=<id>, out_dir=W/cover로 받습니다.
 
