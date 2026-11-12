@@ -77,7 +77,7 @@ FACE_SCORE = 0.6
 
 
 def _detector():
-    """YuNet 얼굴 검출기. 모델은 처음 쓸 때 받는다. OpenCV가 없으면 None."""
+    """YuNet 얼굴 검출기. 모델은 처음 쓸 때 받는다. OpenCV가 없거나 모델을 못 받으면 None."""
     try:
         import cv2
     except ImportError:
@@ -86,10 +86,13 @@ def _detector():
     d.mkdir(exist_ok=True)
     f = d / "face_detection_yunet_2023mar.onnx"
     if not f.exists() or hashlib.sha256(f.read_bytes()).hexdigest() != YUNET_SHA256:
-        req = urllib.request.Request(YUNET, headers={"User-Agent": UA})
-        data = urllib.request.urlopen(req, timeout=25).read()
+        try:  # 못 받으면(도메인 막힘 등) 얼굴 피하기만 건너뛴다. 사진 자체는 그대로 쓴다.
+            req = urllib.request.Request(YUNET, headers={"User-Agent": UA})
+            data = urllib.request.urlopen(req, timeout=25).read()
+        except Exception:
+            return None
         if hashlib.sha256(data).hexdigest() != YUNET_SHA256:
-            raise PhotoError("얼굴 검출 모델 파일이 예상과 다름")
+            return None
         f.write_bytes(data)
     return cv2.FaceDetectorYN.create(str(f), "", (320, 320), FACE_SCORE, 0.3, 50)
 
@@ -240,7 +243,7 @@ def slot(src, crop, w, h, cache, cell=4, occl=None):
         im = load(src, cache)
         fs = faces(src, im, cache)
         if fs is None:
-            info = {"warn": "얼굴 피하기 못 함(OpenCV 없음)"}
+            info = {"warn": "얼굴 피하기 못 함(OpenCV 없음 또는 huggingface.co 막힘)"}
             rect = None
         else:
             rect, left, total = place(im, crop, w, h, fs, occl)
