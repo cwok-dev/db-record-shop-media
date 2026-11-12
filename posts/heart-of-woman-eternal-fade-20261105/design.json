@@ -1,0 +1,167 @@
+{
+ "credit": "BLUEBROWN RECORDS",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16258916_2067946_1548.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16258916",
+   "note": "콘셉트 단체(흰 의상, 푸른 하늘 배경)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16258916_2067945_1542.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16258916",
+   "note": "콘셉트 단체(밤 정원, 흰 의상)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16267744_2076975_5345.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16267744",
+   "note": "LIT IT 뮤직비디오 티저 근접 개인 컷"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16267744_2076977_5356.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16267744",
+   "note": "LIT IT 뮤직비디오 티저: 검은 의상 식탁 장면"
+  },
+  "p5": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16261448_2070745_4552.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16261448",
+   "note": "Melt 뮤직비디오 장면: 정원 하늘 아래 다섯 멤버"
+  },
+  "p6": {
+   "url": "https://cdn.newscj.com/news/photo/202610/3443389_3566513_424.jpg",
+   "page": "https://www.newscj.com/news/articleView.html?idxno=3443389",
+   "note": "콘셉트 개인 근접(금발, 파란 눈)"
+  },
+  "p7": {
+   "url": "https://cdn.newscj.com/news/photo/202610/3443389_3566514_426.jpg",
+   "page": "https://www.newscj.com/news/articleView.html?idxno=3443389",
+   "note": "콘셉트 개인(토끼 귀 털모자)"
+  },
+  "p8": {
+   "url": "https://cdn.newscj.com/news/photo/202610/3443389_3566511_413.jpg",
+   "page": "https://www.newscj.com/news/articleView.html?idxno=3443389",
+   "note": "콘셉트 개인(흰 옷, 물결 배경)"
+  },
+  "p9": {
+   "url": "https://cdn.newscj.com/news/photo/202610/3443389_3566520_442.jpg",
+   "page": "https://www.newscj.com/news/articleView.html?idxno=3443389",
+   "note": "콘셉트 개인(흰 털옷, 해 질 녘 정원)"
+  },
+  "p11": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16261448_2070747_464.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16261448",
+   "note": "Melt 뮤직비디오 장면: 하늘 아래 흰 의상 군무"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "editorial",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "basis": "소개",
+   "why": "아무것도 모르던 흰색에서 출발하는 여정이라는 소개처럼, 흰 의상의 다섯 멤버를 잡지 표지처럼 세웁니다."
+  },
+  "1": {
+   "template": "cinema",
+   "photo": "p2",
+   "crop": [
+    0.15,
+    0.2,
+    0.95,
+    0.9
+   ],
+   "basis": "소개",
+   "why": "첫 발걸음에서 시작하는 한 계절의 여정이라, 밤 정원에 선 다섯 멤버를 영화의 첫 장면처럼 띄웁니다."
+  },
+  "2": {
+   "template": "notch",
+   "photo": "p6",
+   "crop": [
+    0.15,
+    0.0,
+    0.85,
+    1.0
+   ],
+   "basis": "제목",
+   "why": "차가운 마음이 녹아내리는 'Melt'라, 정면을 바라보는 근접 개인 컷 하나로 녹아드는 시선을 담습니다."
+  },
+  "3": {
+   "template": "colorblock",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "basis": "제목",
+   "why": "'Blue'라는 제목을 색 블록에 크게 세우고, 푸른 하늘을 배경으로 한 단체 사진을 얹습니다."
+  },
+  "4": {
+   "template": "poster",
+   "photo": "p8",
+   "crop": [
+    0.0,
+    0.05,
+    1.0,
+    0.9
+   ],
+   "basis": "위치",
+   "why": "앨범 후반으로 넘어가는 곡이라, 물결 앞 개인 사진을 한 장의 포스터로 겁니다."
+  },
+  "5": {
+   "template": "manga",
+   "photo": "p3",
+   "crop": [
+    0.25,
+    0.0,
+    0.7,
+    1.0
+   ],
+   "zooms": [
+    [
+     0.4,
+     0.3,
+     0.75,
+     0.55
+    ],
+    [
+     0.1,
+     0.1,
+     0.9,
+     0.7
+    ],
+    [
+     0.3,
+     0.55,
+     0.8,
+     0.8
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     1.0
+    ]
+   ],
+   "basis": "소개",
+   "why": "808 베이스와 트랩으로 무대를 뒤집겠다는 타이틀곡이라, 티저 근접 컷을 만화 칸 넷으로 나눠 기세를 쌓습니다."
+  },
+  "6": {
+   "template": "cctv",
+   "photo": "p2",
+   "crop": [
+    0.2,
+    0.15,
+    0.9,
+    0.95
+   ],
+   "basis": "제목",
+   "why": "'Find U'처럼 누군가를 찾아 헤매는 마지막 곡이라, 밤 정원의 다섯 멤버를 감시 화면의 감지 박스로 하나씩 찾아냅니다."
+  }
+ }
+}
