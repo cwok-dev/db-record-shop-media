@@ -148,7 +148,7 @@ tracks: { "<n>": { stars, oneline, rec (추천 여부) } }
 ### 4.7 사진
 - 소스: 공식 콘셉트 포토, 단체 사진, 뮤직비디오 티저 스틸. 소속사가 언론에 배포한 기사 사진을 쓴다(X는 로그인·유료 API가 필요해 자동 수집 불가, 사용자 확인 2026-10-22). 표지는 사진이 없을 때의 대체다.
 - 처리: 크롭 영역(비율 `[x0, y0, x1, y1]`) 안에서 칸 비율에 맞는 가장 큰 사각형을 잘라(콜라주의 옆 칸을 섞지 않음) 45° 하프톤(칸 4px, 원본에 가깝게 점을 작게, 사용자 결정 2026-10-29)으로 바꾼다. 흰 옷·밝은 배경 사진은 점이 거의 안 찍혀 흐려지므로, 평균 밝기가 0.45를 넘으면 중간톤을 눌러 0.45로 맞춘다.
-- 얼굴 피하기(사용자 결정 2026-11-12): 렌더링을 두 번 한다. 1차에서 사진 칸마다 그 위에 그려진 글자·라벨·띠·한 줄 평·도장의 자리를 재고, YuNet(OpenCV)으로 찾은 얼굴(이마·머리카락까지 넓힘)이 덮이거나 반쯤 잘리면 crop 영역 안에서 사진을 옮기거나 최대 1.3배까지 확대해 2차로 다시 그린다. 기본 자리에 가까울수록 우선한다. crop 영역 밖은 쓰지 않고, 확대 칸(`zooms`)은 조정하지 않는다. 피하지 못하면 `warnings`에 "얼굴 가림 k/n"을 남기고 렌더링은 계속한다. 필요: `opencv-python-headless`, 모델은 처음 쓸 때 Hugging Face의 OpenCV 공식 사본에서 받아 해시를 확인한다(`huggingface.co` 접근 필요).
+- 얼굴 피하기(사용자 결정 2026-11-12): 렌더링을 두 번 한다. 1차에서 사진 칸마다 그 위에 그려진 글자·라벨·띠·한 줄 평·도장의 자리를 재고, YuNet(OpenCV)으로 찾은 얼굴(이마·머리카락까지 넓힘)이 덮이거나 반쯤 잘리면 crop 영역 안에서 사진을 옮기거나 최대 1.3배까지 확대해 2차로 다시 그린다. 기본 자리에 가까울수록 우선한다. crop 영역 밖은 쓰지 않고, 확대 칸(`zooms`)은 조정하지 않는다. 피하지 못하면 `warnings`에 "얼굴 가림 k/n"을 남기고 렌더링은 계속한다. 필요: `opencv-python-headless`, 모델은 처음 쓸 때 Hugging Face의 OpenCV 공식 사본에서 받아 해시를 확인한다("레코드샵" 환경은 네트워크 제한이 없어 따로 허용할 필요 없음).
 - 원본 사진은 저장소에 올리지 않는다. `design.json`에는 주소와 크롭만 적고, 렌더링 때 다시 받는다.
 - 사진 서버 도메인이 막히면(프록시 403) 그 카드는 표지로 대신하고, **막힌 도메인을 사용자에게 알린다**(사용자 결정: 막힐 때마다 알림). 사용자가 환경의 Network access에 추가한다.
 - 출처는 캡션에 "사진: <소속사명>"으로 적는다(7.5, 사용자 결정 2026-10-22).
@@ -238,7 +238,7 @@ tracks: { "<n>": { stars, oneline, rec (추천 여부) } }
 
 ### 7.2 연결 설정 (2026-10-21 완료)
 - **Meta 앱**: 이용 사례 "Manage messaging & content on Instagram", API Setup with Instagram Login. 권한 `instagram_business_basic`, `instagram_business_content_publish`. 개발 모드이며 @db_record_shop이 테스터로 등록되어 있다.
-- **클라우드 환경 "레코드샵"**: 환경 변수 `IG_ACCESS_TOKEN`, `IG_USER_ID`. 네트워크 접근 Custom, 허용 도메인 `graph.instagram.com`, `rupload.facebook.com`. 게시·토큰 갱신 예약 작업은 반드시 이 환경에서 실행되어야 한다. 예약 작업은 만든 세션의 환경을 기본으로 쓰므로, "레코드샵" 환경의 대화에서 만든다.
+- **클라우드 환경 "레코드샵"**: 환경 변수 `IG_ACCESS_TOKEN`, `IG_USER_ID`. 네트워크 접근 제한 없음(Unrestricted, 2026-11-12 확인). 인스타그램(`graph.instagram.com`, `rupload.facebook.com`)·사진 서버·얼굴 검출 모델(`huggingface.co`) 모두 따로 허용할 필요가 없다. 게시·토큰 갱신 예약 작업은 반드시 이 환경에서 실행되어야 한다. 예약 작업은 만든 세션의 환경을 기본으로 쓰므로, "레코드샵" 환경의 대화에서 만든다.
 - **토큰 갱신**: 장기 토큰은 60일 뒤 만료된다. 매월 1일 오전에 `GET https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token`으로 갱신하는 예약 작업을 "레코드샵" 환경에서 만들도록 사용자에게 안내했다(첫 시험 2026-10-22 23:30). 실제 생성 여부는 예약 작업 목록으로 확인한다. 돌려받은 토큰이 기존과 다르면 새 토큰은 실행 기록에만 보이고, 요약·알림에는 "환경 변수 교체 필요"만 알린다.
 - **카드 이미지 호스팅**: 공개 GitHub 저장소 `cwok-dev/db-record-shop-media`. Claude GitHub 앱 권한이 설정되어 세션에서 푸시할 수 있다. 공개 주소는 `https://raw.githubusercontent.com/cwok-dev/db-record-shop-media/main/<경로>`이며, JPEG가 `content-type: image/jpeg`로 제공되는 것을 확인했다. Meta가 실제로 받아 가는지는 첫 게시 때 확인한다. 시험 파일 `test/check.jpg`는 확인 후 지워도 된다.
 - **릴스 영상**: 호스팅 없이 재개 가능 업로드(`upload_type=resumable` → `rupload.facebook.com`)로 올린다.
