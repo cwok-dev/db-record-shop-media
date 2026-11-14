@@ -1,0 +1,131 @@
+{
+ "credit": "KQ엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16276143_2087988_357.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16276143",
+   "note": "UP 콘셉트 포토(민기, 벽 앞에 앉음)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16276143_2087989_3513.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16276143",
+   "note": "UP 콘셉트 포토(민기, 근접 앉은 자세)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16276143_2087990_3519.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16276143",
+   "note": "UP 콘셉트 포토(민기, 콘크리트 공간에 선 자세)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16276143_2087991_3526.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16276143",
+   "note": "UP 콘셉트 포토(민기, 흰 배경 상반신)"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "live",
+   "photo": "p3",
+   "crop": [
+    0.0,
+    0.25,
+    1.0,
+    1.0
+   ],
+   "basis": "소개",
+   "why": "'CRASH TO BEGIN'처럼 틀을 깨는 거친 앨범이라, 무너진 콘크리트 공간에 선 전투복 차림을 큰 사진판에 세웁니다."
+  },
+  "1": {
+   "template": "cinema",
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.5
+   ],
+   "basis": "소개",
+   "why": "자신을 잃어가는 혼란을 그린 오프닝이라, 어두운 눈빛 근접 장면을 영화의 첫 장면처럼 띄웁니다."
+  },
+  "2": {
+   "template": "notch",
+   "photo": "p4",
+   "crop": [
+    0.0,
+    0.05,
+    1.0,
+    0.75
+   ],
+   "basis": "소개",
+   "why": "쌓아 온 성과를 거리낌 없이 과시하는 곡이라, 정면을 노려보는 사진 한 장으로 자신감을 세웁니다."
+  },
+  "3": {
+   "template": "colorblock",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    0.8
+   ],
+   "lines": [
+    "UP"
+   ],
+   "basis": "제목",
+   "why": "멈춤도 한계도 없이 가장 높은 곳을 향하는 타이틀곡이라, 'UP' 두 글자를 색 블록에 거대하게 세웁니다."
+  },
+  "4": {
+   "template": "full",
+   "photo": "p3",
+   "crop": [
+    0.0,
+    0.1,
+    1.0,
+    1.0
+   ],
+   "props": [
+    "motif:sunburst"
+   ],
+   "basis": "소개",
+   "why": "녹슬어 사라지느니 불길 속으로 걸어 들어가겠다는 결의라, 콘크리트 공간에 선 사진에 터지는 빛 소품을 얹습니다."
+  },
+  "5": {
+   "template": "manga",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "zooms": [
+    [
+     0.35,
+     0.12,
+     0.7,
+     0.35
+    ],
+    [
+     0.4,
+     0.18,
+     0.65,
+     0.28
+    ],
+    [
+     0.3,
+     0.4,
+     0.8,
+     0.75
+    ],
+    [
+     0.2,
+     0.6,
+     0.9,
+     1.0
+    ]
+   ],
+   "basis": "위치",
+   "why": "앨범을 닫는 마지막 곡이라, 한 장면을 만화 칸 넷으로 나눠 나른함과 날카로움을 오가며 끝냅니다."
+  }
+ }
+}
