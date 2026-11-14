@@ -702,6 +702,12 @@ def barcode(seed, w=264, h=60):
     return f"<svg width='{w}' height='{h}'>{bars}</svg>", code[:12].upper()
 
 
+def album_bg(c):
+    """종이 바탕 앨범 템플릿(editorial·flyer·live)의 바탕: 사양 bg가 spot이면 포인트 컬러, 아니면 종이(사용자 결정 2026-11-14).
+    게시물 2·리믹스의 앨범 카드에 붙는 bg: ink는 지금처럼 무시한다."""
+    return c.spot if c.bg == "spot" else PAPER
+
+
 def t_flyer(c):
     """앨범 카드: 공연 전단. 종이 바탕에 잉크 거대 앨범명, 가수·앨범 종류 잉크 띠, 포인트 컬러에 하프톤 사진을 곱한 듀오톤 사진판과
     바코드, 3단 정보 줄, 수록곡을 • 로 이은 잉크 띠. 레퍼런스: Saturday Party 전단."""
@@ -711,7 +717,7 @@ def t_flyer(c):
     css = f"""
 .tt{{left:{M - 6}px;top:{TOP_TITLE - 8}px;font:900 130px/1 Paperlogy;letter-spacing:-.04em;color:{INK};width:max-content;z-index:3}}
 .bar{{left:{M}px;right:{M}px;background:{INK};color:{PAPER};display:flex;justify-content:space-between;padding:14px 24px 8px;font:900 64px/1 Paperlogy;z-index:3}}
-.pic{{left:{M}px;right:{M}px;height:{ph}px;background:{c.spot};overflow:hidden}}
+.pic{{left:{M}px;right:{M}px;height:{ph}px;background:{c.spot};overflow:hidden;{f'border:3px solid {INK}' if c.bg == 'spot' else ''}}}
 .pic .ph{{position:absolute;inset:0;background:url('{c.img(W - 2 * M, ph)}') 0 0/cover;mix-blend-mode:multiply}}
 .pic .bc{{position:absolute;right:16px;bottom:16px;background:{PAPER};padding:10px 12px 4px;text-align:center;font:700 16px 'SpaceMono'}}
 .info{{left:{M}px;right:{M}px;display:flex;justify-content:space-between;font:700 26px/1.45 SCDream;color:{INK};z-index:3}}
@@ -725,7 +731,7 @@ def t_flyer(c):
 <div class='abs info' style='top:{TOP_TITLE + 250 + ph + 26}px'><div>RELEASED<br>{esc(c.spec.get('date', ''))}</div><div>{len(c.tracks or []):02d} TRACKS<br>NEW ALBUM</div><div>DB RECORD SHOP<br>REVIEW</div></div>
 <div class='abs kw' data-fit data-maxw='{W - 2 * M}' data-maxh='60' style='top:{TOP_TITLE + 250 + ph + 132}px'>{names}</div>
 {head(c)}{foot(c)}"""
-    return PAPER, css, body
+    return album_bg(c), css, body
 
 
 def t_live(c):
@@ -745,7 +751,7 @@ def t_live(c):
 <div class='abs dt'>{esc(c.spec.get('date', '')).replace('.', '<br>', 1)}<br><span style='font:700 22px SpaceMono'>{esc(c.spec.get('type', ''))}</span></div>
 <svg class='abs ar' width='80' height='80' viewBox='0 0 100 100'><path d='M20 80 L78 22 M36 20 H80 V64' stroke='{PAPER}' stroke-width='14' fill='none' stroke-linecap='square'/></svg>
 {head(c)}{foot(c)}"""
-    return PAPER, css, body
+    return album_bg(c), css, body
 
 
 def t_neon(c):
@@ -805,7 +811,7 @@ display:flex;align-items:center;justify-content:center;font:900 44px/1 Paperlogy
 <svg class='abs' style='left:{W - M - 200}px;top:{TOP_TITLE + 470}px' width='40' height='40'><path d='M20 0V40M0 20H40' stroke='{INK}' stroke-width='2'/></svg>
 <div class='abs dt'><b>{esc(day)}</b><sup>th</sup><p>{esc(mon)}</p></div>
 {head(c)}{foot(c)}"""
-    return PAPER, css, body
+    return album_bg(c), css, body
 
 
 def n_tracks(c):
