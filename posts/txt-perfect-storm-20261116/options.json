@@ -1,0 +1,305 @@
+{
+ "credit": "빅히트 뮤직",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16263027_2071946_525.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16263027",
+   "note": "HOLDING THE STORM 단체(구체 조형물 아래)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16263027_2071947_532.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16263027",
+   "note": "HOLDING THE STORM 개인 근접"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16263027_2071948_538.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16263027",
+   "note": "HOLDING THE STORM 개인(바닥에 누움)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16263027_2071949_544.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16263027",
+   "note": "HOLDING THE STORM 개인(벽 앞)"
+  },
+  "p5": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16260162_2069504_511.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16260162",
+   "note": "EYE OF THE STORM 단체(원형 무대와 군중)"
+  },
+  "p6": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16260162_2069505_517.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16260162",
+   "note": "EYE OF THE STORM 개인(흰 수트 전신, 세로)"
+  },
+  "p7": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16260162_2069506_5114.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16260162",
+   "note": "EYE OF THE STORM 개인(꽃 든 자세)"
+  },
+  "p8": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16260162_2069507_5120.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16260162",
+   "note": "EYE OF THE STORM 개인(원형 무대 위, 군중 속)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "neon",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "정체된 현실을 깨뜨릴 폭풍을 기다리는 청춘의 불안이라, 구체 조형물 아래 선 다섯 명을 어둡게 깔고 폭풍 전야의 포스터처럼 만듭니다."
+   },
+   {
+    "template": "flyer",
+    "bg": "spot",
+    "photo": "p5",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     0.8
+    ],
+    "basis": "위치",
+    "why": "여섯 곡을 담은 미니 9집이라, 폭풍의 눈 같은 원형 무대 사진에 수록곡 띠와 발매 정보를 포인트 컬러 바탕 위에 한 장으로 담습니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "cinema",
+    "photo": "p8",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     0.75
+    ],
+    "basis": "소개",
+    "why": "무엇을 잃더라도 폭풍 속으로 뛰어들겠다는 출발점이라, 군중 한가운데 앉은 장면을 영화의 첫 장면처럼 띄웁니다."
+   },
+   {
+    "template": "polaroid",
+    "photo": "p2",
+    "crop": [
+     0.2,
+     0.0,
+     0.8,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "앨범의 문을 여는 첫 곡이라, 정면을 보는 근접 사진 한 장을 폴라로이드로 꺼냅니다."
+   }
+  ],
+  "2": [
+   {
+    "template": "notch",
+    "photo": "p7",
+    "crop": [
+     0.4,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "불확실한 현실 속에서도 '너'만은 붙잡고 싶은 러브송이라, 꽃을 쥔 사진 한 장을 정면으로 세웁니다."
+   },
+   {
+    "template": "cctv",
+    "photo": "p5",
+    "crop": [
+     0.1,
+     0.0,
+     0.9,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "앨범의 타이틀곡이라, 원형 무대 위 다섯 명을 감시 화면의 감지 박스로 짚습니다."
+   }
+  ],
+  "3": [
+   {
+    "template": "motion",
+    "photo": "p6",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.9
+    ],
+    "zooms": [
+     [
+      0.3,
+      0.05,
+      0.75,
+      0.35
+     ],
+     [
+      0.2,
+      0.3,
+      0.85,
+      0.75
+     ]
+    ],
+    "basis": "소개",
+    "why": "더 높은 곳으로 이끄는 꿈을 노래한 댄스 펑크라, 흰 수트 전신 사진을 움직이는 액자로 잘라 역동성을 보여 줍니다."
+   },
+   {
+    "template": "colorblock",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.2,
+     1.0,
+     1.0
+    ],
+    "lines": [
+     "Higher",
+     "Love"
+    ],
+    "basis": "제목",
+    "why": "'Higher Love'를 두 줄로 크게 세우고 단체 사진을 얹습니다."
+   }
+  ],
+  "4": [
+   {
+    "template": "full",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.1,
+     0.5,
+     1.0
+    ],
+    "props": [
+     "motif:wave_lines"
+    ],
+    "basis": "소개",
+    "why": "고된 현실에서 잠시 벗어나 쉼터가 되어 주겠다는 곡이라, 바닥에 누워 쉬는 사진 위에 잔잔한 물결 소품을 얹습니다."
+   },
+   {
+    "template": "oval",
+    "photo": "p8",
+    "crop": [
+     0.25,
+     0.0,
+     0.85,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "앨범 후반을 여는 유닛곡이라, 군중 속 한 사람을 둥근 창 안에 따로 담아 잠시 빠져나온 순간을 보여 줍니다."
+   }
+  ],
+  "5": [
+   {
+    "template": "gable",
+    "photo": "p4",
+    "crop": [
+     0.3,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "두려움 없이 하늘로 뛰어오르겠다는 야망이라, 벽 앞에서 위를 향한 사진을 지붕 모양 제목 아래 둡니다."
+   },
+   {
+    "template": "manga",
+    "photo": "p2",
+    "crop": [
+     0.2,
+     0.0,
+     0.8,
+     1.0
+    ],
+    "zooms": [
+     [
+      0.3,
+      0.2,
+      0.7,
+      0.45
+     ],
+     [
+      0.35,
+      0.3,
+      0.65,
+      0.42
+     ],
+     [
+      0.2,
+      0.4,
+      0.8,
+      0.8
+     ],
+     [
+      0.1,
+      0.0,
+      0.9,
+      0.5
+     ]
+    ],
+    "basis": "제목",
+    "why": "'Touch the Sky'를 만화 칸 넷으로 끌어올려, 하늘에 닿으려는 순간을 장면마다 나눕니다."
+   }
+  ],
+  "6": [
+   {
+    "template": "issue",
+    "photo": "p5",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "zooms": [
+     [
+      0.3,
+      0.3,
+      0.7,
+      0.6
+     ],
+     [
+      0.0,
+      0.0,
+      0.4,
+      0.5
+     ]
+    ],
+    "basis": "위치",
+    "why": "앨범을 닫는 마지막 곡이라, 원형 무대 단체 사진을 잡지 기사처럼 띠와 작은 사진으로 나눠 정리합니다."
+   },
+   {
+    "template": "torn",
+    "photo": "p7",
+    "crop": [
+     0.3,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "zooms": [
+     [
+      0.3,
+      0.2,
+      0.9,
+      0.55
+     ],
+     [
+      0.2,
+      0.5,
+      1.0,
+      0.9
+     ]
+    ],
+    "basis": "소개",
+    "why": "익숙한 자신을 내려놓고 변화를 받아들이는 곡이라, 사진을 찢어 낸 띠로 나눠 껍질을 벗는 느낌을 줍니다."
+   }
+  ]
+ }
+}
