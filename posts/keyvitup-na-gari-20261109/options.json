@@ -1,0 +1,250 @@
+{
+ "credit": "인코드엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16258980_2068053_1914.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16258980",
+   "note": "NA-GARI 단체(폐차장 차 더미 앞)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16258980_2068054_1920.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16258980",
+   "note": "NA-GARI 단체(굴착기 위)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16254473_2063030_4359.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16254473",
+   "note": "NA-GARI 개인 전신 콜라주"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16254473_2063031_445.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16254473",
+   "note": "NA-GARI 개인 근접 콜라주"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "live",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     0.75
+    ],
+    "basis": "소개",
+    "why": "'나가리'를 '나아가리'로 뒤집는 EP라, 폐차장 굴착기 위에 올라선 다섯 명을 큰 사진판에 세웁니다."
+   },
+   {
+    "template": "flyer",
+    "bg": "spot",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.2,
+     1.0,
+     0.85
+    ],
+    "basis": "위치",
+    "why": "다섯 곡을 담은 두 번째 EP라, 차 더미 앞 단체 사진에 수록곡 띠와 발매 정보를 포인트 컬러 바탕 위에 담습니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "polaroid",
+    "photo": "p4",
+    "crop": [
+     0.33,
+     0.0,
+     0.66,
+     0.5
+    ],
+    "basis": "위치",
+    "why": "멤버들의 케미와 자신감을 담은 앨범의 인트로라, 개인 근접 사진 한 장을 폴라로이드로 꺼내 문을 엽니다."
+   },
+   {
+    "template": "stacked",
+    "photo": "p3",
+    "crop": [
+     0.66,
+     0.0,
+     1.0,
+     0.5
+    ],
+    "basis": "제목",
+    "why": "'CHEMISTRY'를 세 번 쌓아 반응이 커지는 느낌을 만들고, 개인 전신 사진을 가운데 둡니다."
+   }
+  ],
+  "2": [
+   {
+    "template": "full",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.9
+    ],
+    "props": [
+     "motif:streaks"
+    ],
+    "basis": "소개",
+    "why": "남의 시선에 신경 쓰지 않고 자기 길을 개척하겠다는 타이틀곡이라, 차 더미 앞 단체 사진 위에 질주하는 빛줄기 소품을 얹습니다."
+   },
+   {
+    "template": "cctv",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     0.75
+    ],
+    "basis": "위치",
+    "why": "앨범의 타이틀곡이라, 굴착기 위 다섯 명을 감시 화면의 감지 박스로 짚습니다."
+   }
+  ],
+  "3": [
+   {
+    "template": "motion",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.5,
+     0.5,
+     1.0
+    ],
+    "zooms": [
+     [
+      0.2,
+      0.0,
+      0.8,
+      0.4
+     ],
+     [
+      0.1,
+      0.3,
+      0.9,
+      0.95
+     ]
+    ],
+    "basis": "소개",
+    "why": "정상으로 질주하다 하드테크노로 급전환하는 곡이라, 전신 사진을 움직이는 액자로 잘라 속도감을 줍니다."
+   },
+   {
+    "template": "colorblock",
+    "photo": "p3",
+    "crop": [
+     0.33,
+     0.0,
+     0.66,
+     0.5
+    ],
+    "lines": [
+     "TA"
+    ],
+    "basis": "제목",
+    "why": "짧고 강한 제목 'TA'를 색 블록에 거대하게 세우고 뛰어오르는 개인 전신 사진을 얹습니다."
+   }
+  ],
+  "4": [
+   {
+    "template": "notch",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.5,
+     0.5,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "밤을 지나 아침을 맞는 설렘과 자유를 담은 트랩 R&B라, 느긋하게 기댄 개인 근접 사진 한 장을 세웁니다."
+   },
+   {
+    "template": "torn",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.2,
+     1.0,
+     0.9
+    ],
+    "zooms": [
+     [
+      0.0,
+      0.3,
+      0.5,
+      0.6
+     ],
+     [
+      0.5,
+      0.3,
+      1.0,
+      0.6
+     ]
+    ],
+    "basis": "위치",
+    "why": "앨범 후반의 네 번째 곡이라, 단체 사진을 찢어 낸 띠로 나눠 분위기 전환을 보여 줍니다."
+   }
+  ],
+  "5": [
+   {
+    "template": "bloom",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.15,
+     1.0,
+     0.65
+    ],
+    "lines": [
+     "LOVE ME",
+     "DON'T",
+     "LEAVE ME",
+     "ALONE"
+    ],
+    "basis": "소개",
+    "why": "불안과 확신 사이를 오가는 마지막 곡이라, 긴 제목을 계단처럼 엇갈려 짜고 단체 사진을 작게 둡니다."
+   },
+   {
+    "template": "manga",
+    "photo": "p3",
+    "crop": [
+     0.5,
+     0.5,
+     1.0,
+     1.0
+    ],
+    "zooms": [
+     [
+      0.3,
+      0.05,
+      0.7,
+      0.3
+     ],
+     [
+      0.35,
+      0.1,
+      0.6,
+      0.22
+     ],
+     [
+      0.2,
+      0.3,
+      0.8,
+      0.7
+     ],
+     [
+      0.1,
+      0.5,
+      0.9,
+      1.0
+     ]
+    ],
+    "basis": "위치",
+    "why": "앨범을 닫는 마지막 곡이라, 한 장면을 만화 칸 넷으로 몰아쳐 끝맺습니다."
+   }
+  ]
+ }
+}
