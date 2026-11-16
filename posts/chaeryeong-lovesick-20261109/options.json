@@ -1,0 +1,209 @@
+{
+ "credit": "JYP엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16260145_2069474_3741.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16260145",
+   "note": "Lovesick 콘셉트(분홍 소파, 은빛 날개)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16260145_2069475_3747.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16260145",
+   "note": "Lovesick 콘셉트(분홍 배경 근접, 가로)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16260145_2069477_3759.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16260145",
+   "note": "Lovesick 콘셉트(노란 배경, 날개)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16257913_2066883_2022.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16257913",
+   "note": "Lovesick 콘셉트(컵을 든 근접)"
+  },
+  "p5": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16257913_2066884_2028.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16257913",
+   "note": "Lovesick 콘셉트(신문 콜라주)"
+  },
+  "p6": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16257913_2066885_2035.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16257913",
+   "note": "Lovesick 콘셉트(쪼그려 앉은 전신)"
+  },
+  "p7": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16260145_2069476_3753.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16260145",
+   "note": "Lovesick 콘셉트(사진 두 장 콜라주)"
+  },
+  "p8": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16257913_2066886_2041.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16257913",
+   "note": "Lovesick 콘셉트(타원 프레임, 책상)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "nowplaying",
+    "basis": "위치",
+    "why": "채령의 솔로 데뷔 미니 1집이라, 표지를 재생 화면에 올리고 네 곡과 발매일을 한눈에 보여 줍니다."
+   },
+   {
+    "template": "editorial",
+    "bg": "spot",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.75
+    ],
+    "basis": "소개",
+    "why": "한 사람에게 빠져드는 설렘을 사랑스럽게 그린 앨범이라, 날개를 단 노란 배경 사진을 포인트 컬러 바탕의 잡지 표지처럼 세웁니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "polaroid",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.05,
+     1.0,
+     0.6
+    ],
+    "basis": "소개",
+    "why": "뜻밖의 끌림에 빠지는 두근거림을 담은 타이틀곡이라, 분홍 소파에 앉은 사진을 설레는 순간의 폴라로이드로 꺼냅니다."
+   },
+   {
+    "template": "colorblock",
+    "photo": "p2",
+    "crop": [
+     0.3,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "lines": [
+     "Love",
+     "sick"
+    ],
+    "basis": "제목",
+    "why": "'Lovesick'을 Love·sick 두 줄로 크게 세우고 분홍 배경 근접 사진을 얹습니다."
+   }
+  ],
+  "2": [
+   {
+    "template": "notch",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.8
+    ],
+    "basis": "소개",
+    "why": "꿈속 공간에서 만나 함께 춤추는 몽환적인 곡이라, 날개를 단 사진 한 장을 정면으로 세웁니다."
+   },
+   {
+    "template": "oval",
+    "photo": "p8",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.6
+    ],
+    "basis": "제목",
+    "why": "'Moonlit Club'의 달처럼, 둥근 타원 창 안에 책상 앞에 앉은 장면을 담습니다."
+   }
+  ],
+  "3": [
+   {
+    "template": "motion",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.8
+    ],
+    "zooms": [
+     [
+      0.15,
+      0.0,
+      0.85,
+      0.35
+     ],
+     [
+      0.0,
+      0.3,
+      1.0,
+      0.8
+     ]
+    ],
+    "basis": "소개",
+    "why": "향기처럼 스며들겠다는 몽환적인 R&B라, 컵을 든 근접 사진을 움직이는 액자로 잘라 번지는 느낌을 줍니다."
+   },
+   {
+    "template": "gable",
+    "photo": "p7",
+    "crop": [
+     0.27,
+     0.6,
+     0.97,
+     0.98
+    ],
+    "basis": "위치",
+    "why": "앨범 후반으로 넘어가는 세 번째 곡이라, 줄무늬 방 사진을 지붕 모양 제목 아래 둡니다."
+   }
+  ],
+  "4": [
+   {
+    "template": "desktop",
+    "photo": "p5",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "zooms": [
+     [
+      0.1,
+      0.05,
+      0.6,
+      0.4
+     ],
+     [
+      0.1,
+      0.55,
+      0.6,
+      0.85
+     ],
+     [
+      0.5,
+      0.0,
+      1.0,
+      0.5
+     ]
+    ],
+    "basis": "소개",
+    "why": "채령이 직접 작사한 러브송이라, 신문 콜라주 사진을 바탕화면 창 여러 개로 띄워 모아 둔 마음처럼 보여 줍니다."
+   },
+   {
+    "template": "poster",
+    "photo": "p6",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "솔로 데뷔 앨범을 닫는 마지막 곡이라, 쪼그려 앉은 전신 사진을 한 장의 포스터로 겁니다."
+   }
+  ]
+ }
+}
