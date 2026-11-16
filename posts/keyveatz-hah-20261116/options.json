@@ -1,0 +1,85 @@
+{
+ "credit": "AOMG",
+ "photos": {
+  "p1": {
+   "url": "https://images.khan.co.kr/article/2026/11/17/news-p.v1.20261117.feaacf3268aa423ca7a4d26481a3a919_P1.jpg",
+   "page": "https://sports.khan.co.kr/en/article/202611170327007/",
+   "note": "HAH! 장면 콜라주(푸른 조명)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16275385_2086984_2252.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16275385",
+   "note": "HAH! DAY 버전 단체(캐주얼, 전신)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16275385_2086985_2258.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16275385",
+   "note": "HAH! DAY 버전 단체(상반신)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "nowplaying",
+    "basis": "위치",
+    "why": "한 곡짜리 디지털 싱글이라, 초록빛 표지를 재생 화면에 올리고 발매 정보를 한눈에 보여 줍니다."
+   },
+   {
+    "template": "editorial",
+    "bg": "spot",
+    "photo": "p2",
+    "crop": [
+     0.2,
+     0.0,
+     0.8,
+     0.75
+    ],
+    "basis": "소개",
+    "why": "잔소리를 가볍게 받아치는 AOMG 첫 걸크루라, 당당하게 선 다섯 명을 포인트 컬러 바탕의 잡지 표지처럼 세웁니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "motion",
+    "photo": "p1",
+    "crop": [
+     0.5,
+     0.33,
+     1.0,
+     0.66
+    ],
+    "zooms": [
+     [
+      0.3,
+      0.05,
+      0.75,
+      0.5
+     ],
+     [
+      0.1,
+      0.4,
+      0.9,
+      1.0
+     ]
+    ],
+    "basis": "소개",
+    "why": "남의 말에 일일이 답하지 않고 제 방식대로 가는 곡이라, 푸른 조명 속 멤버 장면을 움직이는 액자로 잘라 기세를 보여 줍니다."
+   },
+   {
+    "template": "colorblock",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     0.9
+    ],
+    "lines": [
+     "HAH!"
+    ],
+    "basis": "제목",
+    "why": "잔소리를 튕겨 내는 추임새 'HAH!'를 색 블록에 거대하게 세우고 다섯 멤버를 얹습니다."
+   }
+  ]
+ }
+}
