@@ -1,0 +1,22 @@
+{
+ "credit": "SHgold네트웍스",
+ "photos": {
+  "p1": {"url": "https://img.mydaily.co.kr/photos/2026/11/17/2026111718084076233_l.jpg", "page": "https://www.mydaily.co.kr/page/view/2026111718195843546", "note": "사쿠란보 뮤직비디오 장면 콜라주(주크박스·다이너)"},
+  "p2": {"url": "https://cdn.topstarnews.net/news/photo/202611/16278565_2090745_5250.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16278565", "note": "사쿠란보 콘셉트(금발 근접)"},
+  "p3": {"url": "https://cdn.topstarnews.net/news/photo/202611/16278565_2090748_533.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16278565", "note": "사쿠란보 뮤직비디오 출연진 단체"}
+ },
+ "cards": {
+  "album": [
+   {"template": "nowplaying", "basis": "위치", "why": "'J-POP REMAKE' 다섯 번째 싱글이라, 체리가 박힌 표지를 재생 화면에 올리고 발매 정보를 한눈에 보여 줍니다."},
+   {"template": "editorial", "bg": "spot", "photo": "p2", "crop": [0.0, 0.0, 1.0, 0.75], "basis": "소개", "why": "2003년 히트곡을 예나 특유의 발랄함으로 다시 부른 싱글이라, 금발 근접 사진을 체리빛 바탕의 잡지 표지처럼 세웁니다."}
+  ],
+  "1": [
+   {"template": "polaroid", "photo": "p3", "crop": [0.0, 0.0, 1.0, 1.0], "basis": "소개", "why": "한일 음악 교류로 23년 만에 되살린 곡이라, 뮤직비디오 출연진이 함께한 단체 사진을 추억의 폴라로이드로 꺼냅니다."},
+   {"template": "colorblock", "photo": "p1", "crop": [0.0, 0.27, 1.0, 0.5], "lines": ["사쿠", "란보"], "basis": "제목", "why": "'사쿠란보(체리)'를 두 줄로 크게 세우고, 뮤직비디오 속 근접 장면을 얹습니다."}
+  ],
+  "2": [
+   {"template": "notch", "photo": "p2", "crop": [0.0, 0.0, 1.0, 0.75], "basis": "소개", "why": "보컬을 뺀 반주 버전이라, 노래 대신 표정만 남은 듯한 근접 사진 한 장을 조용히 세웁니다."},
+   {"template": "clipboard", "photo": "p1", "crop": [0.0, 0.0, 1.0, 0.27], "basis": "위치", "why": "싱글을 닫는 두 번째 트랙이라, 다이너 주크박스 장면을 촬영 기록지에 붙여 마무리합니다."}
+  ]
+ }
+}
