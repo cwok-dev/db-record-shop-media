@@ -1,0 +1,119 @@
+{
+ "credit": "인코드엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16258980_2068053_1914.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16258980",
+   "note": "NA-GARI 단체(폐차장 차 더미 앞)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16258980_2068054_1920.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16258980",
+   "note": "NA-GARI 단체(굴착기 위)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16254473_2063030_4359.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16254473",
+   "note": "NA-GARI 개인 전신 콜라주"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16254473_2063031_445.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16254473",
+   "note": "NA-GARI 개인 근접 콜라주"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "live",
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.1,
+    1.0,
+    0.75
+   ],
+   "basis": "소개",
+   "why": "'나가리'를 '나아가리'로 뒤집는 EP라, 폐차장 굴착기 위에 올라선 다섯 명을 큰 사진판에 세웁니다."
+  },
+  "1": {
+   "template": "stacked",
+   "photo": "p3",
+   "crop": [
+    0.66,
+    0.0,
+    1.0,
+    0.5
+   ],
+   "basis": "제목",
+   "why": "'CHEMISTRY'를 세 번 쌓아 반응이 커지는 느낌을 만들고, 개인 전신 사진을 가운데 둡니다."
+  },
+  "2": {
+   "template": "cctv",
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.1,
+    1.0,
+    0.75
+   ],
+   "basis": "위치",
+   "why": "앨범의 타이틀곡이라, 굴착기 위 다섯 명을 감시 화면의 감지 박스로 짚습니다."
+  },
+  "3": {
+   "template": "motion",
+   "photo": "p3",
+   "crop": [
+    0.0,
+    0.5,
+    0.5,
+    1.0
+   ],
+   "zooms": [
+    [
+     0.2,
+     0.0,
+     0.8,
+     0.4
+    ],
+    [
+     0.1,
+     0.3,
+     0.9,
+     0.95
+    ]
+   ],
+   "basis": "소개",
+   "why": "정상으로 질주하다 하드테크노로 급전환하는 곡이라, 전신 사진을 움직이는 액자로 잘라 속도감을 줍니다."
+  },
+  "4": {
+   "template": "notch",
+   "photo": "p4",
+   "crop": [
+    0.0,
+    0.5,
+    0.5,
+    1.0
+   ],
+   "basis": "소개",
+   "why": "밤을 지나 아침을 맞는 설렘과 자유를 담은 트랩 R&B라, 느긋하게 기댄 개인 근접 사진 한 장을 세웁니다."
+  },
+  "5": {
+   "template": "bloom",
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.15,
+    1.0,
+    0.65
+   ],
+   "lines": [
+    "LOVE ME",
+    "DON'T",
+    "LEAVE ME",
+    "ALONE"
+   ],
+   "basis": "소개",
+   "why": "불안과 확신 사이를 오가는 마지막 곡이라, 긴 제목을 계단처럼 엇갈려 짜고 단체 사진을 작게 둡니다."
+  }
+ }
+}
