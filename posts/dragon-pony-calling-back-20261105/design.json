@@ -1,0 +1,76 @@
+{
+ "credit": "안테나",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16268193_2077479_455.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16268193",
+   "note": "Calling back 단체(3인, 붉은 조명)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16268193_2077480_4511.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16268193",
+   "note": "Calling back 단체(흑백, 전신)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16266610_2075558_123.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16266610",
+   "note": "Calling back 뮤직비디오 티저(억새밭)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16266610_2075559_129.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16266610",
+   "note": "Calling back 뮤직비디오 티저(억새밭 개인)"
+  },
+  "p5": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16266610_2075560_1215.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16266610",
+   "note": "Calling back 뮤직비디오 티저(교복 차림 개인)"
+  },
+  "p6": {
+   "url": "https://cdn.topstarnews.net/news/photo/202610/16263210_2072245_3723.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16263210",
+   "note": "Calling back 콘셉트 포토(개인, 푸른 조명)"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "live",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.05,
+    1.0,
+    0.8
+   ],
+   "basis": "소개",
+   "why": "멤버들이 작사·작곡·편곡을 모두 맡은 셀프 프로듀싱 밴드라, 세 멤버가 나란히 선 사진을 큰 사진판에 세웁니다."
+  },
+  "1": {
+   "template": "cinema",
+   "photo": "p3",
+   "crop": [
+    0.0,
+    0.2,
+    1.0,
+    0.8
+   ],
+   "basis": "위치",
+   "why": "싱글의 첫 곡이자 타이틀곡이라, 억새밭을 걷는 뮤직비디오 장면을 영화의 첫 장면처럼 띄웁니다."
+  },
+  "2": {
+   "template": "full",
+   "photo": "p6",
+   "crop": [
+    0.1,
+    0.0,
+    0.9,
+    1.0
+   ],
+   "props": [
+    "motif:wave_lines"
+   ],
+   "basis": "위치",
+   "why": "싱글을 닫는 두 번째 곡이라, 푸른 조명 속 사진에 90년대 록의 울림 같은 물결 소품을 얹습니다."
+  }
+ }
+}
