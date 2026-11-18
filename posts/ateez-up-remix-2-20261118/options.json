@@ -1,0 +1,23 @@
+{
+ "credit": "KQ엔터테인먼트",
+ "photos": {
+  "p1": {"url": "https://cdn.topstarnews.net/news/photo/202611/16276143_2087988_357.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16276143", "note": "UP 콘셉트 포토(민기, 벽 앞에 앉음)"},
+  "p2": {"url": "https://cdn.topstarnews.net/news/photo/202611/16276143_2087990_3519.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16276143", "note": "UP 콘셉트 포토(민기, 콘크리트 공간에 선 자세)"},
+  "p3": {"url": "https://cdn.topstarnews.net/news/photo/202611/16276143_2087991_3526.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16276143", "note": "UP 콘셉트 포토(민기, 흰 배경 상반신)"},
+  "p4": {"url": "https://cdn.specialtimes.co.kr/news/photo/202611/485091_472270_2737.jpg", "page": "https://www.specialtimes.co.kr/news/articleView.html?idxno=485091", "note": "GOLDEN HOUR : Part.6 단체 콘셉트 포토"}
+ },
+ "cards": {
+  "album": [
+   {"template": "nowplaying", "basis": "위치", "why": "타이틀곡 'UP'을 두 프로듀서가 다시 만든 리믹스 싱글이라, 표지를 재생 화면에 올리고 두 버전을 한눈에 보여 줍니다."},
+   {"template": "stage", "photo": "p4", "crop": [0.0, 0.1, 1.0, 1.0], "basis": "소개", "why": "원곡의 카리스마를 다른 방식으로 풀어낸 리믹스라, 무너진 공간에 선 여덟 멤버를 무대 위에 다시 세웁니다."}
+  ],
+  "1": [
+   {"template": "motion", "photo": "p1", "crop": [0.0, 0.0, 1.0, 0.85], "zooms": [[0.3, 0.05, 0.7, 0.3], [0.1, 0.3, 0.9, 0.85]], "basis": "소개", "why": "정글·드럼 앤 베이스로 질주하는 버전이라, 앉은 사진을 움직이는 액자로 잘라 속도감을 줍니다."},
+   {"template": "colorblock", "photo": "p3", "crop": [0.0, 0.0, 1.0, 0.75], "lines": ["UP"], "basis": "제목", "why": "'UP'을 색 블록에 거대하게 세우고, 정면을 노려보는 사진을 얹어 Spray 버전의 첫 장으로 씁니다."}
+  ],
+  "2": [
+   {"template": "full", "photo": "p2", "crop": [0.0, 0.1, 1.0, 1.0], "props": ["motif:rings"], "basis": "소개", "why": "잔잔하게 시작해 묵직한 비트로 터지는 버전이라, 콘크리트 공간에 선 사진 위에 퍼져 나가는 고리 소품을 얹습니다."},
+   {"template": "cctv", "photo": "p4", "crop": [0.0, 0.0, 1.0, 1.0], "basis": "위치", "why": "리믹스 싱글을 닫는 두 번째 버전이라, 여덟 멤버를 감시 화면의 감지 박스로 짚습니다."}
+  ]
+ }
+}
