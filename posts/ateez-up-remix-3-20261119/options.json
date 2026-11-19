@@ -1,0 +1,115 @@
+{
+ "credit": "KQ엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16276143_2087988_357.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16276143",
+   "note": "UP 콘셉트 포토(민기, 벽 앞에 앉음)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16276143_2087990_3519.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16276143",
+   "note": "UP 콘셉트 포토(민기, 콘크리트 공간에 선 자세)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16276143_2087991_3526.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16276143",
+   "note": "UP 콘셉트 포토(민기, 흰 배경 상반신)"
+  },
+  "p4": {
+   "url": "https://cdn.specialtimes.co.kr/news/photo/202611/485091_472270_2737.jpg",
+   "page": "https://www.specialtimes.co.kr/news/articleView.html?idxno=485091",
+   "note": "GOLDEN HOUR : Part.6 단체 콘셉트 포토"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "live",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "해외 DJ 두 팀이 댄스 플로어용으로 다시 만든 리믹스라, 여덟 멤버 단체 사진을 큰 사진판에 깔고 공연 포스터처럼 겁니다."
+   },
+   {
+    "template": "nowplaying",
+    "basis": "위치",
+    "why": "'UP'의 세 번째 리믹스 싱글이라, 표지를 재생 화면에 올리고 두 버전을 한눈에 보여 줍니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "cinema",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.5
+    ],
+    "basis": "소개",
+    "why": "두꺼운 베이스로 압도감을 키운 R3HAB 버전이라, 어두운 눈빛 근접 장면을 와이드 화면에 꽉 차게 띄웁니다."
+   },
+   {
+    "template": "stacked",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.75
+    ],
+    "basis": "제목",
+    "why": "'UP'을 세 번 쌓아 베이스처럼 겹겹이 밀어 올리고, 정면 사진을 가운데 둡니다."
+   }
+  ],
+  "2": [
+   {
+    "template": "full",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     1.0
+    ],
+    "props": [
+     "motif:equalizer"
+    ],
+    "basis": "소개",
+    "why": "강한 비트로 기복을 크게 가져가는 I Hate Models 버전이라, 콘크리트 공간에 선 사진 위에 이퀄라이저 소품을 얹습니다."
+   },
+   {
+    "template": "torn",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "zooms": [
+     [
+      0.0,
+      0.3,
+      0.5,
+      0.7
+     ],
+     [
+      0.5,
+      0.3,
+      1.0,
+      0.7
+     ]
+    ],
+    "basis": "위치",
+    "why": "싱글을 닫는 두 번째 버전이라, 여덟 멤버 단체 사진을 찢어 낸 띠로 나눠 역동적인 전개를 보여 줍니다."
+   }
+  ]
+ }
+}
