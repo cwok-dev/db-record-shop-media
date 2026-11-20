@@ -1,22 +1,87 @@
 {
  "credit": "인연엔터테인먼트",
  "photos": {
-  "p1": {"url": "https://images.khan.co.kr/article/2026/11/10/news-p.v1.20261110.0bfca5dd1faa445a85207b791f1f2f94_P1.jpg", "page": "https://sports.khan.co.kr/en/article/202611101059007/", "note": "Still Valid 단체(서로 안은 전신, 세로)"},
-  "p2": {"url": "https://images.khan.co.kr/article/2026/11/10/news-p.v1.20261110.1a59979bf3484de6b0ea7b40f84a19a1_P1.jpg", "page": "https://sports.khan.co.kr/en/article/202611101059007/", "note": "Still Valid 단체(나란히 선 전신)"},
-  "p3": {"url": "https://cdn-assets.jawapos.com/images/1/2026/11/09/momoland-x-at-soompi-fCtZz.webp", "page": "https://www.jawapos.com/music-movie/2611090467/still-valid-jadi-kado-10-tahun-momoland-untuk-penggemar", "note": "Still Valid 단체(상반신 근접, 가로)"}
+  "p1": {
+   "url": "https://images.khan.co.kr/article/2026/11/10/news-p.v1.20261110.0bfca5dd1faa445a85207b791f1f2f94_P1.jpg",
+   "page": "https://sports.khan.co.kr/en/article/202611101059007/",
+   "note": "Still Valid 단체(서로 안은 전신, 세로)"
+  },
+  "p2": {
+   "url": "https://images.khan.co.kr/article/2026/11/10/news-p.v1.20261110.1a59979bf3484de6b0ea7b40f84a19a1_P1.jpg",
+   "page": "https://sports.khan.co.kr/en/article/202611101059007/",
+   "note": "Still Valid 단체(나란히 선 전신)"
+  },
+  "p3": {
+   "url": "https://cdn-assets.jawapos.com/images/1/2026/11/09/momoland-x-at-soompi-fCtZz.webp",
+   "page": "https://www.jawapos.com/music-movie/2611090467/still-valid-jadi-kado-10-tahun-momoland-untuk-penggemar",
+   "note": "Still Valid 단체(상반신 근접, 가로)"
+  }
  },
  "cards": {
   "album": [
-   {"template": "nowplaying", "basis": "소개", "why": "'빛바랜 티켓이 아직 유효하다'는 10주년 싱글이라, 회전목마 표지를 재생 화면에 올려 다시 돌아가는 음악으로 보여 줍니다."},
-   {"template": "editorial", "bg": "spot", "photo": "p1", "crop": [0.0, 0.15, 1.0, 0.85], "basis": "위치", "why": "6인 완전체로 돌아온 10주년 싱글이라, 서로 안은 단체 사진을 포인트 컬러 바탕의 기념호 표지처럼 세웁니다."}
+   {
+    "template": "nowplaying",
+    "basis": "소개",
+    "why": "'빛바랜 티켓이 아직 유효하다'는 10주년 싱글이라, 회전목마 표지를 재생 화면에 올려 다시 돌아가는 음악으로 보여 줍니다."
+   },
+   {
+    "template": "editorial",
+    "bg": "spot",
+    "basis": "위치",
+    "why": "'빛바랜 티켓이 아직 유효하다'는 10주년 싱글이라, 회전목마 표지를 포인트 컬러 바탕의 기념호 표지처럼 세웁니다."
+   }
   ],
   "1": [
-   {"template": "polaroid", "photo": "p3", "crop": [0.0, 0.0, 1.0, 1.0], "basis": "소개", "why": "다시 만나는 마음과 처음의 떨림이 여전히 유효하다는 곡이라, 여섯 멤버 근접 사진을 오래 간직한 폴라로이드처럼 꺼냅니다."},
-   {"template": "stacked", "photo": "p2", "crop": [0.0, 0.1, 1.0, 0.8], "basis": "제목", "why": "'Still Valid'를 쌓아 여전히 유효하다는 말을 되풀이하고, 나란히 선 단체 사진을 가운데 둡니다."}
+   {
+    "template": "polaroid",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "다시 만나는 마음과 처음의 떨림이 여전히 유효하다는 곡이라, 여섯 멤버 근접 사진을 오래 간직한 폴라로이드처럼 꺼냅니다."
+   },
+   {
+    "template": "stacked",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     0.8
+    ],
+    "basis": "제목",
+    "why": "'Still Valid'를 쌓아 여전히 유효하다는 말을 되풀이하고, 나란히 선 단체 사진을 가운데 둡니다."
+   }
   ],
   "2": [
-   {"template": "notch", "photo": "p2", "crop": [0.15, 0.05, 0.85, 0.6], "basis": "소개", "why": "요란하지 않아도 둘만 아는 온도로 충분한 미니멀 R&B라, 나란히 선 사진의 상반신만 조용히 잘라 세웁니다."},
-   {"template": "clipboard", "photo": "p1", "crop": [0.0, 0.15, 1.0, 0.85], "basis": "위치", "why": "더블 타이틀의 두 번째 곡이라, 서로 안은 단체 사진을 기록지에 붙여 10주년 기록처럼 남깁니다."}
+   {
+    "template": "notch",
+    "photo": "p2",
+    "crop": [
+     0.15,
+     0.05,
+     0.85,
+     0.6
+    ],
+    "basis": "소개",
+    "why": "요란하지 않아도 둘만 아는 온도로 충분한 미니멀 R&B라, 나란히 선 사진의 상반신만 조용히 잘라 세웁니다."
+   },
+   {
+    "template": "clipboard",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.15,
+     1.0,
+     0.85
+    ],
+    "basis": "위치",
+    "why": "더블 타이틀의 두 번째 곡이라, 서로 안은 단체 사진을 기록지에 붙여 10주년 기록처럼 남깁니다."
+   }
   ]
  }
 }
