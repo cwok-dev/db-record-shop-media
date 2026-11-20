@@ -1,0 +1,102 @@
+{
+ "credit": "더블랙레이블",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16280325_2092973_1953.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16280325",
+   "note": "ICONIC 뮤직비디오 티저 장면 콜라주"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16278519_2090666_254.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16278519",
+   "note": "ICONIC 콘셉트(백발·뱀, 상반신)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16278519_2090667_2510.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16278519",
+   "note": "ICONIC 콘셉트(백발, 흰 의상 전신)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16278519_2090668_2517.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16278519",
+   "note": "ICONIC 콘셉트(붉은 배경, 검은 후드)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "live",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.05,
+     1.0,
+     0.95
+    ],
+    "basis": "소개",
+    "why": "5년 만의 솔로 귀환작이라, 바닥까지 끌리는 백발과 흰 의상의 전신 사진을 큰 사진판에 세워 존재감을 보여 줍니다."
+   },
+   {
+    "template": "nowplaying",
+    "basis": "위치",
+    "why": "두 곡짜리 디지털 싱글이라, 표지를 재생 화면에 올리고 곡 수와 발매일을 한눈에 보여 줍니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "polaroid",
+    "photo": "p4",
+    "crop": [
+     0.0,
+     0.15,
+     1.0,
+     0.85
+    ],
+    "basis": "소개",
+    "why": "뒤에서 말고 얼굴을 마주하고 말하라는 곡이라, 정면을 똑바로 보는 붉은 배경 사진을 폴라로이드로 꺼냅니다."
+   },
+   {
+    "template": "colorblock",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.7
+    ],
+    "lines": [
+     "SAY IT TO",
+     "MY FACE"
+    ],
+    "basis": "제목",
+    "why": "'SAY IT TO MY FACE'를 색 블록에 크게 세우고, 정면을 응시하는 근접 사진을 얹습니다."
+   }
+  ],
+  "2": [
+   {
+    "template": "player",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.0,
+     0.5,
+     0.33
+    ],
+    "basis": "위치",
+    "why": "타이틀곡이자 뮤직비디오가 있는 곡이라, 붉은 무대의 티저 장면을 재생 화면으로 띄우고 진행 막대로 위치를 보여 줍니다."
+   },
+   {
+    "template": "notch",
+    "photo": "p3",
+    "crop": [
+     0.1,
+     0.0,
+     0.9,
+     0.75
+    ],
+    "basis": "소개",
+    "why": "아이콘으로서의 존재감을 선언하는 곡이라, 바닥까지 끌리는 백발의 흰 의상 사진 한 장을 정면으로 세웁니다."
+   }
+  ]
+ }
+}
