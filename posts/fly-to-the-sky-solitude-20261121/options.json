@@ -1,0 +1,106 @@
+{
+ "credit": "BT엔터테인먼트·BYOU엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.rnx.kr/news/photo/202611/921600_958961_5059.jpg",
+   "page": "https://www.rnx.kr/news/articleView.html?idxno=921600",
+   "note": "SOLITUDE 콘셉트(두 사람 나란히 앉음)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16278434_2090547_4721.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16278434",
+   "note": "SOLITUDE 콘셉트(고개 숙인 환희, 가로)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16278434_2090548_4728.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16278434",
+   "note": "SOLITUDE 콘셉트(브라이언 근접, 세로)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16279395_2091655_4826.jpg",
+   "page": "https://global.topstarnews.net/en/articleView.html?idxno=16279395",
+   "note": "Story 뮤직비디오 티저(흑백 옆얼굴)"
+  },
+  "p5": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16279395_2091654_4819.jpg",
+   "page": "https://global.topstarnews.net/en/articleView.html?idxno=16279395",
+   "note": "Story 뮤직비디오 티저(흑백, 홀로 앉은 장면)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "nowplaying",
+    "basis": "위치",
+    "why": "8년 만에 두 사람이 함께 낸 더블 타이틀 싱글이라, 표지를 재생 화면에 올리고 두 곡을 한눈에 보여 줍니다."
+   },
+   {
+    "template": "stage",
+    "photo": "p1",
+    "crop": [
+     0.0,
+     0.05,
+     1.0,
+     0.65
+    ],
+    "basis": "소개",
+    "why": "떨어져 지낸 세월 끝에 다시 함께 선 27주년 싱글이라, 나란히 앉은 두 사람 사진을 무대 위에 세웁니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "polaroid",
+    "photo": "p3",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     0.7
+    ],
+    "basis": "소개",
+    "why": "지나온 시간을 돌아보며 모든 경험에 고마움을 전하는 곡이라, 브라이언 근접 사진을 오래 간직한 폴라로이드로 꺼냅니다."
+   },
+   {
+    "template": "gable",
+    "photo": "p2",
+    "crop": [
+     0.0,
+     0.0,
+     1.0,
+     1.0
+    ],
+    "basis": "제목",
+    "why": "'Who I Am'이라는 물음을 지붕 모양 제목으로 세우고, 고개 숙인 환희의 사진을 그 아래 둡니다."
+   }
+  ],
+  "2": [
+   {
+    "template": "player",
+    "photo": "p4",
+    "crop": [
+     0.1,
+     0.0,
+     0.9,
+     1.0
+    ],
+    "basis": "위치",
+    "why": "뮤직비디오가 있는 두 번째 타이틀곡이라, 흑백 티저 장면을 재생 화면으로 띄우고 진행 막대로 위치를 보여 줍니다."
+   },
+   {
+    "template": "full",
+    "photo": "p5",
+    "crop": [
+     0.0,
+     0.1,
+     1.0,
+     0.9
+    ],
+    "basis": "소개",
+    "why": "모든 것을 주고도 홀로 남은 그리움을 노래한 곡이라, 텅 빈 공간에 홀로 앉은 흑백 장면 위에 저무는 달 소품을 얹습니다.",
+    "props": [
+     "motif:eclipse"
+    ]
+   }
+  ]
+ }
+}
