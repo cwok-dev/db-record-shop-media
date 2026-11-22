@@ -1,0 +1,37 @@
+{
+ "credit": "PAIX PER MIL",
+ "photos": {
+  "p1": {"url": "https://cdn.topstarnews.net/news/photo/202611/16281217_2094075_3121.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16281217", "note": "Cute & Anxiety 콘셉트(비행기 창 속 얼굴)"},
+  "p2": {"url": "https://cdn.topstarnews.net/news/photo/202611/16272598_2083426_5014.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16272598", "note": "Cute & Anxiety 콘셉트(자갈 위에 누운 근접)"},
+  "p3": {"url": "https://cdn.topstarnews.net/news/photo/202611/16272598_2083427_5020.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16272598", "note": "Cute & Anxiety 콘셉트(소파에 기댐)"},
+  "p4": {"url": "https://cdn.topstarnews.net/news/photo/202611/16272598_2083429_5026.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16272598", "note": "Cute & Anxiety 콘셉트(열차 문 앞 전신)"},
+  "p5": {"url": "https://img.etnews.com/news/article/2026/11/21/article_21112933579523.jpg", "page": "https://www.etnews.com/20261121000031", "note": "Cute & Anxiety 콘셉트(열차 문간에 웅크림)"},
+  "p6": {"url": "https://img.etnews.com/news/article/2026/11/21/article_21112955025871.jpg", "page": "https://www.etnews.com/20261121000031", "note": "Cute & Anxiety 콘셉트(양 갈래 머리 잡은 전신)"}
+ },
+ "cards": {
+  "album": [
+   {"template": "live", "photo": "p4", "crop": [0.0, 0.1, 1.0, 0.95], "basis": "소개", "why": "귀여움과 불안이 맞닿은 경계를 그린 EP라, 낡은 열차 문 앞에 선 붉은 머리 전신 사진을 큰 사진판에 세웁니다."},
+   {"template": "flyer", "bg": "spot", "photo": "p1", "crop": [0.12, 0.0, 0.82, 0.85], "basis": "위치", "why": "다섯 곡을 담은 다섯 번째 EP라, 창 속에 갇힌 듯한 사진에 수록곡 띠와 발매 정보를 포인트 컬러 바탕 위에 담습니다."}
+  ],
+  "1": [
+   {"template": "cinema", "photo": "p2", "crop": [0.0, 0.15, 1.0, 0.7], "basis": "소개", "why": "개러지 록과 거친 디스토션으로 문을 여는 곡이라, 자갈 위에 쓰러진 근접 장면을 영화의 첫 장면처럼 띄웁니다."},
+   {"template": "stacked", "photo": "p6", "crop": [0.0, 0.0, 1.0, 0.75], "basis": "제목", "why": "'Too Much'를 세 번 쌓아 넘치는 감정을 되풀이하고, 머리를 잡아 올린 사진을 가운데 둡니다."}
+  ],
+  "2": [
+   {"template": "notch", "photo": "p1", "crop": [0.12, 0.05, 0.82, 0.8], "basis": "소개", "why": "흐릿한 장면을 되감는 트립합 타이틀곡이라, 창 너머로 보이는 얼굴 한 장을 흐린 기억처럼 정면에 세웁니다."},
+   {"template": "player", "photo": "p4", "crop": [0.0, 0.1, 1.0, 0.8], "basis": "위치", "why": "뮤직비디오가 있는 타이틀곡이라, 열차 문 앞 장면을 재생 화면으로 띄우고 진행 막대로 위치를 보여 줍니다."}
+  ],
+  "3": [
+   {"template": "polaroid", "photo": "p5", "crop": [0.0, 0.1, 1.0, 0.7], "basis": "제목", "why": "'Hysteric'의 불안을 웅크린 채 정면을 보는 사진 한 장에 담아 폴라로이드로 꺼냅니다."},
+   {"template": "motion", "photo": "p6", "crop": [0.0, 0.0, 1.0, 1.0], "zooms": [[0.25, 0.05, 0.75, 0.35], [0.15, 0.3, 0.85, 0.9]], "basis": "소개", "why": "반복되는 베이스 리프의 딥하우스라, 전신 사진을 움직이는 액자로 잘라 반복되는 리듬처럼 보여 줍니다."}
+  ],
+  "4": [
+   {"template": "full", "photo": "p3", "crop": [0.0, 0.0, 1.0, 0.9], "props": ["motif:blur_dots"], "basis": "소개", "why": "낮게 깔리는 앰비언트에 글리치를 섞은 곡이라, 소파에 기댄 사진 위에 흐려지는 점 소품을 얹습니다."},
+   {"template": "cctv", "photo": "p4", "crop": [0.0, 0.0, 1.0, 1.0], "basis": "위치", "why": "앨범 후반의 네 번째 곡이라, 열차 문 앞에 선 모습을 밤에 포착된 감시 화면처럼 짚습니다."}
+  ],
+  "5": [
+   {"template": "gable", "photo": "p5", "crop": [0.0, 0.1, 1.0, 0.8], "basis": "위치", "why": "먼저 공개된 곡으로 앨범을 닫는 마지막 트랙이라, 웅크린 사진을 지붕 모양 제목 아래 조용히 둡니다."},
+   {"template": "manga", "photo": "p2", "crop": [0.0, 0.0, 1.0, 1.0], "zooms": [[0.3, 0.3, 0.75, 0.6], [0.35, 0.35, 0.65, 0.5], [0.0, 0.0, 1.0, 0.5], [0.2, 0.5, 0.9, 1.0]], "basis": "제목", "why": "'Adam'이라는 이름처럼 한 사람의 이야기를 만화 칸 넷으로 나눠 끝맺습니다."}
+  ]
+ }
+}
