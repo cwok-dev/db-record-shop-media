@@ -1,0 +1,162 @@
+{
+ "credit": "SM엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16282569_2095290_338.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16282569",
+   "note": "Deep Night(푸른 방, 침대에 앉음)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16282569_2095291_3314.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16282569",
+   "note": "Deep Night(얼굴 근접)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16282569_2095292_3321.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16282569",
+   "note": "Deep Night(엎드린 근접)"
+  },
+  "p4": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16280899_2093657_430.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16280899",
+   "note": "Blue Hour(흰 침구 근접)"
+  },
+  "p5": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16280899_2093658_436.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16280899",
+   "note": "Blue Hour(입술에 손)"
+  },
+  "p6": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16273396_2084443_1520_crop.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16273396",
+   "note": "Blue Hour(소파에 기댐, 가로)"
+  },
+  "p7": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16273396_2084446_1538.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16273396",
+   "note": "Blue Hour(받침대 위 웅크린 전신)"
+  },
+  "p8": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16281649_2094586_147.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16281649",
+   "note": "Dusk(노을빛 침대)"
+  },
+  "p9": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16281649_2094587_153.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16281649",
+   "note": "Dusk(창가 햇살 근접)"
+  },
+  "p10": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16281649_2094588_20.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16281649",
+   "note": "Dusk(햇살 속 앉은 전신)"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "live",
+   "photo": "p8",
+   "crop": [
+    0.1,
+    0.0,
+    0.9,
+    1.0
+   ],
+   "basis": "소개",
+   "why": "밤에서 다음 날 저녁까지 하루를 따라가는 앨범이라, 노을빛 침대에 기댄 사진을 큰 사진판에 깔고 하루 끝의 빛을 보여 줍니다."
+  },
+  "1": {
+   "template": "cinema",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.1,
+    1.0,
+    0.9
+   ],
+   "basis": "위치",
+   "why": "밤이 막 시작되는 공기를 그린 오프닝이라, 푸른 방의 장면을 영화의 첫 장면처럼 띄웁니다."
+  },
+  "2": {
+   "template": "notch",
+   "photo": "p9",
+   "crop": [
+    0.0,
+    0.0,
+    0.62,
+    1.0
+   ],
+   "basis": "소개",
+   "why": "해 뜨기 직전의 어둠을 견딘 사람에게 건네는 위로라, 창가 햇살을 받은 얼굴 한 장을 정면으로 세웁니다."
+  },
+  "3": {
+   "template": "motion",
+   "photo": "p4",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "zooms": [
+    [
+     0.25,
+     0.05,
+     0.6,
+     0.6
+    ],
+    [
+     0.0,
+     0.3,
+     0.7,
+     1.0
+    ]
+   ],
+   "basis": "소개",
+   "why": "새벽에 지난 시간을 되감아 보는 곡이라, 흰 침구 근접 사진을 움직이는 액자로 잘라 되감기처럼 보여 줍니다."
+  },
+  "4": {
+   "template": "cctv",
+   "photo": "p7",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "basis": "위치",
+   "why": "앨범 후반을 여는 네 번째 곡이라, 받침대 위에 웅크린 모습을 감시 화면으로 짚습니다."
+  },
+  "5": {
+   "template": "colorblock",
+   "photo": "p3",
+   "crop": [
+    0.15,
+    0.0,
+    0.95,
+    1.0
+   ],
+   "basis": "위치",
+   "why": "마지막 곡 직전이라, 'Shadows'를 색 블록에 크게 세우고 엎드린 근접 사진을 얹어 그림자 같은 순간을 남깁니다.",
+   "lines": [
+    "Shadows"
+   ]
+  },
+  "6": {
+   "template": "full",
+   "photo": "p8",
+   "crop": [
+    0.12,
+    0.0,
+    0.62,
+    1.0
+   ],
+   "props": [
+    "motif:sunburst"
+   ],
+   "basis": "제목",
+   "why": "하루 끝 잔광을 노래하는 'Golden Hour'라, 노을빛 침대 사진 위에 퍼지는 햇살 소품을 얹어 앨범을 닫습니다."
+  }
+ },
+ "photoStyle": "raw"
+}
