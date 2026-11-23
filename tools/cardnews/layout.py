@@ -11,7 +11,7 @@
 - 제목과 한 줄 평 사이에 남는 세로 공간에서 그림 묶음은 가운데에 둔다.
 - 별 터짐 모양은 추천 표시에만 쓴다.
 """
-import colorsys, hashlib, html, math, pathlib
+import colorsys, hashlib, html, math, pathlib, re
 from point_color import base_color, contrast, _hls, _hex, _rgb, _is_achromatic
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -1022,8 +1022,25 @@ TEMPLATES = {"polaroid": t_polaroid, "stacked": t_stacked, "bloom": t_bloom, "ma
              "motion": t_motion, "issue": t_issue, "torn": t_torn}
 
 
+RAW = False  # True면 사진을 있는 그대로: 그레인을 끄고 사진 칸의 블렌드·필터를 뺀다("photoStyle": "raw").
+
+
+def raw_css(css):
+    """사진(url(...)이 든 규칙)의 mix-blend-mode·filter·opacity를 없애고 그레인을 숨긴다."""
+    def fix(m):
+        rule = m.group(0)
+        if "url(" not in rule:
+            return rule
+        rule = re.sub(r"mix-blend-mode:[a-z-]+", "mix-blend-mode:normal", rule)
+        rule = re.sub(r"filter:(?!url)[^;}]+", "filter:none", rule)
+        return re.sub(r"opacity:\s*\.?\d+(\.\d+)?", "opacity:1", rule)
+    return re.sub(r"\{[^{}]*\}", fix, css) + ".grain{display:none!important}"
+
+
 def page_html(c):
     bg, css, body = TEMPLATES[c.spec["template"]](c)
+    if RAW:
+        css = raw_css(css)
     return (f"<!doctype html><html><head><meta charset='utf-8'><style>{base_css(c, bg)}{css}</style></head>"
             f"<body>{body}{rec_stamp(c)}<script>{SCRIPT}</script></body></html>")
 

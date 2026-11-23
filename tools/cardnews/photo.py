@@ -194,6 +194,14 @@ def place(im, crop, w, h, fs, occl):
     return best, left, len(fs)
 
 
+RAW = False  # True면 하프톤 없이 원본 색 그대로 쓴다(design·options의 "photoStyle": "raw", 사용자 결정 2026-11-24).
+
+
+def treat(im, cell=4):
+    """사진 칸 처리: 기본은 하프톤, RAW면 원본 색 그대로."""
+    return im.convert("RGB") if RAW else halftone(im, cell)
+
+
 def halftone(im, cell=4, angle=45):
     """흰 바탕에 검은 점. 점 크기가 어두움에 비례한다(45° 격자).
     흰 옷·밝은 배경 사진은 점이 거의 안 찍혀 흐려지므로, 평균 밝기가 0.45를 넘으면 중간톤을 눌러 0.45로 맞춘다."""
@@ -224,7 +232,7 @@ def halftone(im, cell=4, angle=45):
 
 def slot_name(src, crop, w, h, cell=4):
     """기본 자리 사진 칸 파일 이름. 렌더링 1차에서 칸을 알아볼 때 쓴다."""
-    return "ht_" + hashlib.sha1(f"{src}|{crop}|{w}|{h}|{cell}".encode()).hexdigest()[:16] + ".png"
+    return ("raw_" if RAW else "ht_") + hashlib.sha1(f"{src}|{crop}|{w}|{h}|{cell}".encode()).hexdigest()[:16] + ".png"
 
 
 def slot(src, crop, w, h, cache, cell=4, occl=None):
@@ -234,10 +242,10 @@ def slot(src, crop, w, h, cache, cell=4, occl=None):
     if not occl:
         out = pathlib.Path(cache) / slot_name(src, crop, w, h, cell)
         if not out.exists():
-            halftone(fit_crop(load(src, cache), crop, w, h), cell).save(out)
+            treat(fit_crop(load(src, cache), crop, w, h), cell).save(out)
         return out, None
     key = hashlib.sha1(f"{src}|{crop}|{w}|{h}|{cell}|{occl}".encode()).hexdigest()[:16]
-    out = pathlib.Path(cache) / f"ht_{key}.png"
+    out = pathlib.Path(cache) / f"{'raw' if RAW else 'ht'}_{key}.png"
     meta = out.with_suffix(".json")
     if not out.exists() or not meta.exists():
         im = load(src, cache)
@@ -249,7 +257,7 @@ def slot(src, crop, w, h, cache, cell=4, occl=None):
             rect, left, total = place(im, crop, w, h, fs, occl)
             info = {"rect": rect, "moved": rect != default_rect(im, crop, w, h),
                     "warn": f"얼굴 가림 {left}/{total}" if left else None}
-        halftone(fit_crop(im, crop, w, h, rect), cell).save(out)
+        treat(fit_crop(im, crop, w, h, rect), cell).save(out)
         meta.write_text(json.dumps(info))
     return out, json.loads(meta.read_text()).get("warn")
 

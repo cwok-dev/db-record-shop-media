@@ -249,8 +249,14 @@ def main():
     fetch_fonts()
     from PIL import Image
 
+    import layout, photo
+
+    def style(d):
+        layout.RAW = photo.RAW = d.get("photoStyle") == "raw"
+
     if args.options:
         opt = json.load(open(args.options, encoding="utf-8"))
+        style(opt)
         cards = opt["cards"]
 
         def specs(p, group):
@@ -282,6 +288,7 @@ def main():
         sys.exit("게시용 렌더링에는 --review가 필요합니다")
     design = json.load(open(args.design, encoding="utf-8")) if args.design else {"cards": {}, "photos": {}}
     dc = design.get("cards", {})
+    style(design)
 
     def specs(p, group):
         return [("", need(dc.get("album"), "앨범"), [need(dc.get(str(t["n"])), f"트랙 {t['n']}") for t in group])]
