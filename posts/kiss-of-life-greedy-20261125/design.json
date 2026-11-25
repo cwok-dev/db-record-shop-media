@@ -1,0 +1,108 @@
+{
+ "credit": "S2엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16281109_2093896_1441.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16281109",
+   "note": "Greedy 첫 콘셉트(아늑한 거실, 세로)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16281109_2093897_1447.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16281109",
+   "note": "Greedy 첫 콘셉트(네 멤버 근접)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202611/16281109_2093898_1453.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16281109",
+   "note": "Greedy 첫 콘셉트 개인 콜라주"
+  },
+  "p4": {
+   "url": "https://cdn.ize.co.kr/news/photo/202611/82947_128996_2140.jpg",
+   "page": "https://www.ize.co.kr/news/articleView.html?idxno=82947",
+   "note": "Greedy 산타 콘셉트(굴뚝 앞)"
+  },
+  "p5": {
+   "url": "https://www.cbci.co.kr/news/photo/202611/630151_433203_2618.jpg",
+   "page": "https://www.cbci.co.kr/news/articleView.html?idxno=630151",
+   "note": "Greedy 산타 콘셉트(눈밭, 지팡이)"
+  }
+ },
+ "cards": {
+  "album": {
+   "template": "stage",
+   "photo": "p1",
+   "crop": [
+    0.0,
+    0.1,
+    1.0,
+    0.9
+   ],
+   "basis": "소개",
+   "why": "소중한 사람과 보내는 평범한 겨울날을 노래한 싱글이라, 아늑한 거실에 모인 네 멤버를 무대 위에 세웁니다."
+  },
+  "1": {
+   "template": "colorblock",
+   "photo": "p5",
+   "crop": [
+    0.0,
+    0.15,
+    1.0,
+    1.0
+   ],
+   "lines": [
+    "Greedy"
+   ],
+   "basis": "제목",
+   "why": "'Greedy'를 색 블록에 크게 세우고, 지팡이를 든 산타 콘셉트 단체 사진을 얹습니다."
+  },
+  "2": {
+   "template": "desktop",
+   "photo": "p3",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "zooms": [
+    [
+     0.0,
+     0.0,
+     0.5,
+     0.5
+    ],
+    [
+     0.0,
+     0.5,
+     0.5,
+     1.0
+    ],
+    [
+     0.5,
+     0.5,
+     1.0,
+     1.0
+    ]
+   ],
+   "basis": "위치",
+   "why": "가운데 곡이라, 멤버별 겨울 사진을 바탕화면 창 여러 개로 띄워 연말 사진첩처럼 보여 줍니다."
+  },
+  "3": {
+   "template": "bloom",
+   "photo": "p2",
+   "crop": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "lines": [
+    "Imperfect",
+    "Christmas"
+   ],
+   "basis": "위치",
+   "why": "싱글을 닫는 마지막 곡이라, 제목을 계단처럼 짜고 네 멤버 사진을 작게 두어 마무리합니다."
+  }
+ },
+ "photoStyle": "raw"
+}
