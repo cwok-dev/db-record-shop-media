@@ -489,7 +489,7 @@ display:flex;align-items:center;gap:18px;padding:0 24px;z-index:6}}
     body = f"""<div class='abs photo'></div><div class='grain'></div>
 <div class='abs search'><svg width='50' height='50' viewBox='0 0 100 100'><circle cx='42' cy='42' r='28' fill='none' stroke='{INK}' stroke-width='10'/>
 <path d='M63 63 L90 90' stroke='{INK}' stroke-width='12' stroke-linecap='round'/></svg><b>{esc(c.title)}</b><u></u></div>
-{folder(M, TOP_TITLE + 150, c.album)}{folder(X[5] - 30, TOP_TITLE + 170, f"TRACK {c.n:02d}")}
+{"" if c.spec.get("noFolders") else folder(M, TOP_TITLE + 150, c.album) + folder(X[5] - 30, TOP_TITLE + 170, f"TRACK {c.n:02d}")}
 {win(X[1] + 40, TOP_TITLE + 290, 560, 500, z[0], f"IMG_{c.n:02d}01.jpg", 3)}
 {win(X[3] + 60, TOP_TITLE + 430, 420, 420, z[1], f"IMG_{c.n:02d}02.jpg", 4)}
 {win(X[1] + 120, TOP_TITLE + 640, 380, 300, z[2], f"IMG_{c.n:02d}03.jpg", 5).replace("class='abs win'", "class='abs win anchor'")}
