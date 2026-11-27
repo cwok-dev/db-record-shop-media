@@ -1,0 +1,74 @@
+{
+ "photoStyle": "raw",
+ "credit": "SM엔터테인먼트",
+ "photos": {
+  "p1": {
+   "url": "https://cdn.topstarnews.net/news/photo/202607/16144430_1968988_1639.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16144430",
+   "note": "KISS N TELL 콘셉트(회전목마 앞 4인)"
+  },
+  "p2": {
+   "url": "https://cdn.topstarnews.net/news/photo/202607/16144430_1968989_1645.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16144430",
+   "note": "KISS N TELL 뮤직비디오 장면(음표 무대)"
+  },
+  "p3": {
+   "url": "https://cdn.topstarnews.net/news/photo/202607/16120993_1953833_1042.jpg",
+   "page": "https://www.topstarnews.net/news/articleView.html?idxno=16120993",
+   "note": "KISS N TELL 콘셉트(핑크 레트로 4인 근접)"
+  },
+  "p4": {
+   "url": "https://isp.edailystatic.com/data/isp/image/2026/07/02/isp20260702000159.1280x.0.jpg",
+   "page": "https://isplus.com/article/view/isp202607020088",
+   "note": "KISS N TELL 콘셉트(미용실 4인 전신)"
+  }
+ },
+ "cards": {
+  "album": [
+   {
+    "template": "nowplaying",
+    "basis": "위치",
+    "why": "일본 첫 미니 타이틀곡을 영어로 다시 부른 한 곡짜리 싱글이라, 표지를 재생 화면에 올리고 발매 정보를 한눈에 보여 줍니다."
+   },
+   {
+    "template": "editorial",
+    "bg": "spot",
+    "photo": "p1",
+    "crop": [
+     0.03,
+     0.0,
+     0.97,
+     0.9
+    ],
+    "basis": "소개",
+    "why": "뮤직비디오 장면이 밈으로 퍼진 놀이공원 콘셉트라, 회전목마 불빛 앞 네 멤버를 포인트 컬러 바탕의 잡지 표지처럼 세웁니다."
+   }
+  ],
+  "1": [
+   {
+    "template": "player",
+    "photo": "p2",
+    "crop": [
+     0.05,
+     0.0,
+     0.95,
+     0.78
+    ],
+    "basis": "위치",
+    "why": "뮤직비디오가 화제가 된 곡이라, 음표가 쏟아지는 무대 장면을 재생 화면으로 띄우고 진행 막대로 위치를 보여 줍니다."
+   },
+   {
+    "template": "polaroid",
+    "photo": "p3",
+    "crop": [
+     0.05,
+     0.0,
+     0.95,
+     1.0
+    ],
+    "basis": "소개",
+    "why": "고민을 나누며 가까워지는 발랄한 하우스 팝이라, 비밀 이야기를 나누듯 모인 네 멤버 사진을 폴라로이드로 꺼냅니다."
+   }
+  ]
+ }
+}
