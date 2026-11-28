@@ -1,0 +1,30 @@
+{
+ "photoStyle": "raw",
+ "credit": "JYP엔터테인먼트",
+ "photos": {
+  "p1": {"url": "https://cdn.topstarnews.net/news/photo/202611/16274440_2085826_312.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16274440", "note": "BABY ANGEL 천사 콘셉트(하늘 그네)"},
+  "p2": {"url": "https://cdn.topstarnews.net/news/photo/202611/16274440_2085828_3115.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16274440", "note": "BABY ANGEL 천사 콘셉트(깃털 근접)"},
+  "p3": {"url": "https://cdn.topstarnews.net/news/photo/202611/16274440_2085829_3121.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16274440", "note": "BABY ANGEL 천사 콘셉트(눈 감고 엎드림)"},
+  "p4": {"url": "https://cdn.topstarnews.net/news/photo/202611/16273465_2084582_2558.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16273465", "note": "NA-sty 키치 콘셉트(노트북, 빨간 의자)"},
+  "p5": {"url": "https://cdn.topstarnews.net/news/photo/202611/16273465_2084584_2610.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16273465", "note": "NA-sty 키치 콘셉트(노트북 든 상반신)"},
+  "p6": {"url": "https://cdn.topstarnews.net/news/photo/202611/16273465_2084585_2617.jpg", "page": "https://www.topstarnews.net/news/articleView.html?idxno=16273465", "note": "NA-sty 키치 콘셉트(누워서 브이)"}
+ },
+ "cards": {
+  "album": [
+   {"template": "editorial", "bg": "spot", "photo": "p5", "crop": [0.2, 0.0, 0.8, 1.0], "basis": "제목", "why": "'나연의 스타일'과 앙큼한 'nasty'를 합친 제목이라, 노란 드레스에 보라 머리의 키치한 사진을 잡지 표지처럼 세웁니다."},
+   {"template": "nowplaying", "basis": "위치", "why": "세 곡을 담은 솔로 싱글이라, 표지를 재생 화면에 올리고 곡 수와 발매일을 한눈에 보여 줍니다."}
+  ],
+  "1": [
+   {"template": "polaroid", "photo": "p1", "crop": [0.15, 0.0, 0.85, 1.0], "basis": "제목", "why": "'BABY ANGEL'이라는 제목처럼, 하늘 그네에 앉은 천사 사진을 폴라로이드로 꺼냅니다."},
+   {"template": "colorblock", "photo": "p2", "crop": [0.2, 0.0, 1.0, 1.0], "lines": ["BABY", "ANGEL"], "basis": "소개", "why": "어느 각도에서도 상대를 사로잡겠다는 짓궂은 천사라, 깃털 사이로 정면을 보는 근접 사진 위에 제목을 크게 세웁니다."}
+  ],
+  "2": [
+   {"template": "notch", "photo": "p6", "crop": [0.1, 0.0, 0.9, 1.0], "basis": "소개", "why": "상대를 떨리게 만들겠다는 장난스러운 플러팅이라, 누워서 브이를 하는 사진 한 장을 정면으로 세웁니다."},
+   {"template": "desktop", "photo": "p4", "crop": [0.0, 0.0, 1.0, 1.0], "zooms": [[0.35, 0.1, 0.7, 0.5], [0.55, 0.3, 1.0, 0.7], [0.0, 0.1, 0.45, 0.5]], "basis": "위치", "why": "나연이 직접 쓴 두 번째 곡이라, 노트북 앞 키치한 사진을 바탕화면 창 여러 개로 띄웁니다."}
+  ],
+  "3": [
+   {"template": "gable", "photo": "p3", "crop": [0.0, 0.0, 1.0, 1.0], "basis": "소개", "why": "함께하는 순간이 꿈같은 휴식처럼 느껴지는 곡이라, 눈을 감고 엎드린 천사 사진을 지붕 모양 제목 아래 둡니다."},
+   {"template": "bloom", "photo": "p1", "crop": [0.15, 0.0, 0.85, 1.0], "basis": "위치", "why": "싱글을 닫는 마지막 곡이라, 'BOY'를 계단처럼 짜고 하늘 그네 사진을 작게 두어 마무리합니다."}
+  ]
+ }
+}
